@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSU Student Portal - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 
+        TESTING INSTRUCTIONS:
+        1. Open this file (login.html) in your web browser
+        2. Use the demo accounts to test:
+           - Username: alice.smith@okstate.edu, Password: password123 (Computer Science student)
+           - Username: marcus.johnson@okstate.edu, Password: password123 (Pre-Medicine student)
+        3. Or click the demo account cards for quick login
+        4. Once logged in, you'll be redirected to the main portal (index.html)
+        5. Use the logout button in the portal to return to this login page
+    -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="osu-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1>OSU Student Portal</h1>
+                <p>Oklahoma State University</p>
+            </div>
+            
+            <div class="login-form-container">
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="studentId">OSU Email Address</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="studentId" name="studentId" placeholder="Enter your OSU email address" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" id="passwordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="login-divider">
+                    <span>or</span>
+                </div>
+                
+                <div class="demo-accounts">
+                    <h3>Demo Accounts</h3>
+                    <p>Try these demo accounts to explore the portal:</p>
+                    
+                    <div class="demo-account-card" data-student-id="OSU001">
+                        <div class="demo-info">
+                            <div class="demo-avatar">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="demo-details">
+                                <h4>Alice Smith</h4>
+                                <p>Computer Science • Junior</p>
+                                <span class="demo-id">ID: OSU001</span>
+                            </div>
+                        </div>
+                        <button class="demo-login-btn">Login as Alice</button>
+                    </div>
+                    
+                    <div class="demo-account-card" data-student-id="OSU002">
+                        <div class="demo-info">
+                            <div class="demo-avatar">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <div class="demo-details">
+                                <h4>Marcus Johnson</h4>
+                                <p>Pre-Medicine • Sophomore</p>
+                                <span class="demo-id">ID: OSU002</span>
+                            </div>
+                        </div>
+                        <button class="demo-login-btn">Login as Marcus</button>
+                    </div>
+                </div>
+                
+                <div class="login-footer">
+                    <div class="help-links">
+                        <a href="#" class="help-link">
+                            <i class="fas fa-question-circle"></i>
+                            Forgot Password?
+                        </a>
+                        <a href="#" class="help-link">
+                            <i class="fas fa-phone"></i>
+                            Need Help?
+                        </a>
+                    </div>
+                    
+                    <div class="login-info">
+                        <p><i class="fas fa-shield-alt"></i> Your information is secure and protected</p>
+                        <p><i class="fas fa-clock"></i> Session timeout: 30 minutes of inactivity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-background">
+            <div class="campus-info">
+                <h2>Welcome to OSU</h2>
+                <p>Access your academic information, financial details, and course schedules all in one place.</p>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-book-open"></i>
+                        <span>Course Management</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Academic Progress</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Financial Information</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Class Schedules</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Logging you in...</p>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

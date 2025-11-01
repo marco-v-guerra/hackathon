@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-left">
+                <h1><i class="fas fa-user-graduate"></i> Student Portal</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-menu">
+                    <i class="fas fa-bell notification-icon"></i>
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/40x40/667eea/ffffff?text=AS" alt="Profile" class="profile-pic">
+                        <span class="welcome-text">Welcome, <span id="studentName">Alice</span></span>
+                    </div>
+                    <button class="btn btn-secondary logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Student Profile Header -->
+            <section class="profile-header">
+                <div class="profile-card">
+                    <div class="profile-left">
+                        <img src="https://via.placeholder.com/120x120/667eea/ffffff?text=AS" alt="Student Photo" class="student-photo">
+                        <div class="profile-info">
+                            <h2 id="fullStudentName">Alice Smith</h2>
+                            <p class="student-id">Student ID: <span id="studentId">STU001</span></p>
+                            <p class="student-program"><span id="studentMajor">Computer Science</span> • <span id="studentYear">Junior</span></p>
+                            <div class="quick-stats">
+                                <div class="quick-stat">
+                                    <span class="stat-label">GPA</span>
+                                    <span class="stat-value" id="studentGPA">3.8</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="stat-label">Credits</span>
+                                    <span class="stat-value" id="studentCredits">95</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="stat-label">Status</span>
+                                    <span class="stat-value status-active" id="studentStatus">Active</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span id="studentEmail">alice.smith@university.edu</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span id="studentPhone">(555) 123-4567</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="studentAddress">123 Campus Dr, Room 204</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Navigation -->
+            <section class="tabs-section">
+                <nav class="tab-nav">
+                    <button class="tab-btn active" data-tab="overview">
+                        <i class="fas fa-home"></i>
+                        <span>Overview</span>
+                    </button>
+                    <button class="tab-btn" data-tab="educational">
+                        <i class="fas fa-book"></i>
+                        <span>Educational</span>
+                    </button>
+                    <button class="tab-btn" data-tab="financial">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Financial</span>
+                    </button>
+                    <button class="tab-btn" data-tab="schedule">
+                        <i class="fas fa-calendar"></i>
+                        <span>Schedule</span>
+                    </button>
+                </nav>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Overview Tab -->
+                    <div class="tab-pane active" id="overview">
+                        <div class="dashboard-grid">
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-chart-line"></i> Academic Progress</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="progress-item">
+                                        <span class="progress-label">Degree Progress</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 79%"></div>
+                                        </div>
+                                        <span class="progress-value">79%</span>
+                                    </div>
+                                    <div class="progress-item">
+                                        <span class="progress-label">Current Semester</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 65%"></div>
+                                        </div>
+                                        <span class="progress-value">65%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Important Notices</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="notice-item notice-warning">
+                                        <i class="fas fa-clock"></i>
+                                        <div>
+                                            <strong>Registration Deadline</strong>
+                                            <p>Spring 2026 registration closes Dec 15th</p>
+                                        </div>
+                                    </div>
+                                    <div class="notice-item notice-info">
+                                        <i class="fas fa-info-circle"></i>
+                                        <div>
+                                            <strong>Scholarship Available</strong>
+                                            <p>New merit scholarship applications open</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-calendar-check"></i> Upcoming Events</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="event-item">
+                                        <div class="event-date">Nov 15</div>
+                                        <div class="event-details">
+                                            <strong>Midterm Exams</strong>
+                                            <p>Computer Science 301</p>
+                                        </div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-date">Nov 22</div>
+                                        <div class="event-details">
+                                            <strong>Career Fair</strong>
+                                            <p>Student Union Building</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Educational Tab -->
+                    <div class="tab-pane" id="educational">
+                        <div class="tab-grid">
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-graduation-cap"></i> Current Courses</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="course-list" id="currentCourses">
+                                        <!-- Courses will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-chart-bar"></i> Grade History</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="grade-history" id="gradeHistory">
+                                        <!-- Grade history will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-trophy"></i> Academic Achievements</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="achievements" id="achievements">
+                                        <!-- Achievements will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-road"></i> Degree Requirements</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="requirements" id="requirements">
+                                        <!-- Requirements will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Tab -->
+                    <div class="tab-pane" id="financial">
+                        <div class="tab-grid">
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-credit-card"></i> Account Balance</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="balance-summary" id="balanceSummary">
+                                        <!-- Balance info will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-receipt"></i> Recent Transactions</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="transaction-list" id="transactions">
+                                        <!-- Transactions will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-hand-holding-usd"></i> Financial Aid</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="financial-aid" id="financialAid">
+                                        <!-- Financial aid info will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-calendar-alt"></i> Payment Schedule</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="payment-schedule" id="paymentSchedule">
+                                        <!-- Payment schedule will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Tab -->
+                    <div class="tab-pane" id="schedule">
+                        <div class="info-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-calendar-week"></i> Weekly Schedule</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="schedule-grid" id="weeklySchedule">
+                                    <!-- Schedule will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>

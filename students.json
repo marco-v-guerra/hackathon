@@ -1,0 +1,314 @@
+[
+    {
+        "id": "STU001",
+        "name": "Alice Smith",
+        "email": "alice.smith@university.edu",
+        "phone": "(555) 123-4567",
+        "address": "123 Campus Dr, Room 204",
+        "major": "Computer Science",
+        "year": 3,
+        "grade": "A",
+        "gpa": 3.8,
+        "credits": 95,
+        "status": "Active",
+        "currentCourses": [
+            {
+                "code": "CS 301",
+                "name": "Data Structures & Algorithms",
+                "instructor": "Dr. Johnson",
+                "credits": 3,
+                "grade": "A",
+                "schedule": "MWF 10:00-11:00"
+            },
+            {
+                "code": "CS 350",
+                "name": "Software Engineering",
+                "instructor": "Prof. Davis",
+                "credits": 3,
+                "grade": "A-",
+                "schedule": "TTh 2:00-3:30"
+            },
+            {
+                "code": "MATH 220",
+                "name": "Linear Algebra",
+                "instructor": "Dr. Wilson",
+                "credits": 4,
+                "grade": "B+",
+                "schedule": "MWF 1:00-2:00"
+            },
+            {
+                "code": "ENG 102",
+                "name": "Technical Writing",
+                "instructor": "Prof. Brown",
+                "credits": 3,
+                "grade": "A",
+                "schedule": "TTh 11:00-12:30"
+            }
+        ],
+        "gradeHistory": [
+            { "semester": "Fall 2025", "year": "2025", "gpa": 3.9, "credits": 15 },
+            { "semester": "Spring 2025", "year": "2025", "gpa": 3.7, "credits": 16 },
+            { "semester": "Fall 2024", "year": "2024", "gpa": 3.8, "credits": 15 },
+            { "semester": "Spring 2024", "year": "2024", "gpa": 3.6, "credits": 14 }
+        ],
+        "achievements": [
+            {
+                "title": "Dean's List",
+                "description": "Fall 2025 - GPA above 3.5",
+                "icon": "fas fa-medal"
+            },
+            {
+                "title": "Programming Competition",
+                "description": "2nd Place - Regional ACM Contest",
+                "icon": "fas fa-trophy"
+            },
+            {
+                "title": "Research Assistant",
+                "description": "AI Lab - Machine Learning Project",
+                "icon": "fas fa-flask"
+            }
+        ],
+        "requirements": [
+            { "name": "Core CS Courses", "status": "complete", "progress": "24/24" },
+            { "name": "Mathematics", "status": "progress", "progress": "18/20" },
+            { "name": "General Education", "status": "complete", "progress": "30/30" },
+            { "name": "Electives", "status": "progress", "progress": "12/18" },
+            { "name": "Capstone Project", "status": "pending", "progress": "0/3" }
+        ],
+        "financial": {
+            "balance": {
+                "tuition": -8500.00,
+                "fees": -1200.00,
+                "housing": -4500.00,
+                "meal_plan": -2800.00,
+                "payments": 12000.00,
+                "total": -5000.00
+            },
+            "transactions": [
+                {
+                    "date": "2025-11-01",
+                    "description": "Tuition Payment",
+                    "amount": 4000.00,
+                    "type": "payment"
+                },
+                {
+                    "date": "2025-10-15",
+                    "description": "Housing Fee",
+                    "amount": -2250.00,
+                    "type": "charge"
+                },
+                {
+                    "date": "2025-10-01",
+                    "description": "Scholarship Credit",
+                    "amount": 2500.00,
+                    "type": "credit"
+                },
+                {
+                    "date": "2025-09-15",
+                    "description": "Meal Plan",
+                    "amount": -1400.00,
+                    "type": "charge"
+                }
+            ],
+            "financialAid": [
+                {
+                    "name": "Merit Scholarship",
+                    "amount": 5000.00,
+                    "status": "Active",
+                    "description": "Academic Excellence Award"
+                },
+                {
+                    "name": "Federal Pell Grant",
+                    "amount": 3000.00,
+                    "status": "Active",
+                    "description": "Need-based federal aid"
+                },
+                {
+                    "name": "Work Study",
+                    "amount": 1500.00,
+                    "status": "Active",
+                    "description": "Campus employment program"
+                }
+            ],
+            "paymentSchedule": [
+                {
+                    "date": "2025-12-15",
+                    "description": "Spring 2026 Tuition",
+                    "amount": 4250.00
+                },
+                {
+                    "date": "2025-12-20",
+                    "description": "Spring Housing",
+                    "amount": 2250.00
+                },
+                {
+                    "date": "2026-01-15",
+                    "description": "Spring Meal Plan",
+                    "amount": 1400.00
+                }
+            ]
+        },
+        "schedule": {
+            "Monday": [
+                { "time": "10:00", "class": "CS 301", "room": "SCI 204" },
+                { "time": "13:00", "class": "MATH 220", "room": "MATH 101" }
+            ],
+            "Tuesday": [
+                { "time": "11:00", "class": "ENG 102", "room": "ENG 205" },
+                { "time": "14:00", "class": "CS 350", "room": "SCI 301" }
+            ],
+            "Wednesday": [
+                { "time": "10:00", "class": "CS 301", "room": "SCI 204" },
+                { "time": "13:00", "class": "MATH 220", "room": "MATH 101" }
+            ],
+            "Thursday": [
+                { "time": "11:00", "class": "ENG 102", "room": "ENG 205" },
+                { "time": "14:00", "class": "CS 350", "room": "SCI 301" }
+            ],
+            "Friday": [
+                { "time": "10:00", "class": "CS 301", "room": "SCI 204" },
+                { "time": "13:00", "class": "MATH 220", "room": "MATH 101" }
+            ]
+        }
+    },
+    {
+        "id": "STU002",
+        "name": "Bob Smith",
+        "email": "bob.smith@university.edu",
+        "phone": "(555) 234-5678",
+        "major": "Mathematics",
+        "year": 2,
+        "grade": "B",
+        "gpa": 3.4
+    },
+    {
+        "id": "STU003",
+        "name": "Carol Davis",
+        "email": "carol.davis@university.edu",
+        "phone": "(555) 345-6789",
+        "major": "Physics",
+        "year": 4,
+        "grade": "A",
+        "gpa": 3.9
+    },
+    {
+        "id": "STU004",
+        "name": "David Wilson",
+        "email": "david.wilson@university.edu",
+        "phone": "(555) 456-7890",
+        "major": "Engineering",
+        "year": 1,
+        "grade": "B",
+        "gpa": 3.2
+    },
+    {
+        "id": "STU005",
+        "name": "Emma Brown",
+        "email": "emma.brown@university.edu",
+        "phone": "(555) 567-8901",
+        "major": "Computer Science",
+        "year": 3,
+        "grade": "A",
+        "gpa": 3.7
+    },
+    {
+        "id": "STU006",
+        "name": "Frank Miller",
+        "email": "frank.miller@university.edu",
+        "phone": "(555) 678-9012",
+        "major": "Business",
+        "year": 2,
+        "grade": "C",
+        "gpa": 2.8
+    },
+    {
+        "id": "STU007",
+        "name": "Grace Lee",
+        "email": "grace.lee@university.edu",
+        "phone": "(555) 789-0123",
+        "major": "Biology",
+        "year": 4,
+        "grade": "A",
+        "gpa": 3.95
+    },
+    {
+        "id": "STU008",
+        "name": "Henry Taylor",
+        "email": "henry.taylor@university.edu",
+        "phone": "(555) 890-1234",
+        "major": "Chemistry",
+        "year": 1,
+        "grade": "B",
+        "gpa": 3.3
+    },
+    {
+        "id": "STU009",
+        "name": "Isabella Garcia",
+        "email": "isabella.garcia@university.edu",
+        "phone": "(555) 901-2345",
+        "major": "Art History",
+        "year": 2,
+        "grade": "A",
+        "gpa": 3.6
+    },
+    {
+        "id": "STU010",
+        "name": "Jack Thompson",
+        "email": "jack.thompson@university.edu",
+        "phone": "(555) 012-3456",
+        "major": "Economics",
+        "year": 3,
+        "grade": "B",
+        "gpa": 3.1
+    },
+    {
+        "id": "STU011",
+        "name": "Karen White",
+        "email": "karen.white@university.edu",
+        "phone": "(555) 123-4560",
+        "major": "Psychology",
+        "year": 4,
+        "grade": "A",
+        "gpa": 3.85
+    },
+    {
+        "id": "STU012",
+        "name": "Liam Rodriguez",
+        "email": "liam.rodriguez@university.edu",
+        "phone": "(555) 234-5601",
+        "major": "Political Science",
+        "year": 1,
+        "grade": "C",
+        "gpa": 2.9
+    },
+    {
+        "id": "STU013",
+        "name": "Maya Patel",
+        "email": "maya.patel@university.edu",
+        "phone": "(555) 345-6012",
+        "major": "Mechanical Engineering",
+        "year": 3,
+        "grade": "A",
+        "gpa": 3.75
+    },
+    {
+        "id": "STU014",
+        "name": "Noah Anderson",
+        "email": "noah.anderson@university.edu",
+        "phone": "(555) 456-7023",
+        "major": "Literature",
+        "year": 2,
+        "grade": "B",
+        "gpa": 3.4
+    },
+    {
+        "id": "STU015",
+        "name": "Olivia Martinez",
+        "email": "olivia.martinez@university.edu",
+        "phone": "(555) 567-8034",
+        "major": "Environmental Science",
+        "year": 4,
+        "grade": "A",
+        "gpa": 3.9
+    }
+]

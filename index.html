@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSU Student Portal</title>
+    <title>Student Portal</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
     <header class="header">
         <div class="container">
             <div class="header-left">
-                <h1><i class="fas fa-user-graduate"></i> OSU Student Portal</h1>
+                <h1><i class="fas fa-user-graduate"></i> Student Portal</h1>
             </div>
             <div class="header-right">
                 <div class="user-menu">
@@ -92,6 +92,10 @@
                     <button class="tab-btn" data-tab="schedule">
                         <i class="fas fa-calendar"></i>
                         <span>Schedule</span>
+                    </button>
+                    <button class="tab-btn" data-tab="planner">
+                        <i class="fas fa-road"></i>
+                        <span>Course Planner</span>
                     </button>
                 </nav>
 
@@ -275,6 +279,115 @@
                             <div class="card-body">
                                 <div class="schedule-grid" id="weeklySchedule">
                                     <!-- Schedule will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Planner Tab -->
+                    <div class="tab-pane" id="planner">
+                        <div class="planner-container">
+                            <!-- Progress Overview -->
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-chart-pie"></i> Degree Progress Overview</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="progress-overview">
+                                        <div class="progress-stat">
+                                            <div class="stat-value" id="totalCreditsEarned">95</div>
+                                            <div class="stat-label">Credits Earned</div>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <div class="stat-value" id="totalCreditsRemaining">25</div>
+                                            <div class="stat-label">Credits Remaining</div>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <div class="stat-value" id="semestersRemaining">2</div>
+                                            <div class="stat-label">Semesters Left</div>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <div class="stat-value" id="expectedGraduation">Spring 2026</div>
+                                            <div class="stat-label">Expected Graduation</div>
+                                        </div>
+                                    </div>
+                                    <div class="degree-progress-bar">
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-fill" id="degreeProgressBar" style="width: 79%"></div>
+                                        </div>
+                                        <div class="progress-percentage">79% Complete</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course Planning Controls -->
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-cogs"></i> Plan Your Academic Path</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="planning-controls">
+                                        <div class="control-group">
+                                            <label for="targetCredits">Target Credits Per Semester (13-15 recommended)</label>
+                                            <input type="range" id="targetCredits" min="13" max="19" value="15" class="slider">
+                                            <div class="slider-value">
+                                                <span id="targetCreditsValue">15</span> credits
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label for="courseTypes">Focus Areas</label>
+                                            <div class="course-type-selection">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" value="core" checked>
+                                                    <span>Core Requirements</span>
+                                                </label>
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" value="electives" checked>
+                                                    <span>Electives</span>
+                                                </label>
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" value="capstone">
+                                                    <span>Capstone/Research</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary" id="generatePlan">
+                                            <i class="fas fa-magic"></i> Generate Academic Plan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Semester Planning Grid -->
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-calendar-alt"></i> Semester-by-Semester Plan</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="semester-grid" id="semesterPlan">
+                                        <!-- Generated semester plan will appear here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course Catalog -->
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-book-open"></i> Available Courses</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="course-search">
+                                        <input type="text" id="courseSearch" placeholder="Search courses..." class="search-input">
+                                        <div class="filter-tabs">
+                                            <button class="filter-btn active" data-filter="all">All</button>
+                                            <button class="filter-btn" data-filter="core">Core</button>
+                                            <button class="filter-btn" data-filter="electives">Electives</button>
+                                            <button class="filter-btn" data-filter="capstone">Capstone</button>
+                                        </div>
+                                    </div>
+                                    <div class="course-catalog" id="courseCatalog">
+                                        <!-- Course catalog will be populated here -->
+                                    </div>
                                 </div>
                             </div>
                         </div>

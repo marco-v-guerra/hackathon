@@ -1575,3 +1575,368 @@ body {
         flex-direction: column;
     }
 }
+
+/* Curriculum Management Styles */
+.curriculum-management {
+    background: #f8f9fc;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.curriculum-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.curriculum-header h4 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.curriculum-header p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.curriculum-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.active-curricula {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.curriculum-item {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1rem;
+    min-width: 200px;
+    position: relative;
+}
+
+.curriculum-item.primary-major {
+    border-color: var(--primary-color);
+}
+
+.curriculum-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.curriculum-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.curriculum-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-fraction {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.mini-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mini-progress-fill {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.curriculum-breakdown {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.breakdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.breakdown-header h5 {
+    color: var(--text-color);
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.shared-courses-section {
+    margin-bottom: 2rem;
+}
+
+.section-header h6 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.section-header p {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.shared-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.shared-course-item {
+    background: #fff3e0;
+    border: 2px solid #ffcc80;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.shared-course-code {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.shared-course-name {
+    color: var(--text-color);
+    font-size: 0.85rem;
+    margin: 0.3rem 0;
+}
+
+.shared-course-applies {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.applies-tag {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.major-requirements-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.major-column {
+    background: #f8f9fc;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.major-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.major-header h6 {
+    color: var(--text-color);
+    margin: 0;
+    font-size: 1rem;
+}
+
+.major-progress {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.major-courses {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.major-course-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.major-course-info {
+    flex: 1;
+}
+
+.major-course-code {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.85rem;
+}
+
+.major-course-name {
+    color: var(--text-color);
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+.major-course-credits {
+    background: #2c3e50;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.minors-container {
+    background: #f0f8ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.minors-header h6 {
+    color: #1565c0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.minors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.minor-item {
+    background: white;
+    border: 1px solid #b3d9ff;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.minor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.minor-name {
+    font-weight: 600;
+    color: #1565c0;
+    font-size: 0.95rem;
+}
+
+.minor-progress {
+    background: #1565c0;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.minor-courses {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.minor-course-item {
+    background: #f8f9fc;
+    border: 1px solid #e3e8ee;
+    border-radius: 4px;
+    padding: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.minor-course-info {
+    flex: 1;
+}
+
+.minor-course-code {
+    font-weight: 600;
+    color: #1565c0;
+    font-size: 0.8rem;
+}
+
+.minor-course-name {
+    color: var(--text-color);
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+}
+
+.minor-course-credits {
+    background: #1565c0;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Responsive Design for Curriculum Management */
+@media (max-width: 768px) {
+    .curriculum-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .major-requirements-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .minors-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .shared-courses-grid {
+        grid-template-columns: 1fr;
+    }
+}

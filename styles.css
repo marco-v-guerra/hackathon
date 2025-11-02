@@ -88,6 +88,14 @@ body {
     height: 40px;
     border-radius: 50%;
     border: 2px solid rgba(255,255,255,0.3);
+    background: linear-gradient(135deg, #e55a00 0%, #ff7f39 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .welcome-text {
@@ -167,7 +175,15 @@ body {
     height: 120px;
     border-radius: 50%;
     border: 4px solid rgba(255,255,255,0.3);
-    object-fit: cover;
+    background: linear-gradient(135deg, #e55a00 0%, #ff7f39 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 36px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(229, 90, 0, 0.25);
 }
 
 .profile-info h2 {
@@ -194,14 +210,16 @@ body {
 .stat-label {
     display: block;
     font-size: 0.8rem;
-    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.95);
     margin-bottom: 0.25rem;
+    font-weight: 500;
 }
 
 .stat-value {
     display: block;
     font-size: 1.5rem;
     font-weight: 700;
+    color: #ffffff;
 }
 
 .status-active {
@@ -1528,6 +1546,7 @@ body {
 
 .semester-credits {
     background: rgba(255,255,255,0.2);
+    color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.875rem;
@@ -2674,6 +2693,295 @@ body {
     font-weight: 600;
 }
 
+/* ========== PREREQUISITE TRACKING STYLES ========== */
+
+/* Course prerequisite indicators */
+.prereq-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.prereq-completed {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.prereq-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.course-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.course-item.prereq-ready {
+    border-left: 4px solid #28a745;
+    background: linear-gradient(90deg, #f8fff9 0%, #fff 20%);
+}
+
+.course-item.prereq-waiting {
+    border-left: 4px solid #ffc107;
+    background: linear-gradient(90deg, #fffdf5 0%, #fff 20%);
+}
+
+.prereq-warning {
+    font-size: 0.8rem;
+    color: #856404;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Prerequisite summary section */
+.prerequisite-summary {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.prerequisite-summary h5 {
+    margin-bottom: 1rem;
+    color: #495057;
+}
+
+.prereq-levels {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.prereq-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.level-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 120px;
+}
+
+.level-badge.ready {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.level-badge.intermediate {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.level-badge.advanced {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.level-count {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Prerequisite tree modal */
+.prerequisite-modal .modal-dialog.large {
+    max-width: 90vw;
+    width: 1000px;
+}
+
+.prerequisite-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.tree-level {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.level-title {
+    background: linear-gradient(135deg, #e55a00, #b8470d);
+    color: white;
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.level-courses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.tree-course {
+    padding: 1rem;
+    border-radius: 6px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.tree-course.completed {
+    border-color: #28a745;
+    background: linear-gradient(135deg, #d4edda, #f8fff9);
+}
+
+.tree-course.in-progress {
+    border-color: #17a2b8;
+    background: linear-gradient(135deg, #d1ecf1, #f0f9ff);
+}
+
+.tree-course.ready {
+    border-color: #ffc107;
+    background: linear-gradient(135deg, #fff3cd, #fffef7);
+}
+
+.tree-course.blocked {
+    border-color: #dc3545;
+    background: linear-gradient(135deg, #f8d7da, #fff5f5);
+    opacity: 0.7;
+}
+
+.tree-course .course-code {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #495057;
+    margin-bottom: 0.25rem;
+}
+
+.tree-course .course-name {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.tree-course .course-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tree-course.completed .course-status {
+    color: #155724;
+}
+
+.tree-course.in-progress .course-status {
+    color: #0c5460;
+}
+
+.tree-course.ready .course-status {
+    color: #856404;
+}
+
+.tree-course.blocked .course-status {
+    color: #721c24;
+}
+
+/* Enhanced semester planning */
+.semester-plan {
+    margin-bottom: 2rem;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.semester-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.semester-title {
+    margin: 0;
+    color: #495057;
+    font-size: 1.2rem;
+}
+
+.semester-credits {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.semester-courses {
+    padding: 1.5rem;
+}
+
+.course-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.course-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.course-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.course-info {
+    flex: 1;
+}
+
+.course-code {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.course-name {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+.course-credits {
+    background: #f8f9fa;
+    color: #495057;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid #e9ecef;
+}
+
 /* Responsive Design for Curriculum Management */
 @media (max-width: 768px) {
     .curriculum-controls {
@@ -2691,5 +2999,19 @@ body {
     
     .shared-courses-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .prereq-levels {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .level-courses {
+        grid-template-columns: 1fr;
+    }
+    
+    .prerequisite-modal .modal-dialog.large {
+        max-width: 95vw;
+        margin: 1rem;
     }
 }

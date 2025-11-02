@@ -1,36 +1,51 @@
-# Student Information System
+# OSU Student Portal
 
-A modern, responsive web application for managing and displaying student information. Built with vanilla HTML, CSS, and JavaScript for simplicity and portability.
+A comprehensive student information system built for Oklahoma State University students. This modern web application provides a complete academic management experience with course tracking, financial information, scheduling, and academic planning tools.
 
 ## Features
 
-### 🎓 Student Management
-- **View Students**: Display students in grid or list view
-- **Add Students**: Create new student records with comprehensive information
-- **Edit Students**: Update existing student information
-- **Search**: Real-time search across names, emails, majors, and student IDs
-- **Filter**: Filter by grade, major, and academic year
+### 🎓 Academic Management
+- **Current Courses**: View enrolled courses with grades, schedules, and instructor information
+- **Past Classes**: Complete academic history with grades and GPA tracking by semester
+- **Course Catalog**: Browse available courses with prerequisites and descriptions
+- **Degree Requirements**: Track progress toward Electrical Engineering degree completion
+- **Academic Planning**: AI-powered and manual academic planning with prerequisite validation
 
-### 📊 Statistics Dashboard
-- **Total Students**: Count of all students in the system
-- **Average GPA**: Calculated average GPA across all students
-- **Honor Students**: Count of students with GPA ≥ 3.5
+### 📊 Student Dashboard
+- **Student Profile**: Comprehensive profile with contact info, major, GPA, and credits
+- **Academic Progress**: Visual progress tracking toward graduation
+- **Grade History**: Semester-by-semester GPA and credit tracking
+- **Achievements**: Academic honors and accomplishments display
 
-### 🎨 User Interface
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-- **Modern UI**: Clean, professional interface with smooth animations
-- **Accessibility**: Keyboard navigation and screen reader friendly
-- **Dark/Light Theme**: Automatic theme detection (system preference)
+### � Financial Information
+- **Account Balance**: Real-time tuition, fees, housing, and meal plan balances
+- **Transaction History**: Detailed payment and charge history
+- **Financial Aid**: Scholarships, grants, and work-study information
+- **Payment Schedule**: Upcoming payment due dates and amounts
+- **Meal Plan Budget**: Track meal plan spending with budget alerts
+
+### 📅 Schedule Management
+- **Weekly Schedule**: Interactive weekly class schedule view
+- **Course Times**: Real-time schedule based on current enrollments
+- **Room Locations**: Building and room information for each class
+
+### 🤖 AI-Powered Features
+- **Academic Planning**: OpenRouter + Gemini integration for intelligent course sequencing
+- **Prerequisite Validation**: Automatic prerequisite checking and course eligibility
+- **Course Recommendations**: Smart suggestions based on degree requirements
 
 ## Project Structure
 
 ```
 hackathon/
-├── index.html          # Main HTML file with app structure
-├── styles.css          # CSS styles and responsive design
-├── script.js           # JavaScript functionality and student management
-├── students.json       # Sample student data (optional)
-└── README.md          # This documentation file
+├── index.html              # Main portal interface with tabbed navigation
+├── login.html              # Student authentication page
+├── login.js                # Login functionality and validation
+├── script.js               # Core application logic and data management
+├── styles.css              # Comprehensive styling and responsive design
+├── students.json           # Student data with academic records
+├── Physics.txt             # Sample course descriptions and requirements
+└── README.md              # Project documentation
 ```
 
 ## Getting Started
@@ -38,11 +53,17 @@ hackathon/
 ### Prerequisites
 - A modern web browser (Chrome, Firefox, Safari, Edge)
 - No additional software installation required
+- Optional: OpenRouter API key for AI-powered academic planning
 
 ### Installation
 1. **Clone or download** the repository to your local machine
 2. **Navigate** to the project directory
-3. **Open** `index.html` in your web browser
+3. **Open** `login.html` in your web browser to start with authentication
+4. **Or open** `index.html` directly to access the main portal
+
+### Demo Login Credentials
+- **Student ID**: `OSU001` (Alice Smith - Electrical Engineering)
+- **Student ID**: `OSU002` (Marcus Johnson - Pre-Medicine)
 
 ### Alternative: Local Server
 For the best experience (especially to load the JSON data), run a local server:
@@ -72,52 +93,79 @@ php -S localhost:8000
 
 Then open `http://localhost:8000` in your browser.
 
-### Optional: AI Academic Plan (OpenRouter + Gemini)
+### AI-Powered Academic Planning (Optional)
 
-You can enable AI-generated academic plans using OpenRouter:
+Enhanced academic planning with OpenRouter + Gemini integration:
 
-- Create an account at openrouter.ai and copy your API key.
-- Click "Generate Academic Plan" in the Academic Planning tab. The app will prompt once for your API key and store it locally in your browser.
-- The default model is `google/gemini-2.5-pro`. You can override by setting `openrouter_model` in `localStorage`.
+1. **Create Account**: Sign up at [openrouter.ai](https://openrouter.ai) and get your API key
+2. **Access Planning**: Navigate to Academic Planning tab in the portal
+3. **Generate Plan**: Click "Generate Academic Plan" - you'll be prompted for your API key
+4. **Automatic Storage**: API key is stored locally in your browser for future use
 
-Notes
-- Your API key is stored in your browser’s localStorage. For production use, proxy the request via a backend to avoid exposing keys.
-- If the AI call fails or no key is provided, the app falls back to a local prerequisite-aware planner.
+**Configuration Options:**
+- **Default Model**: `google/gemini-2.5-pro`
+- **Custom Model**: Set `openrouter_model` in browser localStorage
+- **Fallback**: Local prerequisite-aware planner if AI fails
 
-## Usage
+**AI Features:**
+- Intelligent course sequencing based on prerequisites
+- Personalized recommendations for degree completion
+- Consideration of student's academic history and preferences
 
-### Viewing Students
-- Students are displayed in a **grid view** by default
-- Click the **list view** button to switch to a compact list format
-- Each student card shows:
-  - Name and Student ID
-  - Email and phone number
-  - Major and academic year
-  - Current grade and GPA
+## Usage Guide
 
-### Adding Students
-1. Click the **"Add Student"** button in the header
-2. Fill out the student information form:
-   - **Full Name**: Student's complete name
-   - **Student ID**: Unique identifier (auto-generated if left blank)
-   - **Email**: Student's email address
-   - **Phone**: Contact phone number (optional)
-   - **Major**: Field of study
-   - **Year**: Academic year (1-4: Freshman to Senior)
-   - **Grade**: Current letter grade (A-F)
-   - **GPA**: Grade point average (0.0-4.0)
-3. Click **"Save Student"** to add the student
+### Student Authentication
+1. **Login Page**: Start at `login.html` for authentication
+2. **Student ID**: Enter your OSU student ID (e.g., OSU001)
+3. **Auto-Login**: System automatically loads your profile and academic data
 
-### Editing Students
-1. Click on any **student card** to open their details
-2. Modify the information in the form
-3. Click **"Save Student"** to update the record
+### Navigation Tabs
+The portal features five main sections:
 
-### Searching and Filtering
-- **Search Bar**: Type to search across names, emails, majors, and student IDs
-- **Grade Filter**: Filter by specific letter grades
-- **Major Filter**: Filter by academic major (populated dynamically)
-- **Year Filter**: Filter by academic year (Freshman through Senior)
+#### 📊 Overview Tab
+- **Academic Progress**: Visual degree completion tracking
+- **Important Notices**: Registration deadlines and announcements
+- **Upcoming Events**: Exams, career fairs, and academic deadlines
+
+#### 📚 Educational Tab
+- **Current Courses**: View enrolled classes with schedules and grades
+- **Grade History**: Semester GPA tracking and academic performance
+- **Past Classes**: Complete transcript with filtering and search
+- **Achievements**: Academic honors and recognitions
+- **Degree Requirements**: Progress tracking for major completion
+- **Course Catalog**: Browse available courses with prerequisites
+
+#### 💰 Financial Tab
+- **Account Balance**: Current charges and payments
+- **Transaction History**: Detailed payment records
+- **Financial Aid**: Scholarships, grants, and aid status
+- **Payment Schedule**: Upcoming due dates
+- **Meal Plan Budget**: Spending tracking with progress indicators
+
+#### 📅 Schedule Tab
+- **Weekly View**: Interactive class schedule display
+- **Room Information**: Building and classroom locations
+- **Time Conflicts**: Automatic scheduling conflict detection
+
+#### 🎯 Academic Planning Tab
+- **Degree Progress**: Credits completed and remaining
+- **Plan Generation**: AI-powered and manual academic planning
+- **Prerequisite Tracking**: Course eligibility verification
+- **Graduation Timeline**: Estimated completion dates
+
+### Advanced Features
+
+#### Course Catalog Search
+- **Text Search**: Find courses by code or name
+- **Level Filtering**: Filter by course level (1000-6000)
+- **Department Filtering**: Browse by academic department
+- **Prerequisite Information**: View course requirements
+
+#### Academic Planning Tools
+- **Generate Plan**: Create semester-by-semester course plans
+- **Customize Plan**: Adjust course load and preferences
+- **Prerequisite Validation**: Automatic prerequisite checking
+- **Export Options**: Save plans for academic advising
 
 ## Data Management
 

@@ -30,7 +30,6 @@ class StudentPortal {
         // Content containers
         this.currentCoursesEl = document.getElementById('currentCourses');
         this.gradeHistoryEl = document.getElementById('gradeHistory');
-        this.pastClassesListEl = document.getElementById('pastClassesList');
         this.achievementsEl = document.getElementById('achievements');
         this.requirementsEl = document.getElementById('requirements');
         this.courseCatalogEl = document.getElementById('courseCatalog');
@@ -81,57 +80,6 @@ class StudentPortal {
                 this.showPlanCustomization();
             });
         }
-
-        // Course import event listeners
-        this.setupCourseImportListeners();
-    }
-
-    setupCourseImportListeners() {
-        const importBtn = document.getElementById('importCoursesBtn');
-        const importSection = document.getElementById('courseImportSection');
-        const cancelBtn = document.getElementById('cancelImportBtn');
-        const processBtn = document.getElementById('processImportBtn');
-        const confirmBtn = document.getElementById('confirmImportBtn');
-        const fileInput = document.getElementById('courseFileInput');
-
-        if (importBtn && importSection) {
-            importBtn.addEventListener('click', () => {
-                importSection.style.display = importSection.style.display === 'none' ? 'block' : 'none';
-            });
-        }
-
-        if (cancelBtn && importSection) {
-            cancelBtn.addEventListener('click', () => {
-                importSection.style.display = 'none';
-                this.clearImportData();
-            });
-        }
-
-        if (processBtn) {
-            processBtn.addEventListener('click', () => {
-                this.processImportData();
-            });
-        }
-
-        if (confirmBtn) {
-            confirmBtn.addEventListener('click', () => {
-                this.confirmImport();
-            });
-        }
-
-        if (fileInput) {
-            fileInput.addEventListener('change', (e) => {
-                this.handleFileInput(e);
-            });
-        }
-
-        // Radio button listeners
-        const radioButtons = document.querySelectorAll('input[name="importMethod"]');
-        radioButtons.forEach(radio => {
-            radio.addEventListener('change', () => {
-                this.toggleImportMethod();
-            });
-        });
     }
 
     async loadStudentData() {
@@ -220,183 +168,6 @@ class StudentPortal {
                     { "semester": "Spring 2025", "year": "2025", "gpa": 3.7, "credits": 17 },
                     { "semester": "Fall 2024", "year": "2024", "gpa": 3.8, "credits": 16 },
                     { "semester": "Spring 2024", "year": "2024", "gpa": 3.6, "credits": 18 }
-                ],
-                "pastClasses": [
-                    {
-                        "semester": "Fall 2025",
-                        "year": "2025",
-                        "gpa": 3.9,
-                        "classes": [
-                            {
-                                "code": "ECEN 4133",
-                                "name": "Digital Signal Processing",
-                                "instructor": "Johnson",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 4243",
-                                "name": "Control Systems Design",
-                                "instructor": "Smith",
-                                "credits": 3,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "ECEN 4713",
-                                "name": "Computer Architecture",
-                                "instructor": "Davis",
-                                "credits": 3,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "MATH 4073",
-                                "name": "Applied Statistics",
-                                "instructor": "Wilson",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 4990",
-                                "name": "Special Problems",
-                                "instructor": "Brown",
-                                "credits": 3,
-                                "grade": "A-"
-                            }
-                        ]
-                    },
-                    {
-                        "semester": "Spring 2025",
-                        "year": "2025",
-                        "gpa": 3.7,
-                        "classes": [
-                            {
-                                "code": "ECEN 3233",
-                                "name": "Electronic Circuits",
-                                "instructor": "Anderson",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "ECEN 3613",
-                                "name": "Introduction to Communication Systems",
-                                "instructor": "Clark",
-                                "credits": 3,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "ECEN 3714",
-                                "name": "Embedded System Design",
-                                "instructor": "Miller",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "MATH 3283",
-                                "name": "Partial Differential Equations",
-                                "instructor": "Taylor",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 3843",
-                                "name": "Probability and Random Variables for Engineers",
-                                "instructor": "Moore",
-                                "credits": 3,
-                                "grade": "B+"
-                            }
-                        ]
-                    },
-                    {
-                        "semester": "Fall 2024",
-                        "year": "2024",
-                        "gpa": 3.8,
-                        "classes": [
-                            {
-                                "code": "ECEN 2703",
-                                "name": "Digital Logic Design",
-                                "instructor": "Rodriguez",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 2114",
-                                "name": "Circuit Analysis",
-                                "instructor": "Lee",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "MATH 2934",
-                                "name": "Differential Equations",
-                                "instructor": "Garcia",
-                                "credits": 4,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "PHYS 2234",
-                                "name": "University Physics II",
-                                "instructor": "White",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "CS 2414",
-                                "name": "Computer Programming",
-                                "instructor": "Thompson",
-                                "credits": 4,
-                                "grade": "A"
-                            }
-                        ]
-                    },
-                    {
-                        "semester": "Spring 2024",
-                        "year": "2024",
-                        "gpa": 3.6,
-                        "classes": [
-                            {
-                                "code": "MATH 2144",
-                                "name": "Calculus III",
-                                "instructor": "Martin",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "PHYS 1114",
-                                "name": "University Physics I",
-                                "instructor": "Jackson",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "ECEN 1400",
-                                "name": "Introduction to Electrical and Computer Engineering",
-                                "instructor": "Adams",
-                                "credits": 1,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ENGL 1213",
-                                "name": "English Composition I",
-                                "instructor": "Harris",
-                                "credits": 3,
-                                "grade": "B-"
-                            },
-                            {
-                                "code": "HIST 1483",
-                                "name": "American History to 1865",
-                                "instructor": "Lewis",
-                                "credits": 3,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "CHEM 1515",
-                                "name": "General Chemistry I",
-                                "instructor": "Walker",
-                                "credits": 5,
-                                "grade": "C+"
-                            }
-                        ]
-                    }
                 ],
                 "achievements": [
                     {
@@ -593,162 +364,6 @@ class StudentPortal {
                     { "semester": "Fall 2024", "year": "2024", "gpa": 3.7, "credits": 16 },
                     { "semester": "Spring 2024", "year": "2024", "gpa": 3.5, "credits": 14 }
                 ],
-                "pastClasses": [
-                    {
-                        "semester": "Fall 2025",
-                        "year": "2025",
-                        "gpa": 3.8,
-                        "classes": [
-                            {
-                                "code": "BIOL 3104",
-                                "name": "Cell Biology",
-                                "instructor": "Johnson",
-                                "credits": 4,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "CHEM 3515",
-                                "name": "Organic Chemistry II",
-                                "instructor": "Davis",
-                                "credits": 5,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "PHYS 2234",
-                                "name": "University Physics II",
-                                "instructor": "Wilson",
-                                "credits": 4,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "MATH 3283",
-                                "name": "Partial Differential Equations",
-                                "instructor": "Miller",
-                                "credits": 3,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "PSYC 2223",
-                                "name": "Developmental Psychology",
-                                "instructor": "Brown",
-                                "credits": 3,
-                                "grade": "A"
-                            }
-                        ]
-                    },
-                    {
-                        "semester": "Spring 2025",
-                        "year": "2025",
-                        "gpa": 3.6,
-                        "classes": [
-                            {
-                                "code": "BIOL 2124",
-                                "name": "Human Anatomy and Physiology I",
-                                "instructor": "Anderson",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "CHEM 3415",
-                                "name": "Organic Chemistry I",
-                                "instructor": "Clark",
-                                "credits": 5,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "PHYS 1114",
-                                "name": "University Physics I",
-                                "instructor": "Thompson",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "MATH 2144",
-                                "name": "Calculus III",
-                                "instructor": "Taylor",
-                                "credits": 4,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "STAT 2013",
-                                "name": "Elementary Statistics",
-                                "instructor": "Rodriguez",
-                                "credits": 3,
-                                "grade": "B+"
-                            }
-                        ]
-                    },
-                    {
-                        "semester": "Fall 2024",
-                        "year": "2024",
-                        "gpa": 3.7,
-                        "classes": [
-                            {
-                                "code": "BIOL 1114",
-                                "name": "Principles of Biology I",
-                                "instructor": "Garcia",
-                                "credits": 4,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "CHEM 1515",
-                                "name": "General Chemistry I",
-                                "instructor": "White",
-                                "credits": 5,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "MATH 2934",
-                                "name": "Differential Equations",
-                                "instructor": "Lewis",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "ENGL 1213",
-                                "name": "English Composition I",
-                                "instructor": "Harris",
-                                "credits": 3,
-                                "grade": "A-"
-                            }
-                        ]
-                    },
-                    {
-                        "semester": "Spring 2024",
-                        "year": "2024",
-                        "gpa": 3.5,
-                        "classes": [
-                            {
-                                "code": "MATH 1914",
-                                "name": "Calculus I",
-                                "instructor": "Martin",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "CHEM 1314",
-                                "name": "General Chemistry",
-                                "instructor": "Jackson",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "BIOL 1004",
-                                "name": "Introduction to Biology",
-                                "instructor": "Adams",
-                                "credits": 4,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "HIST 1493",
-                                "name": "American History since 1865",
-                                "instructor": "Walker",
-                                "credits": 3,
-                                "grade": "B-"
-                            }
-                        ]
-                    }
-                ],
                 "achievements": [
                     {
                         "title": "Pre-Health Excellence Award",
@@ -891,25 +506,25 @@ class StudentPortal {
         return {
             'Electrical Engineering': {
                 'Foundation Courses': [
-                    { code: 'MATH 1813', name: 'Precalculus', credits: 3, prerequisites: [] },
-                    { code: 'MATH 2153', name: 'Calculus I', credits: 3, prerequisites: ['MATH 1813'] },
-                    { code: 'MATH 2163', name: 'Calculus II', credits: 3, prerequisites: ['MATH 2153'] },
-                    { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2163'] },
-                    { code: 'MATH 3013', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2163'] },
-                    { code: 'PHYS 2114', name: 'University Physics I', credits: 4, prerequisites: ['MATH 2153'] },
-                    { code: 'PHYS 3313', name: 'Modern Physics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'] },
-                    { code: 'ENGL 3323', name: 'Technical Writing', credits: 3, prerequisites: [] }
+                    { code: 'MATH 1813', name: 'Precalculus', credits: 3, prerequisites: [], programTags: ['Electrical Engineering', 'Mathematics Major'] },
+                    { code: 'MATH 2153', name: 'Calculus I', credits: 3, prerequisites: ['MATH 1813'], programTags: ['Electrical Engineering', 'Mathematics Major'] },
+                    { code: 'MATH 2163', name: 'Calculus II', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Electrical Engineering', 'Mathematics Major'] },
+                    { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2163'], programTags: ['Electrical Engineering', 'Mathematics Major'] },
+                    { code: 'MATH 3013', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2163'], programTags: ['Electrical Engineering', 'Mathematics Major'] },
+                    { code: 'PHYS 2114', name: 'University Physics I', credits: 4, prerequisites: ['MATH 2153'], programTags: ['Electrical Engineering'] },
+                    { code: 'PHYS 3313', name: 'Modern Physics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'], programTags: ['Electrical Engineering'] },
+                    { code: 'ENGL 3323', name: 'Technical Writing', credits: 3, prerequisites: [], programTags: ['Electrical Engineering'] }
                 ],
                 'Core ECEN Courses': [
-                    { code: 'ECEN 2011', name: 'Experimental Methods I', credits: 1, prerequisites: ['PHYS 2114'] },
-                    { code: 'ECEN 2233', name: 'Fundamentals of Digital Logic Design', credits: 3, prerequisites: ['MATH 1813'] },
-                    { code: 'ECEN 2714', name: 'Fundamentals of Electric Circuits', credits: 4, prerequisites: ['MATH 2153', 'PHYS 2114', 'MATH 2233', 'ENSC 2611'] },
-                    { code: 'ECEN 3714', name: 'Network Analysis', credits: 4, prerequisites: ['MATH 2233', 'PHYS 2114', 'ECEN 2714'] },
-                    { code: 'ECEN 3314', name: 'Electronic Devices and Applications', credits: 4, prerequisites: ['ECEN 3714', 'ENSC 2611'] },
-                    { code: 'ECEN 3513', name: 'Signal Analysis', credits: 3, prerequisites: ['ECEN 3714'] },
-                    { code: 'ECEN 3613', name: 'Applied Fields and Waves I', credits: 3, prerequisites: ['MATH 2163', 'ECEN 3714'] },
-                    { code: 'ECEN 3623', name: 'Applied Fields and Waves II', credits: 3, prerequisites: ['ECEN 3613'] },
-                    { code: 'ECEN 3723', name: 'Systems I', credits: 3, prerequisites: ['ECEN 3714', 'ENSC 2113', 'MATH 3013'] }
+                    { code: 'ECEN 2011', name: 'Experimental Methods I', credits: 1, prerequisites: ['PHYS 2114'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 2233', name: 'Fundamentals of Digital Logic Design', credits: 3, prerequisites: ['MATH 1813'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 2714', name: 'Fundamentals of Electric Circuits', credits: 4, prerequisites: ['MATH 2153', 'PHYS 2114', 'MATH 2233', 'ENSC 2611'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 3714', name: 'Network Analysis', credits: 4, prerequisites: ['MATH 2233', 'PHYS 2114', 'ECEN 2714'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 3314', name: 'Electronic Devices and Applications', credits: 4, prerequisites: ['ECEN 3714', 'ENSC 2611'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 3513', name: 'Signal Analysis', credits: 3, prerequisites: ['ECEN 3714'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 3613', name: 'Applied Fields and Waves I', credits: 3, prerequisites: ['MATH 2163', 'ECEN 3714'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 3623', name: 'Applied Fields and Waves II', credits: 3, prerequisites: ['ECEN 3613'], programTags: ['Electrical Engineering'] },
+                    { code: 'ECEN 3723', name: 'Systems I', credits: 3, prerequisites: ['ECEN 3714', 'ENSC 2113', 'MATH 3013'], programTags: ['Electrical Engineering'] }
                 ],
                 'Engineering Support': [
                     { code: 'CS 1113', name: 'Introduction to Programming', credits: 3, prerequisites: [] },
@@ -1007,147 +622,156 @@ class StudentPortal {
                     { code: 'NURS 3143', name: 'Human Pathophysiology', credits: 3, prerequisites: ['BIOL 3204'] }
                 ]
             },
-            'Mathematics': {
+            'Mathematics Major': {
                 'Foundation Courses': [
-                    { code: 'MATH 1483', name: 'Mathematical Functions and Their Uses', credits: 3, prerequisites: [] },
-                    { code: 'MATH 1513', name: 'College Algebra', credits: 3, prerequisites: [] },
-                    { code: 'MATH 1715', name: 'Precalculus', credits: 3, prerequisites: [] },
-                    { code: 'MATH 1813', name: 'Preparation for Calculus', credits: 3, prerequisites: ['MATH 1513'] },
-                    { code: 'MATH 2144', name: 'Calculus I', credits: 3, prerequisites: ['MATH 1813'] },
-                    { code: 'MATH 2153', name: 'Calculus II', credits: 3, prerequisites: ['MATH 2144'] },
-                    { code: 'MATH 2163', name: 'Calculus III', credits: 3, prerequisites: ['MATH 2153'] },
-                    { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2153'] }
+                    { code: 'MATH 1483', name: 'Mathematical Functions and Their Uses (Q)', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 1493', name: 'Applications of Modern Mathematics (Q)', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 1513', name: 'College Algebra (Q)', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 1583', name: 'Applied Geometry and Trigonometry (Q)', credits: 3, prerequisites: ['MATH 1483 or MATH 1513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 1613', name: 'Trigonometry (Q)', credits: 3, prerequisites: ['MATH 1513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 1715', name: 'Precalculus (Q)', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 1813', name: 'Preparation for Calculus (Q)', credits: 3, prerequisites: ['MATH 1513'], programTags: ['Mathematics Major', 'Electrical Engineering'] },
+                    { code: 'MATH 2103', name: 'Business Calculus (Q)', credits: 3, prerequisites: ['MATH 1483 or MATH 1513 or MATH 1715 or MATH 1813'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2123', name: 'Calculus for Technology Programs I (Q)', credits: 3, prerequisites: ['MATH 1613 or MATH 1715 or MATH 1813'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2133', name: 'Calculus for Technology Programs II (Q)', credits: 3, prerequisites: ['MATH 2123 or MATH 2144'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2144', name: 'Calculus I (Q)', credits: 4, prerequisites: ['MATH 1613 or MATH 1715 or MATH 1813'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2153', name: 'Calculus II (Q)', credits: 3, prerequisites: ['MATH 2144'], programTags: ['Mathematics Major', 'Electrical Engineering'] },
+                    { code: 'MATH 2163', name: 'Calculus III', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major', 'Electrical Engineering'] },
+                    { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major', 'Electrical Engineering'] },
+                    { code: 'MATH 3013', name: 'Linear Algebra (Q)', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major', 'Electrical Engineering'] }
                 ],
-                'Core Math Courses': [
-                    { code: 'MATH 3013', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2153'] },
-                    { code: 'MATH 3613', name: 'Introduction to Abstract Algebra', credits: 3, prerequisites: ['MATH 3013'] },
-                    { code: 'MATH 4013', name: 'Calculus of Several Variables', credits: 3, prerequisites: ['MATH 2163', 'MATH 3013'] },
-                    { code: 'MATH 4023', name: 'Introduction to Analysis', credits: 3, prerequisites: ['MATH 2153', 'MATH 3613'] },
-                    { code: 'MATH 4063', name: 'Advanced Linear Algebra', credits: 3, prerequisites: ['MATH 3013', 'MATH 3613'] },
-                    { code: 'MATH 4143', name: 'Advanced Calculus I', credits: 3, prerequisites: ['MATH 2163', 'MATH 3013', 'MATH 4023'] },
-                    { code: 'MATH 4233', name: 'Intermediate Differential Equations', credits: 3, prerequisites: ['MATH 2233', 'MATH 3013'] },
-                    { code: 'MATH 4613', name: 'Abstract Algebra I', credits: 3, prerequisites: ['MATH 3613'] }
+                'Core Mathematics': [
+                    { code: 'MATH 3263', name: 'Linear Algebra and Differential Equations', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3303', name: 'Advanced Perspectives on Secondary Mathematics', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3403', name: 'Geometric Structures for Early Childhood and Elementary Teachers', credits: 3, prerequisites: ['MATH 1483 or MATH 1493 or MATH 1513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3583', name: 'Introduction to Mathematical Modeling', credits: 3, prerequisites: ['MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3603', name: 'Mathematical Structures for Early Childhood and Elementary Teachers', credits: 3, prerequisites: ['MATH 1483 or MATH 1493 or MATH 1513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3613', name: 'Introduction to Abstract Algebra', credits: 3, prerequisites: ['MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3703', name: 'Mathematical Structures in the Middle Grades', credits: 3, prerequisites: ['MATH 3603 and MATH 3403'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3933', name: 'Introduction to Mathematical Research', credits: 3, prerequisites: ['MATH 3013'], programTags: ['Mathematics Major'] }
                 ],
-                'Applied Mathematics': [
-                    { code: 'MATH 3583', name: 'Introduction to Mathematical Modeling', credits: 3, prerequisites: ['MATH 2233', 'MATH 3013'] },
-                    { code: 'MATH 4513', name: 'Introduction to Numerical Analysis', credits: 3, prerequisites: ['MATH 2233', 'MATH 3013'] },
-                    { code: 'MATH 4533', name: 'Matrix Methods in Machine Learning', credits: 3, prerequisites: ['MATH 3013'] },
-                    { code: 'MATH 4553', name: 'Introduction to Optimization', credits: 3, prerequisites: ['MATH 2163', 'MATH 3013'] },
-                    { code: 'MATH 4573', name: 'Introduction to Mathematical Epidemiology', credits: 3, prerequisites: ['MATH 2163', 'MATH 2233', 'MATH 3013'] },
-                    { code: 'MATH 4753', name: 'Introduction to Cryptography', credits: 3, prerequisites: ['MATH 3013', 'MATH 3613'] }
+                'Advanced Mathematics': [
+                    { code: 'MATH 4003', name: 'Mathematical Logic and Computability', credits: 3, prerequisites: ['MATH 3613 or PHIL 3003'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4013', name: 'Calculus of Several Variables', credits: 3, prerequisites: ['MATH 2163 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4023', name: 'Introduction to Analysis', credits: 3, prerequisites: ['MATH 2153 and MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4033', name: 'History of Mathematics', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4063', name: 'Advanced Linear Algebra', credits: 3, prerequisites: ['MATH 3013 and MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4083', name: 'Intermediate Analysis', credits: 3, prerequisites: ['MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4143', name: 'Advanced Calculus I', credits: 3, prerequisites: ['MATH 2163, MATH 3013, and MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4153', name: 'Advanced Calculus II', credits: 3, prerequisites: ['MATH 4143'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4233', name: 'Intermediate Differential Equations', credits: 3, prerequisites: ['MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4263', name: 'Introduction to Partial Differential Equations', credits: 3, prerequisites: ['MATH 2163 and MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4283', name: 'Functions of a Complex Variable', credits: 3, prerequisites: ['MATH 4013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4343', name: 'Introduction to Topology', credits: 3, prerequisites: ['MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4403', name: 'Geometry', credits: 3, prerequisites: ['MATH 3013 and MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4423', name: 'Geometry and Algorithms in Three-Dimensional Modeling', credits: 3, prerequisites: ['MATH 2163 and MATH 3013 and (CS 1103 or CS 1113 or ENGR 1412)'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4443', name: 'Differential Geometry of Curves and Surfaces', credits: 3, prerequisites: ['MATH 2163 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4453', name: 'Mathematical Interest Theory', credits: 3, prerequisites: ['MATH 2153 and MATH 2233'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4513', name: 'Introduction to Numerical Analysis', credits: 3, prerequisites: ['MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4533', name: 'Matrix Methods in Machine Learning', credits: 3, prerequisites: ['MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4553', name: 'Introduction to Optimization', credits: 3, prerequisites: ['MATH 2163 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4573', name: 'Introduction to Mathematical Epidemiology', credits: 3, prerequisites: ['MATH 2163, MATH 2233, and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4613', name: 'Abstract Algebra I', credits: 3, prerequisites: ['MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4623', name: 'Abstract Algebra II', credits: 3, prerequisites: ['MATH 4613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4663', name: 'Combinatorics', credits: 3, prerequisites: ['MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4713', name: 'Number Theory', credits: 3, prerequisites: ['MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4753', name: 'Introduction to Cryptography', credits: 3, prerequisites: ['MATH 3013 and (MATH 3613 or CS 3653)'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4813', name: 'Groups and Representations', credits: 3, prerequisites: ['MATH 3013 and MATH 3613'], programTags: ['Mathematics Major'] }
                 ],
-                'Specialized Areas': [
-                    { code: 'MATH 4283', name: 'Functions of a Complex Variable', credits: 3, prerequisites: ['MATH 4013'] },
-                    { code: 'MATH 4343', name: 'Introduction to Topology', credits: 3, prerequisites: ['MATH 4023'] },
-                    { code: 'MATH 4403', name: 'Geometry', credits: 3, prerequisites: ['MATH 3013', 'MATH 3613'] },
-                    { code: 'MATH 4663', name: 'Combinatorics', credits: 3, prerequisites: ['MATH 3013'] },
-                    { code: 'MATH 4713', name: 'Number Theory', credits: 3, prerequisites: ['MATH 3613'] },
-                    { code: 'MATH 4813', name: 'Groups and Representations', credits: 3, prerequisites: ['MATH 3013', 'MATH 3613'] }
+                'Special Studies & Research': [
+                    { code: 'MATH 1910', name: 'Special Studies', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2890', name: 'Honors Experience in Math', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2900', name: 'Undergraduate Research', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 2910', name: 'Special Studies', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3890', name: 'Advanced Honors Experience in Mathematics', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 3910', name: 'Special Studies', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4590', name: 'Professional Practice in Mathematics', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4900', name: 'Undergraduate Research', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4910', name: 'Special Studies', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4950', name: 'Problem Solving Seminar', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4963', name: 'Preparation for Senior Thesis', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4973', name: 'Senior Thesis', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 4993', name: 'Senior Honors Thesis', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] }
                 ],
-                'Research & Capstone': [
-                    { code: 'MATH 3933', name: 'Introduction to Mathematical Research', credits: 3, prerequisites: ['MATH 3013'] },
-                    { code: 'MATH 4900', name: 'Undergraduate Research', credits: 3, prerequisites: [] },
-                    { code: 'MATH 4963', name: 'Preparation for Senior Thesis', credits: 3, prerequisites: [] },
-                    { code: 'MATH 4973', name: 'Senior Thesis', credits: 3, prerequisites: [] },
-                    { code: 'MATH 4993', name: 'Senior Honors Thesis', credits: 3, prerequisites: [] }
-                ]
-            },
-            'Physics': {
-                'Foundation Physics': [
-                    { code: 'PHYS 1001', name: 'Frontiers of Physics', credits: 1, prerequisites: [] },
-                    { code: 'PHYS 1014', name: 'Descriptive Physics (N)', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 1114', name: 'College Physics I (LN)', credits: 4, prerequisites: ['MATH 1513'] },
-                    { code: 'PHYS 1214', name: 'College Physics II (LN)', credits: 4, prerequisites: ['PHYS 1114'] },
-                    { code: 'PHYS 2014', name: 'University Physics I (LN)', credits: 4, prerequisites: ['MATH 2103', 'MATH 2123', 'MATH 2144'] },
-                    { code: 'PHYS 2020', name: 'Special Topics in Physics (L)', credits: 1, prerequisites: [] },
-                    { code: 'PHYS 2114', name: 'University Physics II (LN)', credits: 4, prerequisites: ['PHYS 2014'] },
-                    { code: 'PHYS 2203', name: 'University Physics III', credits: 3, prerequisites: ['PHYS 2114'] },
-                    { code: 'PHYS 2663', name: 'Physics in Medicine (N)', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 2890', name: 'Honors Experience in Physics', credits: 3, prerequisites: [] }
+                'Graduate Level': [
+                    { code: 'MATH 5000', name: 'Master\'s Research and Thesis', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5003', name: 'Abstract Algebra I', credits: 3, prerequisites: ['MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5010', name: 'Seminar in Mathematics', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5013', name: 'Abstract Algebra II', credits: 3, prerequisites: ['MATH 4613 or MATH 5003'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5023', name: 'Advanced Linear Algebra', credits: 3, prerequisites: ['MATH 3013 and MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5033', name: 'History of Mathematics', credits: 3, prerequisites: ['MATH 2153'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5043', name: 'Advanced Calculus I', credits: 3, prerequisites: ['MATH 2163, MATH 3013, and MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5053', name: 'Advanced Calculus II', credits: 3, prerequisites: ['MATH 4143 or MATH 5043'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5063', name: 'Calculus of Several Variables', credits: 3, prerequisites: ['MATH 2163 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5073', name: 'Introduction to Analysis', credits: 3, prerequisites: ['MATH 2153 and MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5083', name: 'Intermediate Analysis', credits: 3, prerequisites: ['MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5133', name: 'Stochastic Processes', credits: 3, prerequisites: ['MATH 2233, MATH 3013 and STAT 5123'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5143', name: 'Real Analysis I', credits: 3, prerequisites: ['MATH 4153 or MATH 5053'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5153', name: 'Real Analysis II', credits: 3, prerequisites: ['MATH 5143'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5193', name: 'Differentiable Manifolds', credits: 3, prerequisites: ['MATH 4153 or MATH 5053'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5203', name: 'Intermediate Differential Equations', credits: 3, prerequisites: ['MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5213', name: 'Fourier Analysis and Wavelets', credits: 3, prerequisites: ['MATH 4013 or MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5233', name: 'Partial Differential Equations', credits: 3, prerequisites: ['MATH 4013, MATH 4143 and MATH 4233'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5243', name: 'Ordinary Differential Equations', credits: 3, prerequisites: ['MATH 4143 or MATH 5043; MATH 4233; MATH 5023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5253', name: 'Advanced Ordinary Differential Equations', credits: 3, prerequisites: ['MATH 5243'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5263', name: 'Introduction to Partial Differential Equations', credits: 3, prerequisites: ['MATH 2163 and MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5273', name: 'Functions of a Complex Variable', credits: 3, prerequisites: ['MATH 4013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5283', name: 'Complex Analysis I', credits: 3, prerequisites: ['MATH 4153 or MATH 5053'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5293', name: 'Complex Analysis II', credits: 3, prerequisites: ['MATH 5283'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5303', name: 'General Topology', credits: 3, prerequisites: ['MATH 4143 or MATH 5043'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5313', name: 'Geometric Topology', credits: 3, prerequisites: ['MATH 4613 or MATH 5003, MATH 5303'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5343', name: 'Introduction to Topology', credits: 3, prerequisites: ['MATH 4023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5413', name: 'Differential Geometry', credits: 3, prerequisites: ['MATH 4013 or MATH 4143 or MATH 5043'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5423', name: 'Geometry and Algorithms in Three-Dimensional Modeling', credits: 3, prerequisites: ['MATH 2163 and MATH 3013 and (CS 1113 or ENGR 1412)'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5443', name: 'Differential Geometry of Curves and Surfaces', credits: 3, prerequisites: ['MATH 2163 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5453', name: 'Mathematical Interest Theory', credits: 3, prerequisites: ['MATH 2153 and MATH 2233'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5473', name: 'Financial Calculus', credits: 3, prerequisites: ['MATH 4143 or MATH 5043, STAT 4203'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5503', name: 'Introduction to Optimization', credits: 3, prerequisites: ['MATH 2163 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5513', name: 'Introduction to Numerical Analysis', credits: 3, prerequisites: ['MATH 2233 and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5533', name: 'Matrix Methods in Machine Learning', credits: 3, prerequisites: ['MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5543', name: 'Numerical Analysis for Differential Equations', credits: 3, prerequisites: ['MATH 4233, MATH 4513 or CS 4513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5553', name: 'Numerical Analysis for Linear Algebra', credits: 3, prerequisites: ['MATH 3013, and MATH 4513 or CS 4513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5563', name: 'Finite Element Methods for Partial Differential Equations', credits: 3, prerequisites: ['MATH 4023; MATH 4263; and MATH 4513 or CS 4513'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5573', name: 'Introduction to Mathematical Epidemiology', credits: 3, prerequisites: ['MATH 2163, MATH 2233, and MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5580', name: 'Case Studies in Applied Mathematics', credits: 3, prerequisites: ['MATH 2233, MATH 4013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5593', name: 'Methods of Applied Mathematics', credits: 3, prerequisites: ['MATH 2233, MATH 4013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5613', name: 'Algebra I', credits: 3, prerequisites: ['MATH 4613 or MATH 5003'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5623', name: 'Algebra II', credits: 3, prerequisites: ['MATH 5613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5673', name: 'Combinatorics', credits: 3, prerequisites: ['MATH 3013'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5713', name: 'Number Theory', credits: 3, prerequisites: ['MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5753', name: 'Introduction to Cryptography', credits: 3, prerequisites: ['MATH 3013 and (MATH 3613 or CS 3653)'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5803', name: 'Groups and Representations', credits: 3, prerequisites: ['MATH 3013 and MATH 3613'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5903', name: 'Seminar and Practicum in the Teaching of College Mathematics', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 5913', name: 'Introduction to Research in Mathematics Education', credits: 3, prerequisites: ['MATH 3613 or MATH 4023'], programTags: ['Mathematics Major'] }
                 ],
-                'Core Physics': [
-                    { code: 'PHYS 3013', name: 'Mechanics I', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2233'] },
-                    { code: 'PHYS 3113', name: 'Thermal Physics', credits: 3, prerequisites: ['PHYS 2203', 'MATH 2163'] },
-                    { code: 'PHYS 3213', name: 'Optics', credits: 3, prerequisites: ['PHYS 2114', 'PHYS 3513'] },
-                    { code: 'PHYS 3313', name: 'Introduction to Semiconductor Device Physics', credits: 3, prerequisites: ['PHYS 2114'] },
-                    { code: 'PHYS 3323', name: 'Modern Laboratory Methods I', credits: 3, prerequisites: ['PHYS 2014', 'PHYS 2114'] },
-                    { code: 'PHYS 3513', name: 'Mathematical Physics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'] },
-                    { code: 'PHYS 3553', name: 'Foundations of Cancer', credits: 3, prerequisites: ['CHEM 1225', 'CHEM 1414', 'CHEM 1515'] },
-                    { code: 'PHYS 3623', name: 'Modern Laboratory Methods II', credits: 3, prerequisites: ['PHYS 2014', 'PHYS 2114'] },
-                    { code: 'PHYS 3713', name: 'Modern Physics', credits: 3, prerequisites: ['PHYS 2203'] }
-                ],
-                'Advanced Physics': [
-                    { code: 'PHYS 4003', name: 'Computer Simulation Methods in Physics', credits: 3, prerequisites: ['PHYS 3013', 'PHYS 3113', 'PHYS 3313'] },
-                    { code: 'PHYS 4010', name: 'Special Problems', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 4113', name: 'Electricity and Magnetism', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2233'] },
-                    { code: 'PHYS 4213', name: 'Introduction to Nuclear and Particle Physics', credits: 3, prerequisites: ['PHYS 2114', 'PHYS 3713'] },
-                    { code: 'PHYS 4223', name: 'Introduction to General Relativity', credits: 3, prerequisites: ['PHYS 2203', 'PHYS 3513'] },
-                    { code: 'PHYS 4263', name: 'Introduction to Solid State Physics', credits: 3, prerequisites: ['PHYS 3013', 'PHYS 3713'] },
-                    { code: 'PHYS 4313', name: 'Molecular Biophysics', credits: 3, prerequisites: ['PHYS 1214', 'PHYS 2114'] },
-                    { code: 'PHYS 4413', name: 'Modern Physics II', credits: 3, prerequisites: ['PHYS 3013', 'PHYS 3713'] },
-                    { code: 'PHYS 4423', name: 'Mechanics II', credits: 3, prerequisites: ['PHYS 3013'] },
-                    { code: 'PHYS 4503', name: 'Quantum Information', credits: 3, prerequisites: ['PHYS 3713'] },
-                    { code: 'PHYS 4513', name: 'Introductory Quantum Mechanics', credits: 3, prerequisites: ['PHYS 3713'] },
-                    { code: 'PHYS 4663', name: 'Radioactivity and Nuclear Physics', credits: 3, prerequisites: ['PHYS 3713'] },
-                    { code: 'PHYS 4712', name: 'Senior Project', credits: 2, prerequisites: [] },
-                    { code: 'PHYS 4813', name: 'Electromagnetic Radiation', credits: 3, prerequisites: ['PHYS 4113'] },
-                    { code: 'PHYS 4993', name: 'Senior Honors Thesis', credits: 3, prerequisites: [] }
-                ],
-                'Graduate Physics': [
-                    { code: 'PHYS 5000', name: 'Master\'s Thesis Research or Report', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 5110', name: 'Seminar', credits: 1, prerequisites: [] },
-                    { code: 'PHYS 5113', name: 'Statistical Thermodynamics and Kinetic Theory', credits: 3, prerequisites: ['PHYS 3113'] },
-                    { code: 'PHYS 5123', name: 'Geometrical Optics', credits: 3, prerequisites: ['PHYS 3213'] },
-                    { code: 'PHYS 5133', name: 'Laser Spectroscopy', credits: 3, prerequisites: ['PHYS 5163'] },
-                    { code: 'PHYS 5163', name: 'Lasers', credits: 3, prerequisites: ['PHYS 4813'] },
-                    { code: 'PHYS 5213', name: 'Statistical Mechanics', credits: 3, prerequisites: ['PHYS 5113', 'PHYS 5613'] },
-                    { code: 'PHYS 5220', name: 'Physics Topics for Teachers', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 5263', name: 'Particle Physics', credits: 3, prerequisites: ['PHYS 5613'] },
-                    { code: 'PHYS 5303', name: 'Physical Optics', credits: 3, prerequisites: ['PHYS 3213'] },
-                    { code: 'PHYS 5313', name: 'Electromagnetic Theory', credits: 3, prerequisites: ['PHYS 5453'] },
-                    { code: 'PHYS 5350', name: 'Special Problems', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 5413', name: 'Classical Mechanics', credits: 3, prerequisites: ['PHYS 4423'] },
-                    { code: 'PHYS 5453', name: 'Mathematical Methods for Physicists', credits: 3, prerequisites: ['PHYS 3513'] },
-                    { code: 'PHYS 5503', name: 'Frontiers of Quantum Information Science', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 5523', name: 'Radiation Detection and Measurement', credits: 3, prerequisites: ['PHYS 3713', 'PHYS 4213'] },
-                    { code: 'PHYS 5533', name: 'Dosimetry and Radiation Protection', credits: 3, prerequisites: ['PHYS 4663', 'PHYS 5523'] },
-                    { code: 'PHYS 5553', name: 'Foundations of Cancer', credits: 3, prerequisites: ['MICR 3033'] },
-                    { code: 'PHYS 5563', name: 'Radioactivity and Nuclear Physics Laboratory', credits: 3, prerequisites: ['PHYS 4663', 'PHYS 5523'] },
-                    { code: 'PHYS 5573', name: 'Radiation Biophysics', credits: 3, prerequisites: ['PHYS 5533'] },
-                    { code: 'PHYS 5593', name: 'Physics of Radiation Therapy', credits: 3, prerequisites: ['PHYS 5533'] },
-                    { code: 'PHYS 5613', name: 'Quantum Mechanics I', credits: 3, prerequisites: ['PHYS 5453'] },
-                    { code: 'PHYS 5663', name: 'Solid State Physics I', credits: 3, prerequisites: ['PHYS 4513'] },
-                    { code: 'PHYS 5713', name: 'Solid State Physics II', credits: 3, prerequisites: ['PHYS 5663'] },
-                    { code: 'PHYS 5813', name: 'General Relativity', credits: 3, prerequisites: ['PHYS 5453'] },
-                    { code: 'PHYS 5960', name: 'Problems in Chemical Physics', credits: 3, prerequisites: [] }
-                ],
-                'Doctoral Physics': [
-                    { code: 'PHYS 6000', name: 'Doctoral Dissertation Research', credits: 3, prerequisites: [] },
-                    { code: 'PHYS 6010', name: 'Advanced Graduate Seminar', credits: 1, prerequisites: [] },
-                    { code: 'PHYS 6113', name: 'Advanced Theory of Solids', credits: 3, prerequisites: ['PHYS 5663'] },
-                    { code: 'PHYS 6213', name: 'Group Theory for Physics', credits: 3, prerequisites: ['PHYS 5453'] },
-                    { code: 'PHYS 6243', name: 'Semiconductors I', credits: 3, prerequisites: ['PHYS 5113', 'PHYS 5613', 'PHYS 5663'] },
-                    { code: 'PHYS 6260', name: 'Special Topics in High Energy Physics', credits: 3, prerequisites: ['PHYS 5263'] },
-                    { code: 'PHYS 6313', name: 'Quantum Mechanics II', credits: 3, prerequisites: ['PHYS 5613'] },
-                    { code: 'PHYS 6323', name: 'Quantum Field Theory', credits: 3, prerequisites: ['PHYS 6313'] },
-                    { code: 'PHYS 6343', name: 'Semiconductors II', credits: 3, prerequisites: ['PHYS 6243'] },
-                    { code: 'PHYS 6413', name: 'Nonlinear Optics', credits: 3, prerequisites: ['PHYS 5163', 'PHYS 5313', 'PHYS 5613'] },
-                    { code: 'PHYS 6423', name: 'Quantum Optics', credits: 3, prerequisites: ['PHYS 5163', 'PHYS 5613'] },
-                    { code: 'PHYS 6513', name: 'Advanced Topics in Solid State Physics', credits: 3, prerequisites: ['PHYS 5663'] },
-                    { code: 'PHYS 6613', name: 'Advanced Nuclear and Particle Physics', credits: 3, prerequisites: ['PHYS 5263', 'PHYS 6313'] },
-                    { code: 'PHYS 6713', name: 'Advanced Electromagnetic Radiation', credits: 3, prerequisites: [] }
-                ],
-                'Photonics Specialization': [
-                    { code: 'PHYS 6803', name: 'Photonics I: Advanced Optics', credits: 3, prerequisites: ['ECEN 3213', 'ECEN 3813'] },
-                    { code: 'PHYS 6810', name: 'Photonics II: THz Photonics and THz-TDS', credits: 3, prerequisites: ['PHYS 6803'] },
-                    { code: 'PHYS 6820', name: 'Photonics II: Spectroscopy II', credits: 3, prerequisites: ['PHYS 6803'] },
-                    { code: 'PHYS 6830', name: 'Photonics II: Spectroscopy III', credits: 3, prerequisites: ['PHYS 6803'] },
-                    { code: 'PHYS 6840', name: 'Photonics III: Microscopy I', credits: 3, prerequisites: ['CHEM 3553'] },
-                    { code: 'PHYS 6850', name: 'Photonics III: Microscopy II', credits: 3, prerequisites: ['PHYS 3553'] },
-                    { code: 'PHYS 6860', name: 'Photonics III: Microscopy III and Image Processing', credits: 3, prerequisites: ['ECEN 5793'] },
-                    { code: 'PHYS 6870', name: 'Photonics IV: Synthesis and Devices I', credits: 3, prerequisites: ['PHYS 6803', 'PHYS 6840'] },
-                    { code: 'PHYS 6880', name: 'Photonics IV: Semiconductor Devices, Testing and Characterization', credits: 3, prerequisites: ['PHYS 6803'] },
-                    { code: 'PHYS 6890', name: 'Photonics IV: Semiconductor Synthesis and Devices III', credits: 3, prerequisites: ['PHYS 6803'] }
+                'Doctoral Level': [
+                    { code: 'MATH 6000', name: 'Doctoral Research and Dissertation', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6010', name: 'Advanced Seminar in Mathematics', credits: 1, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6090', name: 'Doctoral Research Project', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6143', name: 'Functional Analysis I', credits: 3, prerequisites: ['MATH 4613 or MATH 5003 or MATH 5023, MATH 5153, MATH 5303'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6213', name: 'Harmonic Analysis', credits: 3, prerequisites: ['MATH 5153, MATH 5283'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6233', name: 'Advanced Partial Differential Equations', credits: 3, prerequisites: ['MATH 5233'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6263', name: 'Potential Theory', credits: 3, prerequisites: ['MATH 5153 and MATH 5283'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6283', name: 'Several Complex Variables', credits: 3, prerequisites: ['MATH 5283'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6290', name: 'Topics in Analysis', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6323', name: 'Algebraic Topology I', credits: 3, prerequisites: ['MATH 5313'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6390', name: 'Topics in Topology', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6433', name: 'Algebraic Geometry', credits: 3, prerequisites: ['MATH 5623'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6453', name: 'Complex Geometry', credits: 3, prerequisites: ['MATH 5283'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6490', name: 'Topics in Geometry', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6513', name: 'Theoretical Numerical Analysis', credits: 3, prerequisites: ['MATH 5153, MATH 5543 or CS 5543, and MATH 5553 or CS 5553'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6590', name: 'Topics in Applied Mathematics', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6613', name: 'Commutative Algebra', credits: 3, prerequisites: ['MATH 5623'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6623', name: 'Homological Algebra', credits: 3, prerequisites: ['MATH 5623'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6690', name: 'Topics in Algebra', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6713', name: 'Analytic Number Theory', credits: 3, prerequisites: ['MATH 4283 or MATH 5283'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6723', name: 'Algebraic Number Theory', credits: 3, prerequisites: ['MATH 5013 or MATH 5623'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6790', name: 'Topics in Number Theory', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6813', name: 'Lie Groups and Representations', credits: 3, prerequisites: ['MATH 4153 or MATH 5053, MATH 4613 or MATH 5003, MATH 5303'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6823', name: 'Lie Algebras', credits: 3, prerequisites: ['MATH 5013 and MATH 5023'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6890', name: 'Topics in Representation Theory', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6923', name: 'Research in Undergraduate Mathematics Education', credits: 3, prerequisites: ['MATH 5913'], programTags: ['Mathematics Major'] },
+                    { code: 'MATH 6990', name: 'Topics in Collegiate Mathematics Education', credits: 3, prerequisites: [], programTags: ['Mathematics Major'] }
                 ]
             }
         };
@@ -1617,7 +1241,6 @@ class StudentPortal {
     loadTabContent() {
         this.loadCurrentCourses();
         this.loadGradeHistory();
-        this.loadPastClasses();
         this.loadAchievements();
         this.loadRequirements();
         this.loadCourseCatalog();
@@ -1694,176 +1317,6 @@ class StudentPortal {
         this.gradeHistoryEl.innerHTML = historyHTML;
     }
 
-    loadPastClasses() {
-        if (!this.pastClassesListEl || !this.studentData.pastClasses) return;
-
-        // Initialize filter elements if they exist
-        const pastClassesFilter = document.getElementById('pastClassesFilter');
-        const pastClassesSearch = document.getElementById('pastClassesSearch');
-
-        // Set up event listeners for filtering
-        if (pastClassesFilter && !pastClassesFilter.hasEventListener) {
-            pastClassesFilter.addEventListener('change', () => this.filterPastClasses());
-            pastClassesFilter.hasEventListener = true;
-        }
-        
-        if (pastClassesSearch && !pastClassesSearch.hasEventListener) {
-            pastClassesSearch.addEventListener('input', () => this.filterPastClasses());
-            pastClassesSearch.hasEventListener = true;
-        }
-
-        // Update summary statistics
-        this.updatePastClassesSummary();
-
-        // Display past classes
-        this.displayPastClasses();
-    }
-
-    updatePastClassesSummary() {
-        const totalClassesEl = document.getElementById('totalClassesTaken');
-        const completedClassesEl = document.getElementById('completedClasses');
-        const averageGradeEl = document.getElementById('averageGrade');
-
-        if (!this.studentData.pastClasses) return;
-
-        let totalClasses = 0;
-        let completedClasses = 0;
-        let totalGradePoints = 0;
-        let totalCredits = 0;
-
-        this.studentData.pastClasses.forEach(semester => {
-            semester.classes.forEach(classItem => {
-                totalClasses++;
-                if (classItem.grade !== 'W' && classItem.grade !== 'F') {
-                    completedClasses++;
-                }
-                
-                // Calculate GPA (simplified)
-                const gradePoints = this.getGradePoints(classItem.grade);
-                if (gradePoints !== null) {
-                    totalGradePoints += gradePoints * classItem.credits;
-                    totalCredits += classItem.credits;
-                }
-            });
-        });
-
-        const averageGPA = totalCredits > 0 ? (totalGradePoints / totalCredits).toFixed(2) : '0.00';
-
-        if (totalClassesEl) totalClassesEl.textContent = totalClasses;
-        if (completedClassesEl) completedClassesEl.textContent = completedClasses;
-        if (averageGradeEl) averageGradeEl.textContent = averageGPA;
-    }
-
-    getGradePoints(grade) {
-        const gradeMap = {
-            'A': 4.0, 'A-': 3.7,
-            'B+': 3.3, 'B': 3.0, 'B-': 2.7,
-            'C+': 2.3, 'C': 2.0, 'C-': 1.7,
-            'D+': 1.3, 'D': 1.0, 'D-': 0.7,
-            'F': 0.0
-        };
-        return gradeMap[grade] !== undefined ? gradeMap[grade] : null;
-    }
-
-    displayPastClasses(filteredClasses = null) {
-        const classesToDisplay = filteredClasses || this.studentData.pastClasses;
-        
-        if (!classesToDisplay || classesToDisplay.length === 0) {
-            this.pastClassesListEl.innerHTML = `
-                <div class="no-classes-message">
-                    <i class="fas fa-book-open"></i>
-                    No past classes found matching your criteria.
-                </div>
-            `;
-            return;
-        }
-
-        // Group semesters by year
-        const groupedByYear = {};
-        classesToDisplay.forEach(semester => {
-            if (!groupedByYear[semester.year]) {
-                groupedByYear[semester.year] = [];
-            }
-            groupedByYear[semester.year].push(semester);
-        });
-
-        // Sort years in descending order (most recent first)
-        const sortedYears = Object.keys(groupedByYear).sort((a, b) => b - a);
-
-        const pastClassesHTML = sortedYears.map(year => {
-            const yearSemesters = groupedByYear[year];
-            
-            return `
-                <div class="year-group">
-                    <div class="year-header">${year}</div>
-                    ${yearSemesters.map(semester => `
-                        <div class="past-class-semester">
-                            <div class="semester-subheader">
-                                <span class="semester-name">${semester.semester}</span>
-                                <span class="semester-gpa">GPA: ${semester.gpa.toFixed(2)}</span>
-                            </div>
-                            <div class="semester-classes">
-                                ${semester.classes.map(classItem => `
-                                    <div class="past-class-item">
-                                        <div class="past-class-info">
-                                            <div class="past-class-code">${classItem.code}</div>
-                                            <div class="past-class-name">${classItem.name}</div>
-                                            <div class="past-class-instructor">Prof. ${classItem.instructor}</div>
-                                        </div>
-                                        <div class="past-class-grade">
-                                            <span class="grade-badge grade-${classItem.grade.toLowerCase().replace('+', 'plus').replace('-', 'minus')}">${classItem.grade}</span>
-                                            <span class="past-class-credits">${classItem.credits}</span>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }).join('');
-
-        this.pastClassesListEl.innerHTML = pastClassesHTML;
-    }
-
-    filterPastClasses() {
-        const filterValue = document.getElementById('pastClassesFilter')?.value || 'all';
-        const searchValue = document.getElementById('pastClassesSearch')?.value.toLowerCase() || '';
-
-        if (!this.studentData.pastClasses) return;
-
-        let filteredSemesters = this.studentData.pastClasses.map(semester => {
-            let filteredClasses = semester.classes;
-
-            // Apply search filter
-            if (searchValue) {
-                filteredClasses = filteredClasses.filter(classItem => 
-                    classItem.code.toLowerCase().includes(searchValue) ||
-                    classItem.name.toLowerCase().includes(searchValue) ||
-                    classItem.instructor.toLowerCase().includes(searchValue)
-                );
-            }
-
-            // Apply status filter
-            if (filterValue === 'completed') {
-                filteredClasses = filteredClasses.filter(classItem => 
-                    classItem.grade !== 'W' && classItem.grade !== 'F'
-                );
-            } else if (filterValue === 'failed') {
-                filteredClasses = filteredClasses.filter(classItem => 
-                    classItem.grade === 'W' || classItem.grade === 'F'
-                );
-            }
-
-            return {
-                ...semester,
-                classes: filteredClasses
-            };
-        }).filter(semester => semester.classes.length > 0);
-
-        this.displayPastClasses(filteredSemesters);
-    }
-
     loadAchievements() {
         if (!this.achievementsEl || !this.studentData.achievements) return;
 
@@ -1913,658 +1366,31 @@ class StudentPortal {
     }
 
     getAllCourses() {
-        const allCourses = [
-            // MATH Courses - Complete Mathematics Department Catalog
-            {
-                code: "MATH 1483",
-                name: "Mathematical Functions and Their Uses (Q)",
-                credits: 3,
-                prerequisites: "An acceptable placement score.",
-                level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 1493",
-                name: "Applications of Modern Mathematics (Q)",
-                credits: 3,
-                prerequisites: "An acceptable placement score.",
-                level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 1513",
-                name: "College Algebra (Q)",
-                credits: 3,
-                prerequisites: "An acceptable placement score.",
-                level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 1583",
-                name: "Applied Geometry and Trigonometry (Q)",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in MATH 1483 or MATH 1513, or an acceptable placement score.",
-                level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 1613",
-                name: "Trigonometry (Q)",
-                credits: 3,
-                prerequisites: "MATH 1513 with a grade of \"C\" or better or an acceptable placement score.",
-                level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 1715",
-                name: "Precalculus (Q)",
-                credits: 3,
-                prerequisites: "An acceptable placement score.",
-                level: "1000",
-                department: "Mathematics"
-            },
+        // Temporary simple implementation to fix syntax errors
+        return [
             {
                 code: "MATH 1813",
-                name: "Preparation for Calculus (Q)",
+                name: "Precalculus",
                 credits: 3,
-                prerequisites: "MATH 1513 with a grade of \"C\" or better or an acceptable placement score.",
+                prerequisites: "None",
                 level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 1910",
-                name: "Special Studies",
+                programTags: ['Electrical Engineering', 'Mathematics Major']
+            }
+        ];
+    }
+
+    renderCourseCatalog(courses) {
+                name: "Calculus I",
                 credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "1000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2103",
-                name: "Business Calculus (Q)",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in one of MATH 1483 or MATH 1513 or MATH 1715 or MATH 1813, or an acceptable placement score.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2123",
-                name: "Calculus for Technology Programs I (Q)",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in MATH 1613 or MATH 1715 or MATH 1813, or an acceptable placement score.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2133",
-                name: "Calculus for Technology Programs II (Q)",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in MATH 2123 or MATH 2144.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2144",
-                name: "Calculus I (Q)",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in MATH 1613 or MATH 1715 or MATH 1813, or an acceptable placement score.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2153",
-                name: "Calculus II (Q)",
-                credits: 3,
-                prerequisites: "MATH 2144 with a grade of \"C\" or better.",
-                level: "2000",
-                department: "Mathematics"
+                prerequisites: "MATH 1813 with a grade of C or better.",
+                level: "2000"
             },
             {
                 code: "MATH 2163",
-                name: "Calculus III",
+                name: "Calculus II",
                 credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2233",
-                name: "Differential Equations",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2890",
-                name: "Honors Experience in Math",
-                credits: 1,
-                prerequisites: "Honors College participation and concurrent enrollment in a designated MATH course.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2900",
-                name: "Undergraduate Research",
-                credits: 3,
-                prerequisites: "Consent of Instructor.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 2910",
-                name: "Special Studies",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "2000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3013",
-                name: "Linear Algebra (Q)",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3263",
-                name: "Linear Algebra and Differential Equations",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3303",
-                name: "Advanced Perspectives on Secondary Mathematics",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3403",
-                name: "Geometric Structures for Early Childhood and Elementary Teachers",
-                credits: 3,
-                prerequisites: "MATH 1483 or MATH 1493 or MATH 1513.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3583",
-                name: "Introduction to Mathematical Modeling",
-                credits: 3,
-                prerequisites: "MATH 2233 and MATH 3013 with grades of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3603",
-                name: "Mathematical Structures for Early Childhood and Elementary Teachers",
-                credits: 3,
-                prerequisites: "MATH 1483 or MATH 1493 or MATH 1513.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3613",
-                name: "Introduction to Abstract Algebra",
-                credits: 3,
-                prerequisites: "MATH 3013 with a grade of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3703",
-                name: "Mathematical Structures in the Middle Grades",
-                credits: 3,
-                prerequisites: "MATH 3603 and MATH 3403 with grades of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3890",
-                name: "Advanced Honors Experience in Mathematics",
-                credits: 1,
-                prerequisites: "Honors College participation and concurrent enrollment in a designated MATH course.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3910",
-                name: "Special Studies",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 3933",
-                name: "Introduction to Mathematical Research",
-                credits: 3,
-                prerequisites: "MATH 3013 with grade of \"C\" or better.",
-                level: "3000",
-                department: "Mathematics"
-            },
-            // 4000 Level MATH Courses
-            {
-                code: "MATH 4003",
-                name: "Mathematical Logic and Computability",
-                credits: 3,
-                prerequisites: "MATH 3613 or PHIL 3003 or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4013",
-                name: "Calculus of Several Variables",
-                credits: 3,
-                prerequisites: "MATH 2163 and MATH 3013 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4023",
-                name: "Introduction to Analysis",
-                credits: 3,
-                prerequisites: "MATH 2153 and MATH 3613 with grades of \"C\" or better, or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4033",
-                name: "History of Mathematics",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4063",
-                name: "Advanced Linear Algebra",
-                credits: 3,
-                prerequisites: "MATH 3013 and MATH 3613 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4083",
-                name: "Intermediate Analysis",
-                credits: 3,
-                prerequisites: "MATH 4023 with grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4143",
-                name: "Advanced Calculus I",
-                credits: 3,
-                prerequisites: "MATH 2163, MATH 3013, and MATH 4023 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4153",
-                name: "Advanced Calculus II",
-                credits: 3,
-                prerequisites: "MATH 4143 with grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4233",
-                name: "Intermediate Differential Equations",
-                credits: 3,
-                prerequisites: "MATH 2233 and MATH 3013 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4263",
-                name: "Introduction to Partial Differential Equations",
-                credits: 3,
-                prerequisites: "MATH 2163 and MATH 2233 and MATH 3013 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4283",
-                name: "Functions of a Complex Variable",
-                credits: 3,
-                prerequisites: "MATH 4013 with a grade of \"C\" or better, or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4343",
-                name: "Introduction to Topology",
-                credits: 3,
-                prerequisites: "MATH 4023 with a grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4403",
-                name: "Geometry",
-                credits: 3,
-                prerequisites: "MATH 3013 and MATH 3613 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4423",
-                name: "Geometry and Algorithms in Three-Dimensional Modeling",
-                credits: 3,
-                prerequisites: "MATH 2163 and MATH 3013 and (CS 1103 or CS 1113 or ENGR 1412) with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4443",
-                name: "Differential Geometry of Curves and Surfaces",
-                credits: 3,
-                prerequisites: "MATH 2163 and MATH 3013 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4453",
-                name: "Mathematical Interest Theory",
-                credits: 3,
-                prerequisites: "MATH 2153 and MATH 2233 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4513",
-                name: "Introduction to Numerical Analysis",
-                credits: 3,
-                prerequisites: "MATH 2233 and MATH 3013 with grades of \"C\" or better and knowledge of programming, or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4533",
-                name: "Matrix Methods in Machine Learning",
-                credits: 3,
-                prerequisites: "MATH 3013 with grade of \"C\" or better and knowledge of computer programming, or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4553",
-                name: "Introduction to Optimization",
-                credits: 3,
-                prerequisites: "MATH 2163 and MATH 3013 with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4573",
-                name: "Introduction to Mathematical Epidemiology",
-                credits: 3,
-                prerequisites: "MATH 2163, MATH 2233, and MATH 3013 with grades of \"C\" or better; and basic experience in coding, or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4590",
-                name: "Professional Practice in Mathematics",
-                credits: 3,
-                prerequisites: "Declared major in mathematics and consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4613",
-                name: "Abstract Algebra I",
-                credits: 3,
-                prerequisites: "MATH 3613 with grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4623",
-                name: "Abstract Algebra II",
-                credits: 3,
-                prerequisites: "MATH 4613 with grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4663",
-                name: "Combinatorics",
-                credits: 3,
-                prerequisites: "MATH 3013 with a grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4713",
-                name: "Number Theory",
-                credits: 3,
-                prerequisites: "MATH 3613 with a grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4753",
-                name: "Introduction to Cryptography",
-                credits: 3,
-                prerequisites: "MATH 3013 and (MATH 3613 or CS 3653) with grades of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4813",
-                name: "Groups and Representations",
-                credits: 3,
-                prerequisites: "MATH 3013 and MATH 3613 with grades of \"C\" or better, or consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4900",
-                name: "Undergraduate Research",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4910",
-                name: "Special Studies",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4950",
-                name: "Problem Solving Seminar",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4963",
-                name: "Preparation for Senior Thesis",
-                credits: 3,
-                prerequisites: "Consent of instructor, junior or senior standing.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4973",
-                name: "Senior Thesis",
-                credits: 3,
-                prerequisites: "Consent of instructor, senior standing.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 4993",
-                name: "Senior Honors Thesis",
-                credits: 3,
-                prerequisites: "Consent of instructor, senior standing, and Honors Program participation.",
-                level: "4000",
-                department: "Mathematics"
-            },
-            // 5000 Level MATH Courses (Graduate)
-            {
-                code: "MATH 5000",
-                name: "Master's Research and Thesis",
-                credits: 6,
-                prerequisites: "Consent of advisory committee.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5003",
-                name: "Abstract Algebra I",
-                credits: 3,
-                prerequisites: "MATH 3613 with grade of \"C\" or better.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5010",
-                name: "Seminar in Mathematics",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5013",
-                name: "Abstract Algebra II",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in one of MATH 4613 or MATH 5003.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5023",
-                name: "Advanced Linear Algebra",
-                credits: 3,
-                prerequisites: "MATH 3013 and MATH 3613 with grades of \"C\" or better.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5033",
-                name: "History of Mathematics",
-                credits: 3,
-                prerequisites: "MATH 2153 with a grade of \"C\" or better.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5043",
-                name: "Advanced Calculus I",
-                credits: 3,
-                prerequisites: "MATH 2163, MATH 3013, and MATH 4023 with grades of \"C\" or better.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5053",
-                name: "Advanced Calculus II",
-                credits: 3,
-                prerequisites: "Grade of \"C\" or better in one of MATH 4143 or MATH 5043.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5063",
-                name: "Calculus of Several Variables",
-                credits: 3,
-                prerequisites: "MATH 2163 and MATH 3013 with grades of \"C\" or better.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5073",
-                name: "Introduction to Analysis",
-                credits: 3,
-                prerequisites: "MATH 2153 and MATH 3613 with grades of \"C\" or better, or consent of instructor.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5083",
-                name: "Intermediate Analysis",
-                credits: 3,
-                prerequisites: "MATH 4023 with grade of \"C\" or better.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 5133",
-                name: "Stochastic Processes",
-                credits: 3,
-                prerequisites: "MATH 2233, MATH 3013 and STAT 5123.",
-                level: "5000",
-                department: "Mathematics"
-            },
-            // 6000 Level MATH Courses (Doctoral)
-            {
-                code: "MATH 6000",
-                name: "Doctoral Research and Dissertation",
-                credits: 12,
-                prerequisites: "Consent of advisory committee.",
-                level: "6000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 6010",
-                name: "Advanced Seminar in Mathematics",
-                credits: 3,
-                prerequisites: "Consent of instructor and student's advisory committee.",
-                level: "6000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 6090",
-                name: "Doctoral Research Project",
-                credits: 6,
-                prerequisites: "Consent of advisory committee.",
-                level: "6000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 6143",
-                name: "Functional Analysis I",
-                credits: 3,
-                prerequisites: "MATH 4613 or MATH 5003 or MATH 5023, MATH 5153, MATH 5303.",
-                level: "6000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 6213",
-                name: "Harmonic Analysis",
-                credits: 3,
-                prerequisites: "MATH 5153, MATH 5283.",
-                level: "6000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 6233",
-                name: "Advanced Partial Differential Equations",
-                credits: 3,
-                prerequisites: "MATH 5233 or consent of instructor.",
-                level: "6000",
-                department: "Mathematics"
-            },
-            {
-                code: "MATH 6290",
-                name: "Topics in Analysis",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "6000",
-                department: "Mathematics"
+                prerequisites: "MATH 2153 with a grade of C or better.",
+                level: "2000"
             },
             {
                 code: "MATH 2233",
@@ -2580,678 +1406,27 @@ class StudentPortal {
                 prerequisites: "MATH 2163 with a grade of C or better.",
                 level: "3000"
             },
-            // PHYSICS Courses - Complete Physics Department Catalog
-            {
-                code: "PHYS 1001",
-                name: "Frontiers of Physics",
-                credits: 1,
-                prerequisites: "Freshmen and sophomore Physics Majors only or consent of instructor.",
-                level: "1000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 1014",
-                name: "Descriptive Physics (N)",
-                credits: 3,
-                prerequisites: "None.",
-                level: "1000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 1114",
-                name: "College Physics I (LN)",
-                credits: 4,
-                prerequisites: "Minimum grade of \"C\" in MATH 1513 or higher.",
-                level: "1000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 1214",
-                name: "College Physics II (LN)",
-                credits: 4,
-                prerequisites: "PHYS 1114 or PHYS 2014 with a \"C\" or better or acceptable AP credit.",
-                level: "1000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 2014",
-                name: "University Physics I (LN)",
-                credits: 4,
-                prerequisites: "Minimum grade of \"C\" in MATH 2103 or MATH 2123 or MATH 2144 or acceptable AP credit.",
-                level: "2000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 2020",
-                name: "Special Topics in Physics (L)",
-                credits: 1,
-                prerequisites: "None. (Lab exercises for introductory courses).",
-                level: "2000",
-                department: "Physics"
-            },
+            // PHYSICS Courses
             {
                 code: "PHYS 2114",
-                name: "University Physics II (LN)",
+                name: "University Physics I",
                 credits: 4,
-                prerequisites: "PHYS 2014 with a \"C\" or better or acceptable AP credit.",
-                level: "2000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 2203",
-                name: "University Physics III",
-                credits: 3,
-                prerequisites: "PHYS 2114 with a grade of \"C\" or better or acceptable AP credit.",
-                level: "2000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 2663",
-                name: "Physics in Medicine (N)",
-                credits: 3,
-                prerequisites: "None.",
-                level: "2000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 2890",
-                name: "Honors Experience in Physics",
-                credits: 3,
-                prerequisites: "Honors Program participation and concurrent enrollment in designated course(s).",
-                level: "2000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3013",
-                name: "Mechanics I",
-                credits: 3,
-                prerequisites: "PHYS 2114 or equivalent, and MATH 2233 or concurrent enrollment.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3113",
-                name: "Thermal Physics",
-                credits: 3,
-                prerequisites: "PHYS 2203 and MATH 2163 or concurrent enrollment.",
-                level: "3000",
-                department: "Physics"
+                prerequisites: "MATH 2153 concurrent enrollment or higher.",
+                level: "2000"
             },
             {
                 code: "PHYS 3213",
                 name: "Optics",
                 credits: 3,
-                prerequisites: "PHYS 2114 and PHYS 3513, or consent of the instructor.",
-                level: "3000",
-                department: "Physics"
+                prerequisites: "PHYS 2114 and MATH 2163 with grades of C or better.",
+                level: "3000"
             },
             {
                 code: "PHYS 3313",
-                name: "Introduction to Semiconductor Device Physics",
-                credits: 3,
-                prerequisites: "PHYS 2114 or equivalent.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3323",
-                name: "Modern Laboratory Methods I",
-                credits: 3,
-                prerequisites: "PHYS 2014, PHYS 2114.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3513",
-                name: "Mathematical Physics",
-                credits: 3,
-                prerequisites: "PHYS 2114 and MATH 2163.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3553",
-                name: "Foundations of Cancer",
-                credits: 3,
-                prerequisites: "Minimum grade of \"C\" in CHEM 1225 or CHEM 1414 or CHEM 1515.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3623",
-                name: "Modern Laboratory Methods II",
-                credits: 3,
-                prerequisites: "PHYS 2014, PHYS 2114.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 3713",
                 name: "Modern Physics",
                 credits: 3,
-                prerequisites: "PHYS 2203 with a \"C\" or better.",
-                level: "3000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4003",
-                name: "Computer Simulation Methods in Physics",
-                credits: 3,
-                prerequisites: "PHYS 3013, PHYS 3113, PHYS 3313 or consent of instructor.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4010",
-                name: "Special Problems",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4113",
-                name: "Electricity and Magnetism",
-                credits: 3,
-                prerequisites: "PHYS 2114 and MATH 2233, or their equivalents.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4213",
-                name: "Introduction to Nuclear and Particle Physics",
-                credits: 3,
-                prerequisites: "PHYS 2114 and PHYS 3713 or consent of instructor.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4223",
-                name: "Introduction to General Relativity",
-                credits: 3,
-                prerequisites: "Minimum grade of \"C\" in both PHYS 2203 and PHYS 3513 or consent of instructor.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4263",
-                name: "Introduction to Solid State Physics",
-                credits: 3,
-                prerequisites: "PHYS 3013, PHYS 3713 or consent of instructor.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4313",
-                name: "Molecular Biophysics",
-                credits: 3,
-                prerequisites: "PHYS 1214 or PHYS 2114.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4413",
-                name: "Modern Physics II",
-                credits: 3,
-                prerequisites: "PHYS 3013 and PHYS 3713.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4423",
-                name: "Mechanics II",
-                credits: 3,
-                prerequisites: "PHYS 3013.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4503",
-                name: "Quantum Information",
-                credits: 3,
-                prerequisites: "PHYS 3713 Modern Physics.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4513",
-                name: "Introductory Quantum Mechanics",
-                credits: 3,
-                prerequisites: "PHYS 3713.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4663",
-                name: "Radioactivity and Nuclear Physics",
-                credits: 3,
-                prerequisites: "PHYS 3713 or consent of instructor.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4712",
-                name: "Senior Project",
-                credits: 2,
-                prerequisites: "None listed.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4813",
-                name: "Electromagnetic Radiation",
-                credits: 3,
-                prerequisites: "PHYS 4113 with minimum grade of \"C.\"",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 4993",
-                name: "Senior Honors Thesis",
-                credits: 3,
-                prerequisites: "Departmental invitation, senior standing, Honors Program participation.",
-                level: "4000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5000",
-                name: "Master's Thesis Research or Report",
-                credits: 3,
-                prerequisites: "Consent of major professor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5110",
-                name: "Seminar",
-                credits: 1,
-                prerequisites: "Graduate standing in physics.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5113",
-                name: "Statistical Thermodynamics and Kinetic Theory",
-                credits: 3,
-                prerequisites: "PHYS 3113.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5123",
-                name: "Geometrical Optics",
-                credits: 3,
-                prerequisites: "PHYS 3213 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5133",
-                name: "Laser Spectroscopy",
-                credits: 3,
-                prerequisites: "PHYS 5163.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5163",
-                name: "Lasers",
-                credits: 3,
-                prerequisites: "PHYS 4813 or equivalent.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5213",
-                name: "Statistical Mechanics",
-                credits: 3,
-                prerequisites: "PHYS 5113 and PHYS 5613 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5220",
-                name: "Physics Topics for Teachers",
-                credits: 3,
-                prerequisites: "Teaching experience or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5263",
-                name: "Particle Physics",
-                credits: 3,
-                prerequisites: "PHYS 5613 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5303",
-                name: "Physical Optics",
-                credits: 3,
-                prerequisites: "PHYS 3213 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5313",
-                name: "Electromagnetic Theory",
-                credits: 3,
-                prerequisites: "PHYS 5453.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5350",
-                name: "Special Problems",
-                credits: 3,
-                prerequisites: "Graduate standing in physics.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5413",
-                name: "Classical Mechanics",
-                credits: 3,
-                prerequisites: "PHYS 4423 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5453",
-                name: "Mathematical Methods for Physicists",
-                credits: 3,
-                prerequisites: "PHYS 3513.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5503",
-                name: "Frontiers of Quantum Information Science",
-                credits: 3,
-                prerequisites: "None listed.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5523",
-                name: "Radiation Detection and Measurement",
-                credits: 3,
-                prerequisites: "PHYS 3713 and PHYS 4213.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5533",
-                name: "Dosimetry and Radiation Protection",
-                credits: 3,
-                prerequisites: "PHYS 4663 and PHYS 5523 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5553",
-                name: "Foundations of Cancer",
-                credits: 3,
-                prerequisites: "Minimum grade of \"C\" in (or equivalent) or MICR 3033 (or equivalent) or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5563",
-                name: "Radioactivity and Nuclear Physics Laboratory",
-                credits: 3,
-                prerequisites: "PHYS 4663 and PHYS 5523 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5573",
-                name: "Radiation Biophysics",
-                credits: 3,
-                prerequisites: "PHYS 5533 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5593",
-                name: "Physics of Radiation Therapy",
-                credits: 3,
-                prerequisites: "PHYS 5533 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5613",
-                name: "Quantum Mechanics I",
-                credits: 3,
-                prerequisites: "PHYS 5453.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5663",
-                name: "Solid State Physics I",
-                credits: 3,
-                prerequisites: "PHYS 4513.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5713",
-                name: "Solid State Physics II",
-                credits: 3,
-                prerequisites: "PHYS 5663 or equivalent.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5813",
-                name: "General Relativity",
-                credits: 3,
-                prerequisites: "PHYS 5453 or consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 5960",
-                name: "Problems in Chemical Physics",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "5000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6000",
-                name: "Doctoral Dissertation Research",
-                credits: 3,
-                prerequisites: "Admission to candidacy and permission of major professor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6010",
-                name: "Advanced Graduate Seminar",
-                credits: 1,
-                prerequisites: "Consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6113",
-                name: "Advanced Theory of Solids",
-                credits: 3,
-                prerequisites: "PHYS 5663.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6213",
-                name: "Group Theory for Physics",
-                credits: 3,
-                prerequisites: "PHYS 5453.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6243",
-                name: "Semiconductors I",
-                credits: 3,
-                prerequisites: "PHYS 5113, PHYS 5613, PHYS 5663.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6260",
-                name: "Special Topics in High Energy Physics",
-                credits: 3,
-                prerequisites: "PHYS 5263 or consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6313",
-                name: "Quantum Mechanics II",
-                credits: 3,
-                prerequisites: "PHYS 5613.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6323",
-                name: "Quantum Field Theory",
-                credits: 3,
-                prerequisites: "PHYS 6313 or consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6343",
-                name: "Semiconductors II",
-                credits: 3,
-                prerequisites: "PHYS 6243.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6413",
-                name: "Nonlinear Optics",
-                credits: 3,
-                prerequisites: "PHYS 5163, PHYS 5313, and PHYS 5613.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6423",
-                name: "Quantum Optics",
-                credits: 3,
-                prerequisites: "PHYS 5163, PHYS 5613 or consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6513",
-                name: "Advanced Topics in Solid State Physics",
-                credits: 3,
-                prerequisites: "PHYS 5663 or equivalent.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6613",
-                name: "Advanced Nuclear and Particle Physics",
-                credits: 3,
-                prerequisites: "PHYS 5263, PHYS 6313; or consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6713",
-                name: "Advanced Electromagnetic Radiation",
-                credits: 3,
-                prerequisites: "Consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6803",
-                name: "Photonics I: Advanced Optics",
-                credits: 3,
-                prerequisites: "ECEN 3213 or ECEN 3813.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6810",
-                name: "Photonics II: THz Photonics and THz-TDS",
-                credits: 3,
-                prerequisites: "PHYS 6803.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6820",
-                name: "Photonics II: Spectroscopy II",
-                credits: 3,
-                prerequisites: "PHYS 6803.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6830",
-                name: "Photonics II: Spectroscopy III",
-                credits: 3,
-                prerequisites: "PHYS 6803.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6840",
-                name: "Photonics III: Microscopy I",
-                credits: 3,
-                prerequisites: "CHEM 3553 or consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6850",
-                name: "Photonics III: Microscopy II",
-                credits: 3,
-                prerequisites: "PHYS 3553 or consent of instructor.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6860",
-                name: "Photonics III: Microscopy III and Image Processing",
-                credits: 3,
-                prerequisites: "ECEN 5793.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6870",
-                name: "Photonics IV: Synthesis and Devices I",
-                credits: 3,
-                prerequisites: "PHYS 6803 and PHYS 6840.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6880",
-                name: "Photonics IV: Semiconductor Devices, Testing and Characterization",
-                credits: 3,
-                prerequisites: "PHYS 6803.",
-                level: "6000",
-                department: "Physics"
-            },
-            {
-                code: "PHYS 6890",
-                name: "Photonics IV: Semiconductor Synthesis and Devices III",
-                credits: 3,
-                prerequisites: "PHYS 6803.",
-                level: "6000",
-                department: "Physics"
+                prerequisites: "PHYS 2114 and MATH 2163 with grades of C or better.",
+                level: "3000"
             },
             // Computer Science Courses
             {
@@ -3383,6 +1558,7 @@ class StudentPortal {
                 prerequisites: "CHEM 1515 and PHYS 2114 and MATH 2163 with grades of C or better.",
                 level: "3000"
             },
+            // ECEN Courses (existing ones)
             {
                 code: "ECEN 2011",
                 name: "Experimental Methods I",
@@ -3523,60 +1699,22 @@ class StudentPortal {
                 prerequisites: "ECEN 3314.",
                 level: "4000"
             },
-            {
-                code: "ECEN 4413",
-                name: "Automatic Control Systems",
-                credits: 3,
-                prerequisites: "ECEN 3723 or (MAE 3723 or MAE 3724).",
-                level: "4000"
-            },
-            {
-                code: "ECEN 4503",
-                name: "Applications of Probability and Statistics to Random Signals",
-                credits: 3,
-                prerequisites: "ECEN 3513.",
-                level: "4000"
-            },
-            {
-                code: "ECEN 4523",
-                name: "Communication Theory",
-                credits: 3,
-                prerequisites: "Currently enrolled in ECEN 4503 or have taken ECEN 4503 or both ECEN 3513 and STAT 4033.",
-                level: "4000"
-            },
-            {
-                code: "ECEN 4763",
-                name: "Introduction to Digital Signal Processing",
-                credits: 3,
-                prerequisites: "ECEN 3513.",
-                level: "4000"
-            }
-        ];
-        
-        // Add imported courses if any exist
-        const importedCourses = this.getImportedCourses();
-        return allCourses.concat(importedCourses);
-    }
-
-    getImportedCourses() {
-        try {
-            const stored = localStorage.getItem('importedCourses');
-            return stored ? JSON.parse(stored) : [];
-        } catch (error) {
-            console.error('Error loading imported courses:', error);
-            return [];
-        }
-    }
 
     renderCourseCatalog(courses) {
         const coursesHTML = courses.map(course => {
             const levelClass = `level-${course.level}`;
-            const departmentLabel = course.department || "Electrical Engineering";
+            
+            // Handle program tags - if course has programTags array, use it; otherwise default to Electrical Engineering
+            const programTags = course.programTags || ['Electrical Engineering'];
+            const programBadgesHTML = programTags.map(tag => 
+                `<div class="course-program-badge program-${tag.replace(/\s+/g, '-').toLowerCase()}">${tag}</div>`
+            ).join('');
+            
             return `
                 <div class="catalog-course-item" data-level="${course.level}" data-code="${course.code.toLowerCase()}" data-name="${course.name.toLowerCase()}">
                     <div class="course-badges">
                         <div class="course-level-badge ${levelClass}">${course.level} Level</div>
-                        <div class="course-program-badge">${departmentLabel}</div>
+                        ${programBadgesHTML}
                     </div>
                     <div class="catalog-course-header">
                         <div class="catalog-course-code">${course.code}</div>
@@ -3944,7 +2082,7 @@ class StudentPortal {
             const currentCourses = this.studentData.currentCourses.map(course => course.code);
             console.log('Current courses:', currentCourses);
             
-            // Combine all available courses from student's major
+            // Combine all available courses
             const allAvailableCourses = [];
             Object.keys(majorCourses).forEach(category => {
                 majorCourses[category].forEach(course => {
@@ -3952,194 +2090,6 @@ class StudentPortal {
                         allAvailableCourses.push({...course, category: category.toLowerCase()});
                     }
                 });
-            });
-
-            // Also include Mathematics courses for academic planning
-            const mathCourses = courseDatabase['Mathematics'];
-            if (mathCourses && this.studentData.major !== 'Mathematics') {
-                console.log('Adding Mathematics courses to available courses');
-                Object.keys(mathCourses).forEach(category => {
-                    mathCourses[category].forEach(course => {
-                        if (!currentCourses.includes(course.code)) {
-                            // Check if course is already added from major courses
-                            const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                            if (!existingCourse) {
-                                allAvailableCourses.push({...course, category: `math-${category.toLowerCase()}`});
-                            }
-                        }
-                    });
-                });
-            }
-
-            // Also include Physics courses for academic planning
-            const physicsCourses = courseDatabase['Physics'];
-            if (physicsCourses && this.studentData.major !== 'Physics') {
-                console.log('Adding Physics courses to available courses');
-                Object.keys(physicsCourses).forEach(category => {
-                    physicsCourses[category].forEach(course => {
-                        if (!currentCourses.includes(course.code)) {
-                            // Check if course is already added from major courses
-                            const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                            if (!existingCourse) {
-                                allAvailableCourses.push({...course, category: `physics-${category.toLowerCase()}`});
-                            }
-                        }
-                    });
-                });
-            }
-
-            // Also include ALL courses from the main catalog for comprehensive planning
-            const allCatalogCourses = this.getAllCourses();
-            
-            // Add all Mathematics courses from catalog
-            const mathCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('MATH') && course.department === 'Mathematics'
-            );
-            console.log('Adding comprehensive Mathematics catalog courses:', mathCatalogCourses.length);
-            mathCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'mathematics-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all Physics courses from catalog
-            const physicsCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('PHYS') && course.department === 'Physics'
-            );
-            console.log('Adding comprehensive Physics catalog courses:', physicsCatalogCourses.length);
-            physicsCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'physics-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all Computer Science courses from catalog
-            const csCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('CS') && !course.department
-            );
-            console.log('Adding Computer Science catalog courses:', csCatalogCourses.length);
-            csCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'computer-science-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all Engineering Science courses from catalog
-            const enscCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('ENSC') && !course.department
-            );
-            console.log('Adding Engineering Science catalog courses:', enscCatalogCourses.length);
-            enscCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'engineering-science-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all Chemistry courses from catalog
-            const chemCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('CHEM') && !course.department
-            );
-            console.log('Adding Chemistry catalog courses:', chemCatalogCourses.length);
-            chemCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'chemistry-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all English courses from catalog
-            const englCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('ENGL') && !course.department
-            );
-            console.log('Adding English catalog courses:', englCatalogCourses.length);
-            englCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'english-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all Statistics courses from catalog
-            const statCatalogCourses = allCatalogCourses.filter(course => 
-                course.code.startsWith('STAT') && !course.department
-            );
-            console.log('Adding Statistics catalog courses:', statCatalogCourses.length);
-            statCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'statistics-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
-            });
-
-            // Add all other courses from catalog that don't fit into specific categories
-            const otherCatalogCourses = allCatalogCourses.filter(course => 
-                !course.code.startsWith('MATH') && 
-                !course.code.startsWith('PHYS') && 
-                !course.code.startsWith('CS') && 
-                !course.code.startsWith('ENSC') && 
-                !course.code.startsWith('CHEM') && 
-                !course.code.startsWith('ENGL') && 
-                !course.code.startsWith('STAT') &&
-                !course.department
-            );
-            console.log('Adding other catalog courses:', otherCatalogCourses.length);
-            otherCatalogCourses.forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    const existingCourse = allAvailableCourses.find(c => c.code === course.code);
-                    if (!existingCourse) {
-                        allAvailableCourses.push({
-                            ...course, 
-                            category: 'other-catalog',
-                            prerequisites: Array.isArray(course.prerequisites) ? course.prerequisites : [course.prerequisites]
-                        });
-                    }
-                }
             });
 
             console.log('Available courses loaded:', allAvailableCourses.length);
@@ -4711,7 +2661,7 @@ class StudentPortal {
             this.studentData.secondMajor = {
                 name: majorName,
                 credits: 0,
-                requiredCredits: 120,
+                requiredCredits: 36,
                 courses: []
             };
         }
@@ -5171,187 +3121,6 @@ class StudentPortal {
         });
 
         minorsGrid.innerHTML = html;
-    }
-
-    // Course Import Functions
-    toggleImportMethod() {
-        const selectedMethod = document.querySelector('input[name="importMethod"]:checked').value;
-        const fileInput = document.getElementById('courseFileInput');
-        const textArea = document.getElementById('courseDataInput');
-        
-        if (selectedMethod === 'file') {
-            fileInput.style.display = 'block';
-            textArea.style.display = 'none';
-        } else {
-            fileInput.style.display = 'none';
-            textArea.style.display = 'block';
-        }
-    }
-
-    handleFileInput(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const content = e.target.result;
-                document.getElementById('courseDataInput').value = content;
-            };
-            reader.readAsText(file);
-        }
-    }
-
-    processImportData() {
-        const selectedMethod = document.querySelector('input[name="importMethod"]:checked').value;
-        let rawData = '';
-
-        if (selectedMethod === 'file') {
-            rawData = document.getElementById('courseDataInput').value;
-        } else {
-            rawData = document.getElementById('courseDataInput').value;
-        }
-
-        if (!rawData.trim()) {
-            alert('Please provide course data to import.');
-            return;
-        }
-
-        try {
-            const courses = this.parseCSVData(rawData);
-            this.previewImportedCourses(courses);
-        } catch (error) {
-            alert('Error parsing course data: ' + error.message);
-        }
-    }
-
-    parseCSVData(csvData) {
-        const lines = csvData.trim().split('\n');
-        const courses = [];
-        
-        // Skip header line if it exists
-        const startIndex = lines[0].toLowerCase().includes('course') ? 1 : 0;
-        
-        for (let i = startIndex; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-            
-            // Parse CSV line (handle quotes and commas)
-            const columns = this.parseCSVLine(line);
-            
-            if (columns.length >= 3) {
-                const code = columns[0].trim();
-                const name = columns[1].trim();
-                const prerequisites = columns[2].trim();
-                
-                // Extract course level from code
-                const levelMatch = code.match(/(\d{4})/);
-                const level = levelMatch ? levelMatch[1] : '1000';
-                
-                // Determine credits (default to 3 if not specified)
-                let credits = 3;
-                if (columns.length > 3 && columns[3]) {
-                    const creditMatch = columns[3].match(/(\d+)/);
-                    credits = creditMatch ? parseInt(creditMatch[1]) : 3;
-                }
-                
-                courses.push({
-                    code: code,
-                    name: name,
-                    credits: credits,
-                    prerequisites: prerequisites || 'None',
-                    level: level
-                });
-            }
-        }
-        
-        return courses;
-    }
-
-    parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                result.push(current);
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        
-        result.push(current);
-        return result.map(item => item.replace(/^"(.*)"$/, '$1'));
-    }
-
-    previewImportedCourses(courses) {
-        const previewSection = document.getElementById('importPreview');
-        const previewList = document.getElementById('previewList');
-        
-        if (courses.length === 0) {
-            alert('No valid courses found in the data.');
-            return;
-        }
-        
-        const previewHTML = courses.slice(0, 10).map(course => `
-            <div class="preview-course-item">
-                <div class="preview-course-code">${course.code}</div>
-                <div class="preview-course-name">${course.name}</div>
-                <div class="preview-course-prereqs">Prerequisites: ${course.prerequisites}</div>
-                <div class="preview-course-details">${course.credits} credits • Level ${course.level}</div>
-            </div>
-        `).join('');
-        
-        previewList.innerHTML = previewHTML;
-        
-        if (courses.length > 10) {
-            previewList.innerHTML += `<div class="preview-course-item"><em>... and ${courses.length - 10} more courses</em></div>`;
-        }
-        
-        previewSection.style.display = 'block';
-        this.pendingImportCourses = courses;
-    }
-
-    confirmImport() {
-        if (!this.pendingImportCourses || this.pendingImportCourses.length === 0) {
-            alert('No courses to import.');
-            return;
-        }
-        
-        // Add courses to the catalog
-        this.addCoursesToCatalog(this.pendingImportCourses);
-        
-        // Clear import data and hide section
-        this.clearImportData();
-        document.getElementById('courseImportSection').style.display = 'none';
-        
-        // Refresh the course catalog display
-        this.loadCourseCatalog();
-        
-        alert(`Successfully imported ${this.pendingImportCourses.length} courses!`);
-    }
-
-    addCoursesToCatalog(newCourses) {
-        // Add courses to the internal course database
-        if (!this.importedCourses) {
-            this.importedCourses = [];
-        }
-        
-        this.importedCourses = this.importedCourses.concat(newCourses);
-        
-        // Store in localStorage for persistence
-        localStorage.setItem('importedCourses', JSON.stringify(this.importedCourses));
-    }
-
-    clearImportData() {
-        document.getElementById('courseFileInput').value = '';
-        document.getElementById('courseDataInput').value = '';
-        document.getElementById('importPreview').style.display = 'none';
-        this.pendingImportCourses = null;
     }
 }
 

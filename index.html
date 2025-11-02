@@ -199,6 +199,41 @@
 
                             <div class="info-card">
                                 <div class="card-header">
+                                    <h3><i class="fas fa-history"></i> Past Classes Taken</h3>
+                                    <div class="card-controls">
+                                        <select id="pastClassesFilter" class="filter-select">
+                                            <option value="all">All Semesters</option>
+                                            <option value="completed">Completed Only</option>
+                                            <option value="failed">Failed/Withdrawn</option>
+                                        </select>
+                                        <input type="text" id="pastClassesSearch" placeholder="Search courses..." class="search-input">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="past-classes-summary">
+                                        <div class="summary-stats">
+                                            <div class="summary-stat">
+                                                <span class="stat-number" id="totalClassesTaken">24</span>
+                                                <span class="stat-label">Total Classes</span>
+                                            </div>
+                                            <div class="summary-stat">
+                                                <span class="stat-number" id="completedClasses">22</span>
+                                                <span class="stat-label">Completed</span>
+                                            </div>
+                                            <div class="summary-stat">
+                                                <span class="stat-number" id="averageGrade">3.7</span>
+                                                <span class="stat-label">Average GPA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="past-classes-list" id="pastClassesList">
+                                        <!-- Past classes will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
                                     <h3><i class="fas fa-trophy"></i> Academic Achievements</h3>
                                 </div>
                                 <div class="card-body">
@@ -215,6 +250,70 @@
                                 <div class="card-body">
                                     <div class="requirements" id="requirements">
                                         <!-- Requirements will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card course-catalog-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-book-open"></i> Course Catalog</h3>
+                                    <div class="catalog-controls">
+                                        <input type="text" id="courseSearch" placeholder="Search courses..." class="course-search-input">
+                                        <select id="courseLevel" class="course-level-select">
+                                            <option value="all">All Levels</option>
+                                            <option value="1000">1000 Level</option>
+                                            <option value="2000">2000 Level</option>
+                                            <option value="3000">3000 Level</option>
+                                            <option value="4000">4000 Level</option>
+                                            <option value="5000">5000 Level</option>
+                                            <option value="6000">6000 Level</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-secondary" id="importCoursesBtn">
+                                            <i class="fas fa-upload"></i> Import Courses
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Course Import Section -->
+                                    <div class="course-import-section" id="courseImportSection" style="display: none;">
+                                        <div class="import-header">
+                                            <h4><i class="fas fa-file-import"></i> Import Course Data</h4>
+                                            <p>Upload a CSV file with course data or paste data directly</p>
+                                        </div>
+                                        <div class="import-options">
+                                            <div class="import-method">
+                                                <label class="import-label">
+                                                    <input type="radio" name="importMethod" value="file" checked> Upload CSV File
+                                                </label>
+                                                <input type="file" id="courseFileInput" accept=".csv,.txt" class="file-input">
+                                            </div>
+                                            <div class="import-method">
+                                                <label class="import-label">
+                                                    <input type="radio" name="importMethod" value="paste"> Paste Data
+                                                </label>
+                                                <textarea id="courseDataInput" placeholder="Paste CSV data here (Course Code,Course Name,Prerequisites)..." 
+                                                         class="data-textarea" rows="6"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="import-actions">
+                                            <button class="btn btn-primary" id="processImportBtn">
+                                                <i class="fas fa-cogs"></i> Process Import
+                                            </button>
+                                            <button class="btn btn-secondary" id="cancelImportBtn">
+                                                <i class="fas fa-times"></i> Cancel
+                                            </button>
+                                        </div>
+                                        <div class="import-preview" id="importPreview" style="display: none;">
+                                            <h5>Preview Imported Courses:</h5>
+                                            <div class="preview-list" id="previewList"></div>
+                                            <button class="btn btn-success" id="confirmImportBtn">
+                                                <i class="fas fa-check"></i> Add to Catalog
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="course-catalog" id="courseCatalog">
+                                        <!-- Course catalog will be loaded here -->
                                     </div>
                                 </div>
                             </div>
@@ -267,6 +366,70 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-utensils"></i> Meal Plan Budget</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="meal-plan-budget" id="mealPlanBudget">
+                                        <div class="budget-overview">
+                                            <div class="budget-stat single-stat">
+                                                <div class="budget-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                                <div class="budget-info">
+                                                    <span class="budget-amount" id="remainingBudget">$1,680</span>
+                                                    <span class="budget-label">Remaining Budget</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="budget-progress">
+                                            <div class="progress-header">
+                                                <span>Budget Used</span>
+                                                <span id="budgetPercentage">20%</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill budget-progress-fill" id="budgetProgressBar" style="width: 20%"></div>
+                                            </div>
+                                            <div class="progress-details">
+                                                <span id="spentAmount">$420</span>
+                                                <span>of <span id="totalBudgetProgress">$2,100</span></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="budget-breakdown">
+                                            <div class="breakdown-item">
+                                                <div class="breakdown-header">
+                                                    <i class="fas fa-calendar-day"></i>
+                                                    <span>Daily Allowance</span>
+                                                </div>
+                                                <div class="breakdown-value" id="dailyAllowance">$15.00</div>
+                                            </div>
+                                            <div class="breakdown-item">
+                                                <div class="breakdown-header">
+                                                    <i class="fas fa-hamburger"></i>
+                                                    <span>Per Meal Budget</span>
+                                                </div>
+                                                <div class="breakdown-value" id="perMealBudget">$5.00</div>
+                                            </div>
+                                            <div class="breakdown-item">
+                                                <div class="breakdown-header">
+                                                    <i class="fas fa-calendar-week"></i>
+                                                    <span>Weeks Remaining</span>
+                                                </div>
+                                                <div class="breakdown-value" id="weeksRemaining">12</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="budget-alerts">
+                                            <div class="alert alert-info" id="budgetAlert">
+                                                <i class="fas fa-info-circle"></i>
+                                                <span>You're on track! Continue at current spending pace.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -303,7 +466,7 @@
                                             </div>
                                         </div>
                                         <div class="progress-stat">
-                                            <div class="stat-icon"><i class="fas fa-target"></i></div>
+                                            <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
                                             <div class="stat-info">
                                                 <span class="stat-number" id="remainingCredits">22</span>
                                                 <span class="stat-label">Credits Remaining</span>
@@ -513,6 +676,13 @@
                                     <option value="core">Core Courses</option>
                                     <option value="electives">Electives</option>
                                     <option value="requirements">Requirements</option>
+                                    <option value="math">Mathematics</option>
+                                    <option value="physics">Physics</option>
+                                    <option value="computer-science">Computer Science</option>
+                                    <option value="engineering">Engineering Science</option>
+                                    <option value="chemistry">Chemistry</option>
+                                    <option value="english">English</option>
+                                    <option value="statistics">Statistics</option>
                                 </select>
                                 <input type="text" id="courseSearch" placeholder="Search courses..." 
                                        onkeyup="studentPortal.filterCourses()">

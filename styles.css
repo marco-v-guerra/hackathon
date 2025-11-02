@@ -1,4 +1,11 @@
 /* Reset and Base Styles for Student Portal */
+:root {
+    --primary-color: #e55a00;
+    --text-color: #333;
+    --background-color: #fafafa;
+    --border-color: #e3e8ee;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,8 +15,8 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #444;
-    background-color: #fafafa;
+    color: var(--text-color);
+    background-color: var(--background-color);
 }
 
 .container {
@@ -1050,14 +1057,15 @@ body {
 }
 
 .course-credits {
-    background: var(--primary-color);
+    background: #2c3e50;
     color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    min-width: 50px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-width: 55px;
     text-align: center;
+    border: 1px solid #34495e;
 }
 
 .plan-summary {
@@ -1456,12 +1464,13 @@ body {
 }
 
 .course-credits {
-    background: var(--primary-color);
+    background: #2c3e50;
     color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 1px solid #34495e;
 }
 
 /* Priority Section */

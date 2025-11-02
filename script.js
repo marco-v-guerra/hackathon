@@ -103,6 +103,8 @@ class StudentPortal {
         }
         
         this.populateStudentInfo();
+        this.updateOverviewProgress();
+        this.initPlanningStatsFromTranscript();
         this.loadTabContent();
     }
 
@@ -383,12 +385,16 @@ class StudentPortal {
     generateAcademicPlan() {
         if (!this.studentData) return;
 
-        const currentCredits = this.studentData.credits;
+        // Derive progress from transcript
+        const currentCredits = this.computeCompletedCredits(this.studentData);
         const targetCredits = 120;
-        const remainingCredits = targetCredits - currentCredits;
+        const remainingCredits = Math.max(0, targetCredits - currentCredits);
         
-        // Get current courses to avoid duplicates
-        const currentCourses = this.studentData.currentCourses.map(course => course.code);
+        // Get taken courses (completed + currently enrolled) to avoid duplicates
+        const currentCourses = [
+            ...(this.studentData.currentCourses || []).map(course => course.code),
+            ...((this.studentData.completedCourses || []).map(course => course.code))
+        ];
         
         // Get available courses for student's major
         const courseDatabase = this.getCourseDatabase();
@@ -399,7 +405,7 @@ class StudentPortal {
             return;
         }
 
-        // Combine all available courses
+        // Combine all available courses and remove any already taken
         const allAvailableCourses = [];
         Object.keys(majorCourses).forEach(category => {
             majorCourses[category].forEach(course => {
@@ -412,7 +418,7 @@ class StudentPortal {
         // Generate semester plan
         const semesters = this.planSemesters(allAvailableCourses, remainingCredits);
         
-        // Display the plan
+        // Display the plan using transcript-based credits
         this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
     }
 
@@ -804,6 +810,8 @@ class StudentPortal {
     populateStudentInfo() {
         const data = this.studentData;
         const yearNames = ['', 'Freshman', 'Sophomore', 'Junior', 'Senior'];
+        const completedCredits = this.computeCompletedCredits(data);
+        const computedGPA = this.computeGPAFromTranscript(data);
         
         // Update profile information
         if (this.studentNameEl) this.studentNameEl.textContent = data.name.split(' ')[0];
@@ -811,12 +819,70 @@ class StudentPortal {
         if (this.studentIdEl) this.studentIdEl.textContent = data.id;
         if (this.studentMajorEl) this.studentMajorEl.textContent = data.major;
         if (this.studentYearEl) this.studentYearEl.textContent = yearNames[data.year];
-        if (this.studentGPAEl) this.studentGPAEl.textContent = data.gpa.toFixed(1);
-        if (this.studentCreditsEl) this.studentCreditsEl.textContent = data.credits;
+        if (this.studentGPAEl) this.studentGPAEl.textContent = (computedGPA ?? data.gpa).toFixed(1);
+        if (this.studentCreditsEl) this.studentCreditsEl.textContent = completedCredits ?? data.credits;
         if (this.studentStatusEl) this.studentStatusEl.textContent = data.status;
         if (this.studentEmailEl) this.studentEmailEl.textContent = data.email;
         if (this.studentPhoneEl) this.studentPhoneEl.textContent = data.phone;
         if (this.studentAddressEl) this.studentAddressEl.textContent = data.address;
+    }
+
+    computeCompletedCredits(data) {
+        if (!data?.completedCourses?.length) return data?.credits ?? 0;
+        return data.completedCourses.reduce((sum, c) => sum + (Number(c.credits) || 0), 0);
+    }
+
+    computeGPAFromTranscript(data) {
+        if (!data?.completedCourses?.length) return data?.gpa ?? null;
+        const pointsMap = {
+            'A+': 4.0, 'A': 4.0, 'A-': 3.7,
+            'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+            'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+            'D+': 1.3, 'D': 1.0, 'D-': 0.7,
+            'F': 0.0
+        };
+        let totalCredits = 0;
+        let totalPoints = 0;
+        data.completedCourses.forEach(c => {
+            const cr = Number(c.credits) || 0;
+            const gp = pointsMap[c.grade] ?? null;
+            if (cr > 0 && gp !== null) {
+                totalCredits += cr;
+                totalPoints += gp * cr;
+            }
+        });
+        if (!totalCredits) return data?.gpa ?? null;
+        return totalPoints / totalCredits;
+    }
+
+    updateOverviewProgress() {
+        const data = this.studentData;
+        const completedCredits = this.computeCompletedCredits(data);
+        const degreePercent = Math.max(0, Math.min(100, Math.round((completedCredits / 120) * 100)));
+        const degreeFill = document.getElementById('degreeProgressFill');
+        const degreeText = document.getElementById('degreeProgressValue');
+        if (degreeFill) degreeFill.style.width = `${degreePercent}%`;
+        if (degreeText) degreeText.textContent = `${degreePercent}%`;
+
+        // Optional: estimate current semester progress as ratio of graded vs total current courses
+        const currentFill = document.getElementById('currentSemesterProgressFill');
+        const currentText = document.getElementById('currentSemesterProgressValue');
+        if (currentFill && currentText) {
+            // Without milestones, show 0% by default or a simple heuristic
+            const est = 0; // keep neutral unless you want to estimate
+            currentFill.style.width = `${est}%`;
+            currentText.textContent = `${est}%`;
+        }
+    }
+
+    initPlanningStatsFromTranscript() {
+        // Initialize planning stats (before generating a plan) using completed credits
+        const completedCredits = this.computeCompletedCredits(this.studentData);
+        const remaining = Math.max(0, 120 - completedCredits);
+        const estSemesters = Math.max(1, Math.ceil(remaining / 15));
+        if (document.getElementById('graduationProgress')) {
+            this.updatePlanningStats(completedCredits, remaining, estSemesters);
+        }
     }
 
     loadTabContent() {

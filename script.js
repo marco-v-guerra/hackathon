@@ -729,7 +729,7 @@ class StudentPortal {
                 "year": 3,
                 "grade": "A",
                 "gpa": 3.8,
-                "credits": 102,
+                "credits": 85,
                 "status": "Active",
                 "currentCourses": [
                     {

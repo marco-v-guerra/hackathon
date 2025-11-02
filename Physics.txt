@@ -1,0 +1,36 @@
+Major: PHYSICS
+
+ENGL 1113 or ENGL 1313 | Composition I or Critical Analysis and Writing I | 3 | N/A
+ENGL 1213, ENGL 1413, or ENGL 3323 | Select one of: Composition II, Critical Analysis and Writing II, or Technical Writing | 3 | ENGL 1113
+HIST 1103, 1483 (H), or 1493 (DH) | Select one American History course | 3 | N/A
+POLS 1113 | American Government | 3 | N/A
+MATH 2144 | Calculus I (Q) | 4 | MATH 1613 or MATH 1715 or MATH 1813 with a C or better
+MATH 2153 | Calculus II (Q) | 3 | MATH 2144 with a C or better
+CHEM 1314 | Chemistry I (L/N) | 4 | MATH 1483 or MATH 1513 with a C or better
+Course Designated (N) | Natural Sciences (N) elective | 2 | N/A
+Courses Designated (H) | Understanding Humanities (H) | 6 | N/A
+Courses Designated (S) | Exploring Society & Human Behavior (S) | 3 | N/A
+Courses Designated (D) | Diversity (D) | 3 | N/A
+Courses Designated (G) | Global Cultural Competency (G) | 3 | N/A
+Courses Designated (Q), (H), (N), (S), (D), (G), or (F) | Additional General Education (if needed to meet 40-hour minimum) | 0 | N/A
+UNIV 1111 | First Year Seminar (or other approved) | 1 | N/A
+CHEM 1515 | Chemistry II (L/N) | 5 | CHEM 1314 or CHEM 1414 with a C or better or acceptable AP credit
+PHYS 2014 | University Physics I (L/N) | 4 | MATH 2103 or MATH 2123 or MATH 2144 with a C or better or acceptable AP credit
+N/A | Foreign Language (See note 3 for requirement details) | 0-6 | Varies by language/proficiency
+N/A | Upper-Division General Education (outside major dept., See note 2.c.) | 6 | Must be 3000-level or above
+PHYS 2114 | University Physics II (L/N) | 4 | PHYS 2014 with a C or better
+PHYS 2203 | University Physics III | 3 | PHYS 2114 with a C or better
+PHYS 3013 | Mechanics I | 3 | PHYS 2114 or equivalent, and MATH 2233 or concurrent enrollment
+PHYS 3323 | Modern Laboratory Methods I | 3 | PHYS 2014, PHYS 2114
+PHYS 3513 | Mathematical Physics | 3 | PHYS 2114 and MATH 2163
+PHYS 3623 | Modern Laboratory Methods II | 3 | PHYS 2014, PHYS 2114
+PHYS 3713 | Modern Physics | 3 | PHYS 2203 with a C or better
+PHYS 4113 | Electricity and Magnetism | 3 | PHYS 2114 and MATH 2233
+PHYS 4513 | Introductory Quantum Mechanics | 3 | PHYS 3713
+PHYS 4712 | Senior Project | 2 | N/A
+PHYS 4813 | Electromagnetic Radiation | 3 | PHYS 4113
+MATH 2163 | Calculus III | 3 | MATH 2153 with a C or better
+MATH 2233 | Differential Equations | 3 | MATH 2153 with a C or better
+N/A | Physics/Astronomy Upper-Division (3000-level or above) | 9 | Varies by course
+N/A | Technical Electives (BIOL, CS, ENSC, GEOL, MAE, MATH, MEEN, PHIL) | 6 | Varies by course
+N/A | General Electives (Suggested: ASTR, CS, and MATH) | 13 | Varies by course

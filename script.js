@@ -842,11 +842,12 @@ class StudentPortal {
                     }
                 ],
                 "requirements": [
-                    { "name": "CS Core Requirements", "status": "progress", "progress": "32/40" },
-                    { "name": "Mathematics Requirements", "status": "complete", "progress": "18/18" },
+                    { "name": "ECEN Core Courses", "status": "progress", "progress": "12/36" },
+                    { "name": "Mathematics & Physics", "status": "complete", "progress": "22/22" },
+                    { "name": "Engineering Support", "status": "progress", "progress": "14/18" },
                     { "name": "OSU General Education", "status": "complete", "progress": "40/40" },
-                    { "name": "CS Electives", "status": "progress", "progress": "8/15" },
-                    { "name": "Senior Capstone", "status": "pending", "progress": "0/6" }
+                    { "name": "ECEN Electives", "status": "pending", "progress": "0/9" },
+                    { "name": "Senior Design", "status": "pending", "progress": "0/7" }
                 ],
                 "financial": {
                     "balance": {

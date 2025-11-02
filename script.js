@@ -37,6 +37,7 @@ class StudentPortal {
         this.financialAidEl = document.getElementById('financialAid');
         this.paymentScheduleEl = document.getElementById('paymentSchedule');
         this.weeklyScheduleEl = document.getElementById('weeklySchedule');
+        this.transcriptEl = document.getElementById('transcript');
     }
 
     attachEventListeners() {
@@ -108,378 +109,181 @@ class StudentPortal {
     getStudentsData() {
         return [
             {
-                "id": "OSU001",
-                "name": "Alice Smith",
-                "email": "alice.smith@okstate.edu",
-                "phone": "(405) 744-5000",
-                "address": "Kerr-Drummond Hall, Room 304",
-                "major": "Electrical Engineering",
+                "id": "OSU003",
+                "name": "Priya Kumar",
+                "email": "priya.kumar@okstate.edu",
+                "phone": "(405) 744-7123",
+                "address": "Stout Hall, Room 210",
+                "major": "Physics",
                 "year": 3,
-                "grade": "A",
-                "gpa": 3.8,
-                "credits": 98,
+                "grade": "A-",
+                "gpa": 3.6,
+                "credits": 78,
                 "status": "Active",
                 "currentCourses": [
                     {
-                        "code": "CS 3443",
-                        "name": "Computer Systems",
-                        "instructor": "Dr. Johnson",
+                        "code": "PHYS 3013",
+                        "name": "Mechanics I",
+                        "instructor": "Dr. Thompson",
                         "credits": 3,
                         "grade": "A",
                         "schedule": "MWF 10:00-10:50"
                     },
                     {
-                        "code": "CS 3823",
-                        "name": "Database Systems",
-                        "instructor": "Prof. Williams",
+                        "code": "PHYS 3513",
+                        "name": "Mathematical Physics",
+                        "instructor": "Dr. Nguyen",
                         "credits": 3,
                         "grade": "A-",
-                        "schedule": "TTh 11:00-12:15"
+                        "schedule": "TTh 9:30-10:45"
                     },
                     {
-                        "code": "MATH 3113",
-                        "name": "Linear Algebra",
-                        "instructor": "Dr. Smith",
+                        "code": "PHYS 3323",
+                        "name": "Modern Laboratory Methods I",
+                        "instructor": "Prof. Rivera",
                         "credits": 3,
                         "grade": "B+",
-                        "schedule": "MWF 1:00-1:50"
+                        "schedule": "W 14:00-16:50"
                     },
                     {
-                        "code": "CS 4273",
-                        "name": "Software Engineering",
-                        "instructor": "Prof. Brown",
+                        "code": "PHYS 3713",
+                        "name": "Modern Physics",
+                        "instructor": "Dr. Patel",
                         "credits": 3,
                         "grade": "A",
-                        "schedule": "TTh 2:00-3:15"
+                        "schedule": "MW 13:00-14:15"
                     },
                     {
-                        "code": "CS 3653",
-                        "name": "Computer Networks",
-                        "instructor": "Dr. Davis",
+                        "code": "MATH 2233",
+                        "name": "Differential Equations",
+                        "instructor": "Dr. Chen",
                         "credits": 3,
                         "grade": "A-",
-                        "schedule": "MW 3:00-4:15"
+                        "schedule": "TTh 12:30-13:45"
                     }
                 ],
+                "completedCourses": [
+                    { "code": "UNIV 1111", "name": "First Year Seminar", "credits": 1, "term": "Fall", "year": 2023, "grade": "A" },
+                    { "code": "ENGL 1113", "name": "Composition I", "credits": 3, "term": "Fall", "year": 2023, "grade": "A" },
+                    { "code": "MATH 2144", "name": "Calculus I", "credits": 4, "term": "Fall", "year": 2023, "grade": "A-" },
+                    { "code": "CHEM 1314", "name": "Chemistry I", "credits": 4, "term": "Fall", "year": 2023, "grade": "B+" },
+                    { "code": "ENGL 3323", "name": "Technical Writing", "credits": 3, "term": "Spring", "year": 2024, "grade": "A-" },
+                    { "code": "MATH 2153", "name": "Calculus II", "credits": 3, "term": "Spring", "year": 2024, "grade": "A-" },
+                    { "code": "CHEM 1515", "name": "Chemistry II", "credits": 5, "term": "Spring", "year": 2024, "grade": "B+" },
+                    { "code": "PHYS 2014", "name": "University Physics I", "credits": 4, "term": "Spring", "year": 2024, "grade": "A-" },
+                    { "code": "MATH 2163", "name": "Calculus III", "credits": 3, "term": "Fall", "year": 2024, "grade": "B+" },
+                    { "code": "PHYS 2114", "name": "University Physics II", "credits": 4, "term": "Fall", "year": 2024, "grade": "A-" },
+                    { "code": "POLS 1113", "name": "American Government", "credits": 3, "term": "Fall", "year": 2024, "grade": "A-" },
+                    { "code": "PHYS 2203", "name": "University Physics III", "credits": 3, "term": "Spring", "year": 2025, "grade": "B+" },
+                    { "code": "HIST 1103", "name": "American History", "credits": 3, "term": "Spring", "year": 2025, "grade": "B+" },
+                    { "code": "STAT 2013", "name": "Elementary Statistics", "credits": 3, "term": "Spring", "year": 2025, "grade": "A" }
+                ],
                 "gradeHistory": [
-                    { "semester": "Fall 2025", "year": "2025", "gpa": 3.9, "credits": 15 },
-                    { "semester": "Spring 2025", "year": "2025", "gpa": 3.7, "credits": 17 },
-                    { "semester": "Fall 2024", "year": "2024", "gpa": 3.8, "credits": 16 },
-                    { "semester": "Spring 2024", "year": "2024", "gpa": 3.6, "credits": 18 }
+                    { "semester": "Fall 2025", "year": "2025", "gpa": 3.7, "credits": 15 },
+                    { "semester": "Spring 2025", "year": "2025", "gpa": 3.5, "credits": 16 },
+                    { "semester": "Fall 2024", "year": "2024", "gpa": 3.6, "credits": 16 },
+                    { "semester": "Spring 2024", "year": "2024", "gpa": 3.4, "credits": 15 }
                 ],
                 "achievements": [
                     {
                         "title": "Dean's List",
-                        "description": "Fall 2025 - Outstanding Academic Performance",
-                        "icon": "fas fa-trophy"
-                    },
-                    {
-                        "title": "CS Department Scholarship",
-                        "description": "Merit-based scholarship recipient",
-                        "icon": "fas fa-graduation-cap"
-                    },
-                    {
-                        "title": "Hackathon Winner",
-                        "description": "First place in OSU Code Challenge 2025",
-                        "icon": "fas fa-code"
-                    }
-                ],
-                "requirements": [
-                    { "name": "CS Core Requirements", "status": "progress", "progress": "32/40" },
-                    { "name": "Mathematics Requirements", "status": "complete", "progress": "18/18" },
-                    { "name": "OSU General Education", "status": "complete", "progress": "40/40" },
-                    { "name": "CS Electives", "status": "progress", "progress": "8/15" },
-                    { "name": "Senior Capstone", "status": "pending", "progress": "0/6" }
-                ],
-                "financial": {
-                    "balance": {
-                        "tuition": -8500.00,
-                        "fees": -1200.00,
-                        "housing": -4800.00,
-                        "meal_plan": -2800.00,
-                        "payments": 14500.00,
-                        "total": -2800.00
-                    },
-                    "transactions": [
-                        {
-                            "date": "2025-11-01",
-                            "description": "Tuition Payment",
-                            "amount": 4250.00,
-                            "type": "payment"
-                        },
-                        {
-                            "date": "2025-10-25",
-                            "description": "Lab Fee - Computer Systems",
-                            "amount": -75.00,
-                            "type": "charge"
-                        },
-                        {
-                            "date": "2025-10-15",
-                            "description": "Housing Payment",
-                            "amount": 2400.00,
-                            "type": "payment"
-                        },
-                        {
-                            "date": "2025-10-01",
-                            "description": "Meal Plan",
-                            "amount": -1400.00,
-                            "type": "charge"
-                        }
-                    ],
-                    "financialAid": [
-                        {
-                            "name": "Academic Excellence Scholarship",
-                            "amount": 6500.00,
-                            "status": "Active",
-                            "description": "Merit-based scholarship for high GPA"
-                        },
-                        {
-                            "name": "Oklahoma Promise",
-                            "amount": 3200.00,
-                            "status": "Active",
-                            "description": "State tuition assistance program"
-                        },
-                        {
-                            "name": "CS Department Grant",
-                            "amount": 2800.00,
-                            "status": "Active",
-                            "description": "Departmental need-based aid"
-                        },
-                        {
-                            "name": "Work Study - IT Support",
-                            "amount": 2000.00,
-                            "status": "Active",
-                            "description": "Campus technology services"
-                        }
-                    ],
-                    "paymentSchedule": [
-                        {
-                            "date": "2025-12-15",
-                            "description": "Spring 2026 Tuition",
-                            "amount": 4250.00
-                        },
-                        {
-                            "date": "2025-12-20",
-                            "description": "Spring Housing",
-                            "amount": 2400.00
-                        },
-                        {
-                            "date": "2026-01-15",
-                            "description": "Spring Meal Plan",
-                            "amount": 1400.00
-                        }
-                    ]
-                },
-                "schedule": {
-                    "Monday": [
-                        { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
-                        { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" },
-                        { "time": "15:00", "class": "CS 3653", "room": "MSCS 203" }
-                    ],
-                    "Tuesday": [
-                        { "time": "11:00", "class": "CS 3823", "room": "MSCS 109" },
-                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" }
-                    ],
-                    "Wednesday": [
-                        { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
-                        { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" },
-                        { "time": "15:00", "class": "CS 3653", "room": "MSCS 203" }
-                    ],
-                    "Thursday": [
-                        { "time": "11:00", "class": "CS 3823", "room": "MSCS 109" },
-                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" }
-                    ],
-                    "Friday": [
-                        { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
-                        { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" }
-                    ]
-                }
-            },
-            {
-                "id": "OSU002",
-                "name": "Marcus Johnson",
-                "email": "marcus.johnson@okstate.edu",
-                "phone": "(405) 744-6000",
-                "address": "Bennett Hall, Room 512",
-                "major": "Pre-Medicine",
-                "year": 2,
-                "grade": "A-",
-                "gpa": 3.7,
-                "credits": 62,
-                "status": "Active",
-                "currentCourses": [
-                    {
-                        "code": "CHEM 3053",
-                        "name": "Organic Chemistry I",
-                        "instructor": "Dr. Peterson",
-                        "credits": 3,
-                        "grade": "A-",
-                        "schedule": "MWF 9:00-9:50"
-                    },
-                    {
-                        "code": "BIOL 3204",
-                        "name": "Human Anatomy",
-                        "instructor": "Dr. Williams",
-                        "credits": 4,
-                        "grade": "A",
-                        "schedule": "TTh 10:30-11:45"
-                    },
-                    {
-                        "code": "PHYS 2014",
-                        "name": "University Physics I",
-                        "instructor": "Dr. Thompson",
-                        "credits": 4,
-                        "grade": "B+",
-                        "schedule": "MWF 11:00-11:50"
-                    },
-                    {
-                        "code": "PSYC 1113",
-                        "name": "Introduction to Psychology",
-                        "instructor": "Prof. Davis",
-                        "credits": 3,
-                        "grade": "A",
-                        "schedule": "TTh 1:00-2:15"
-                    },
-                    {
-                        "code": "STAT 2013",
-                        "name": "Elementary Statistics",
-                        "instructor": "Dr. Rodriguez",
-                        "credits": 3,
-                        "grade": "B+",
-                        "schedule": "MW 2:00-3:15"
-                    }
-                ],
-                "gradeHistory": [
-                    { "semester": "Fall 2025", "year": "2025", "gpa": 3.8, "credits": 17 },
-                    { "semester": "Spring 2025", "year": "2025", "gpa": 3.6, "credits": 15 },
-                    { "semester": "Fall 2024", "year": "2024", "gpa": 3.7, "credits": 16 },
-                    { "semester": "Spring 2024", "year": "2024", "gpa": 3.5, "credits": 14 }
-                ],
-                "achievements": [
-                    {
-                        "title": "Pre-Health Excellence Award",
-                        "description": "Outstanding performance in pre-medical coursework",
+                        "description": "Recognized for academic excellence in Physics",
                         "icon": "fas fa-medal"
                     },
                     {
-                        "title": "Volunteer of the Month",
-                        "description": "OSU Medical Center - 50+ volunteer hours",
-                        "icon": "fas fa-heart"
+                        "title": "Undergraduate Research Assistant",
+                        "description": "Optics lab – Laser spectroscopy with Dr. Patel",
+                        "icon": "fas fa-flask"
                     },
                     {
-                        "title": "Chemistry Tutor",
-                        "description": "Peer tutoring program - General Chemistry",
-                        "icon": "fas fa-flask"
+                        "title": "Physics Club Officer",
+                        "description": "Treasurer – OSU Society of Physics Students",
+                        "icon": "fas fa-atom"
                     }
                 ],
                 "requirements": [
-                    { "name": "Pre-Med Core Requirements", "status": "progress", "progress": "28/36" },
-                    { "name": "MCAT Prerequisites", "status": "progress", "progress": "18/24" },
+                    { "name": "Physics Core Requirements", "status": "progress", "progress": "24/42" },
+                    { "name": "Laboratory Requirements", "status": "progress", "progress": "3/6" },
+                    { "name": "Mathematics Requirements", "status": "progress", "progress": "10/13" },
                     { "name": "OSU General Education", "status": "complete", "progress": "40/40" },
-                    { "name": "Science Electives", "status": "progress", "progress": "8/12" },
-                    { "name": "Clinical Experience", "status": "progress", "progress": "75/150" }
+                    { "name": "Senior Project", "status": "pending", "progress": "0/2" }
                 ],
                 "financial": {
                     "balance": {
-                        "tuition": -9200.00,
-                        "fees": -1400.00,
-                        "housing": -5000.00,
-                        "meal_plan": -3200.00,
-                        "payments": 15000.00,
-                        "total": -3800.00
+                        "tuition": -7800.00,
+                        "fees": -1100.00,
+                        "housing": -4200.00,
+                        "meal_plan": -2600.00,
+                        "payments": 13500.00,
+                        "total": -2200.00
                     },
                     "transactions": [
                         {
-                            "date": "2025-11-01",
-                            "description": "Scholarship Payment",
+                            "date": "2025-10-28",
+                            "description": "Tuition Payment",
                             "amount": 3500.00,
-                            "type": "credit"
-                        },
-                        {
-                            "date": "2025-10-20",
-                            "description": "Lab Fee - Chemistry",
-                            "amount": -150.00,
-                            "type": "charge"
-                        },
-                        {
-                            "date": "2025-10-01",
-                            "description": "Housing Payment",
-                            "amount": 2500.00,
                             "type": "payment"
                         },
                         {
-                            "date": "2025-09-15",
-                            "description": "Meal Plan",
-                            "amount": -1600.00,
+                            "date": "2025-10-10",
+                            "description": "Lab Fee - Modern Physics",
+                            "amount": -80.00,
                             "type": "charge"
+                        },
+                        {
+                            "date": "2025-09-20",
+                            "description": "Housing Payment",
+                            "amount": 2100.00,
+                            "type": "payment"
                         }
                     ],
                     "financialAid": [
                         {
-                            "name": "Pre-Health Scholarship",
-                            "amount": 5500.00,
+                            "name": "College of Arts and Sciences Scholarship",
+                            "amount": 3000.00,
                             "status": "Active",
-                            "description": "Merit scholarship for pre-medical students"
+                            "description": "Merit-based scholarship for Physics majors"
                         },
                         {
-                            "name": "Oklahoma Resident Grant",
-                            "amount": 2800.00,
+                            "name": "Undergraduate Research Grant",
+                            "amount": 1500.00,
                             "status": "Active",
-                            "description": "State grant for Oklahoma residents"
-                        },
-                        {
-                            "name": "Federal Pell Grant",
-                            "amount": 3800.00,
-                            "status": "Active",
-                            "description": "Need-based federal aid"
-                        },
-                        {
-                            "name": "Work Study - Lab Assistant",
-                            "amount": 2200.00,
-                            "status": "Active",
-                            "description": "Chemistry department lab assistant"
+                            "description": "Support for optics research project"
                         }
                     ],
                     "paymentSchedule": [
                         {
                             "date": "2025-12-15",
                             "description": "Spring 2026 Tuition",
-                            "amount": 4600.00
+                            "amount": 4100.00
                         },
                         {
-                            "date": "2025-12-20",
+                            "date": "2025-12-22",
                             "description": "Spring Housing",
-                            "amount": 2500.00
-                        },
-                        {
-                            "date": "2026-01-15",
-                            "description": "Spring Meal Plan",
-                            "amount": 1600.00
+                            "amount": 2100.00
                         }
                     ]
                 },
                 "schedule": {
                     "Monday": [
-                        { "time": "09:00", "class": "CHEM 3053", "room": "CHEM 179" },
-                        { "time": "11:00", "class": "PHYS 2014", "room": "PHYS 106" },
-                        { "time": "14:00", "class": "STAT 2013", "room": "MSCS 203" }
+                        { "time": "10:00", "class": "PHYS 3013", "room": "PHYS 204" },
+                        { "time": "13:00", "class": "PHYS 3713", "room": "PHYS 106" }
                     ],
                     "Tuesday": [
-                        { "time": "10:30", "class": "BIOL 3204", "room": "LSE 104" },
-                        { "time": "13:00", "class": "PSYC 1113", "room": "PSYC 108" }
+                        { "time": "09:30", "class": "PHYS 3513", "room": "MSCS 210" },
+                        { "time": "12:30", "class": "MATH 2233", "room": "MSCS 115" }
                     ],
                     "Wednesday": [
-                        { "time": "09:00", "class": "CHEM 3053", "room": "CHEM 179" },
-                        { "time": "11:00", "class": "PHYS 2014", "room": "PHYS 106" },
-                        { "time": "14:00", "class": "STAT 2013", "room": "MSCS 203" }
+                        { "time": "10:00", "class": "PHYS 3013", "room": "PHYS 204" },
+                        { "time": "14:00", "class": "PHYS 3323", "room": "PHYS 307" }
                     ],
                     "Thursday": [
-                        { "time": "10:30", "class": "BIOL 3204", "room": "LSE 104" },
-                        { "time": "13:00", "class": "PSYC 1113", "room": "PSYC 108" }
+                        { "time": "09:30", "class": "PHYS 3513", "room": "MSCS 210" },
+                        { "time": "12:30", "class": "MATH 2233", "room": "MSCS 115" }
                     ],
                     "Friday": [
-                        { "time": "09:00", "class": "CHEM 3053", "room": "CHEM 179" },
-                        { "time": "11:00", "class": "PHYS 2014", "room": "PHYS 106" }
+                        { "time": "10:00", "class": "PHYS 3013", "room": "PHYS 204" },
+                        { "time": "13:00", "class": "PHYS 3713", "room": "PHYS 106" }
                     ]
                 }
             }
@@ -545,6 +349,32 @@ class StudentPortal {
                     { code: 'CHEM 4653', name: 'Biochemistry II', credits: 3, prerequisites: ['CHEM 3653'] },
                     { code: 'HLTH 2143', name: 'Medical Terminology', credits: 3, prerequisites: [] },
                     { code: 'NURS 3143', name: 'Human Pathophysiology', credits: 3, prerequisites: ['BIOL 3204'] }
+                ]
+            },
+            'Physics': {
+                'Core Courses': [
+                    { code: 'PHYS 2014', name: 'University Physics I', credits: 4, prerequisites: ['MATH 2103|2123|2144'] },
+                    { code: 'PHYS 2114', name: 'University Physics II', credits: 4, prerequisites: ['PHYS 2014'] },
+                    { code: 'PHYS 2203', name: 'University Physics III', credits: 3, prerequisites: ['PHYS 2114'] },
+                    { code: 'PHYS 3013', name: 'Mechanics I', credits: 3, prerequisites: ['PHYS 2114','MATH 2233 (concurrent ok)'] },
+                    { code: 'PHYS 3713', name: 'Modern Physics', credits: 3, prerequisites: ['PHYS 2203'] },
+                    { code: 'PHYS 4113', name: 'Electricity and Magnetism', credits: 3, prerequisites: ['PHYS 2114','MATH 2233'] },
+                    { code: 'PHYS 4513', name: 'Introductory Quantum Mechanics', credits: 3, prerequisites: ['PHYS 3713'] },
+                    { code: 'PHYS 4813', name: 'Electromagnetic Radiation', credits: 3, prerequisites: ['PHYS 4113'] }
+                ],
+                'Laboratories': [
+                    { code: 'PHYS 3323', name: 'Modern Laboratory Methods I', credits: 3, prerequisites: ['PHYS 2014','PHYS 2114'] },
+                    { code: 'PHYS 3623', name: 'Modern Laboratory Methods II', credits: 3, prerequisites: ['PHYS 2014','PHYS 2114'] }
+                ],
+                'Math Requirements': [
+                    { code: 'MATH 2144', name: 'Calculus I', credits: 4, prerequisites: [] },
+                    { code: 'MATH 2153', name: 'Calculus II', credits: 3, prerequisites: ['MATH 2144'] },
+                    { code: 'MATH 2163', name: 'Calculus III', credits: 3, prerequisites: ['MATH 2153'] },
+                    { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2153'] }
+                ],
+                'Electives': [
+                    { code: 'ASTR 3103', name: 'Introduction to Astrophysics', credits: 3, prerequisites: ['PHYS 2114'] },
+                    { code: 'PHYS 4712', name: 'Senior Project', credits: 2, prerequisites: [] }
                 ]
             }
         };
@@ -997,6 +827,37 @@ class StudentPortal {
         this.loadFinancialInfo();
         this.loadSchedule();
         this.loadPlanningTab();
+        this.loadTranscript();
+    }
+
+    loadTranscript() {
+        if (!this.transcriptEl || !this.studentData) return;
+
+        const transcript = this.studentData.completedCourses || [];
+
+        if (!transcript.length) {
+            this.transcriptEl.innerHTML = '<p style="color:#666">No completed courses to display.</p>';
+            return;
+        }
+
+        // Sort by year then term order
+        const termOrder = { 'Spring': 1, 'Summer': 2, 'Fall': 3 };
+        const sorted = [...transcript].sort((a, b) => {
+            if (a.year !== b.year) return a.year - b.year;
+            return (termOrder[a.term] || 0) - (termOrder[b.term] || 0);
+        });
+
+        const html = sorted.map(course => `
+            <div class="course-item">
+                <div class="course-info">
+                    <div class="course-name">${course.code} - ${course.name}</div>
+                    <div class="course-details">${course.term} ${course.year} • ${course.credits} credits</div>
+                </div>
+                <div class="course-grade">${course.grade}</div>
+            </div>
+        `).join('');
+
+        this.transcriptEl.innerHTML = html;
     }
 
     switchTab(tabId) {

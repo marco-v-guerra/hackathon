@@ -1348,6 +1348,7 @@ body {
     background: #e3e8ee;
     outline: none;
     border-radius: 3px;
+    appearance: none;
     -webkit-appearance: none;
 }
 

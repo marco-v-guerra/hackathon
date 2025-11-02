@@ -519,5 +519,15 @@
         "year": 4,
         "grade": "A",
         "gpa": 3.9
+    },
+    {
+        "id": "OSU003",
+        "name": "Priya Kumar",
+        "email": "priya.kumar@okstate.edu",
+        "phone": "(405) 744-7123",
+        "major": "Physics",
+        "year": 3,
+        "grade": "A-",
+        "gpa": 3.6
     }
 ]

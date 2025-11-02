@@ -2,13 +2,9 @@
 class LoginManager {
     constructor() {
         this.accounts = {
-            'alice.smith@okstate.edu': {
+            'priya.kumar@okstate.edu': {
                 password: 'password123',
-                studentId: 'OSU001'
-            },
-            'marcus.johnson@okstate.edu': {
-                password: 'password123',
-                studentId: 'OSU002'
+                studentId: 'OSU003'
             }
         };
         

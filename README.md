@@ -72,6 +72,16 @@ php -S localhost:8000
 
 Then open `http://localhost:8000` in your browser.
 
+## Demo Login Account
+
+Use this demo account on `login.html` to explore the portal:
+
+- Priya Kumar — Physics
+  - Email: `priya.kumar@okstate.edu`
+  - Password: `password123`
+
+Tip: You can also click the demo card on the login page for a one-click login.
+
 ## Usage
 
 ### Viewing Students

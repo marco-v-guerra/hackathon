@@ -22,6 +22,11 @@ A modern, responsive web application for managing and displaying student informa
 - **Accessibility**: Keyboard navigation and screen reader friendly
 - **Dark/Light Theme**: Automatic theme detection (system preference)
 
+### 🤖 AI-Powered Academic Planning
+- **Generate Academic Plan**: Uses OpenRouter with Google Gemini 2.5 Pro to create a semester-by-semester plan
+- **Respects Prerequisites**: Plans courses in the correct order based on your course history and catalog
+- **Custom Preferences**: Toggle summer semesters and light course load options
+
 ## Project Structure
 
 ```
@@ -71,6 +76,20 @@ php -S localhost:8000
 ```
 
 Then open `http://localhost:8000` in your browser.
+
+### Enable AI Planning (OpenRouter)
+To use the AI plan generator, you need a free OpenRouter API key:
+
+1. Create an account and get an API key from https://openrouter.ai/keys
+2. Open the app in your browser (served from `http://localhost` to avoid CORS issues)
+3. Go to the Academic Planning tab and click the "AI Settings" button
+4. Paste your API key (starts with `sk-or-...`) and save
+5. Click "Generate Academic Plan"
+
+Notes:
+- Your API key is stored locally in your browser (`localStorage`) and is not uploaded anywhere.
+- If you see a permissions/CORS error, make sure you are serving the site via a local server (not opening the file directly).
+- The model used is `google/gemini-2.5-pro` via OpenRouter.
 
 ## Usage
 
@@ -180,9 +199,13 @@ Key CSS variables can be modified in `styles.css`:
 ## Security Considerations
 
 - **Client-Side Only**: All data processing happens in the browser
-- **No Server Communication**: No data is sent to external servers
+- **No Server Communication**: No data is sent to external servers by default
 - **Input Validation**: Basic form validation implemented
 - **XSS Protection**: All user inputs are properly escaped
+
+When AI planning is enabled, the following applies:
+- The app sends only the necessary planning context (major, completed courses, and the course catalog for your major) to OpenRouter for processing.
+- Avoid sharing sensitive personal data in the application if you plan to use the AI features.
 
 ## Future Enhancements
 

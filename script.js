@@ -71,7 +71,15 @@ class StudentPortal {
         const generatePlanBtn = document.getElementById('generatePlanBtn');
         if (generatePlanBtn) {
             generatePlanBtn.addEventListener('click', () => {
-                this.generateAcademicPlan();
+                // Prefer AI-generated plan when API key is configured; fall back to local generator
+                this.generateAcademicPlanAI().catch(() => this.generateAcademicPlan());
+            });
+        }
+
+        const aiSettingsBtn = document.getElementById('aiSettingsBtn');
+        if (aiSettingsBtn) {
+            aiSettingsBtn.addEventListener('click', () => {
+                this.promptForOpenRouterKey();
             });
         }
 
@@ -1189,6 +1197,243 @@ class StudentPortal {
         this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
     }
 
+    // AI-powered academic plan generation via OpenRouter (Gemini 2.5 Pro)
+    async generateAcademicPlanAI() {
+        if (!this.studentData) return;
+
+        const apiKey = this.getOpenRouterApiKey();
+        if (!apiKey) {
+            // Prompt the user to enter an API key
+            this.promptForOpenRouterKey();
+            if (!this.getOpenRouterApiKey()) {
+                throw new Error('OpenRouter API key is required.');
+            }
+        }
+
+        const currentCredits = this.studentData.credits ?? 0;
+        const targetCredits = 120;
+        const remainingCredits = Math.max(0, targetCredits - currentCredits);
+
+        this.renderPlanLoadingState('Generating academic plan with AI...');
+
+        try {
+            const promptData = this.buildAIPlanningPromptData();
+            const messages = [
+                {
+                    role: 'system',
+                    content: [
+                        'You are an academic advisor AI for Oklahoma State University (OSU).',
+                        'Create a semester-by-semester plan that respects course prerequisites,',
+                        'keeps credit load reasonable per preferences, avoids duplicates for taken courses,',
+                        'and sequences courses so prerequisites are met before dependent courses.',
+                        'If electives are needed to reach the credit target, select appropriate ones from the catalog.',
+                        'Constraints:',
+                        '- Max credits per semester: 19',
+                        '- Typical target per semester: 15 (or 12-13 if light load is preferred)',
+                        '- Include or exclude summer per preference',
+                        '- Start from the provided starting term',
+                        'Output strictly valid JSON with this schema and nothing else:',
+                        '{\n  "semesters": [\n    {\n      "name": string,\n      "totalCredits": number,\n      "courses": [ { "code": string, "name": string, "credits": number } ]\n    }\n  ],\n  "summary": {\n    "plannedCredits": number,\n    "semestersCount": number\n  }\n}'
+                    ].join(' ')
+                },
+                {
+                    role: 'user',
+                    content: JSON.stringify(promptData)
+                }
+            ];
+
+            const aiText = await this.callOpenRouter(messages);
+            const aiJson = this.parseAIPlanResponse(aiText);
+
+            if (!aiJson || !Array.isArray(aiJson.semesters)) {
+                throw new Error('AI response missing semesters array.');
+            }
+
+            // Normalize semesters structure
+            const semesters = aiJson.semesters.map(s => ({
+                name: s.name,
+                totalCredits: typeof s.totalCredits === 'number' ? s.totalCredits : (Array.isArray(s.courses) ? s.courses.reduce((sum, c) => sum + (c.credits || 0), 0) : 0),
+                courses: Array.isArray(s.courses) ? s.courses.map(c => ({
+                    code: c.code,
+                    name: c.name,
+                    credits: c.credits
+                })) : []
+            }));
+
+            this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
+        } catch (err) {
+            console.error('AI plan generation failed:', err);
+            const planContainer = document.getElementById('academicPlan');
+            if (planContainer) {
+                planContainer.classList.add('active');
+                planContainer.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>AI planning unavailable.</strong> ${err?.message || 'An error occurred.'}
+                    </div>
+                `;
+            }
+            throw err;
+        } finally {
+            this.clearPlanLoadingState();
+        }
+    }
+
+    buildAIPlanningPromptData() {
+        const includeSummer = document.getElementById('summerCoursesOption')?.checked ?? true;
+        const preferLightLoad = document.getElementById('lightLoadOption')?.checked ?? false;
+
+        const targetTotalCredits = 120;
+        const currentCredits = this.studentData?.credits ?? 0;
+
+        const courseDatabase = this.getCourseDatabase();
+        const majorCourses = courseDatabase[this.studentData.major] || {};
+        const catalog = [];
+        Object.keys(majorCourses).forEach(category => {
+            (majorCourses[category] || []).forEach(course => {
+                catalog.push({ code: course.code, name: course.name, credits: course.credits, prerequisites: course.prerequisites || [] });
+            });
+        });
+
+        // Collect taken courses (past + current), filter out non-passing grades
+        const passing = new Set(['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D']);
+        const takenCodes = new Set();
+        (this.studentData.currentCourses || []).forEach(c => takenCodes.add(c.code));
+        (this.studentData.pastClasses || []).forEach(term => {
+            (term.classes || []).forEach(c => {
+                if (!c.grade || passing.has(String(c.grade).trim().toUpperCase())) {
+                    takenCodes.add(c.code);
+                }
+            });
+        });
+
+        // Determine starting term
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const m = now.getMonth();
+        const startingSemester = m <= 4 ? 'Spring' : (m <= 7 ? 'Summer' : 'Fall');
+        const startingYear = m <= 4 ? currentYear : currentYear + 1;
+
+        return {
+            student: {
+                id: this.studentData.id,
+                name: this.studentData.name,
+                major: this.studentData.major,
+                creditsCompleted: currentCredits
+            },
+            preferences: {
+                includeSummer,
+                preferLightLoad,
+                maxCreditsPerSemester: 19,
+                typicalCreditsPerSemester: preferLightLoad ? 13 : 15
+            },
+            constraints: {
+                targetTotalCredits,
+                startingTerm: `${startingSemester} ${startingYear}`
+            },
+            courseCatalog: catalog,
+            takenCourses: Array.from(takenCodes)
+        };
+    }
+
+    async callOpenRouter(messages) {
+        const apiKey = this.getOpenRouterApiKey();
+        if (!apiKey) throw new Error('OpenRouter API key not set.');
+
+        const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+                'X-Title': 'OSU Student Portal'
+            },
+            body: JSON.stringify({
+                model: 'google/gemini-2.5-pro',
+                messages,
+                temperature: 0.2,
+                max_tokens: 1800
+            })
+        });
+
+        if (!resp.ok) {
+            const text = await resp.text().catch(() => '');
+            throw new Error(`OpenRouter request failed (${resp.status}): ${text || resp.statusText}`);
+        }
+
+        const data = await resp.json();
+        const content = data?.choices?.[0]?.message?.content;
+        if (!content) throw new Error('No content returned from AI.');
+        return content;
+    }
+
+    parseAIPlanResponse(text) {
+        // Try direct JSON first
+        try {
+            return JSON.parse(text);
+        } catch (_) {}
+
+        // Try to extract JSON block
+        try {
+            const start = text.indexOf('{');
+            const end = text.lastIndexOf('}');
+            if (start >= 0 && end > start) {
+                const candidate = text.slice(start, end + 1);
+                return JSON.parse(candidate);
+            }
+        } catch (e) {
+            console.warn('Failed to parse AI JSON:', e);
+        }
+        return null;
+    }
+
+    renderPlanLoadingState(message) {
+        const planContainer = document.getElementById('academicPlan');
+        if (planContainer) {
+            planContainer.classList.add('active');
+            planContainer.innerHTML = `
+                <div class="info-card" style="padding:16px;">
+                    <div class="card-body">
+                        <div class="loading" style="display:flex;align-items:center;gap:8px;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>${message || 'Generating academic plan...'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        const btn = document.getElementById('generatePlanBtn');
+        if (btn) {
+            if (!btn.dataset._origText) btn.dataset._origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        }
+    }
+
+    clearPlanLoadingState() {
+        const btn = document.getElementById('generatePlanBtn');
+        if (btn) {
+            btn.disabled = false;
+            if (btn.dataset._origText) btn.innerHTML = btn.dataset._origText;
+        }
+    }
+
+    getOpenRouterApiKey() {
+        try { return localStorage.getItem('OPENROUTER_API_KEY'); } catch (_) { return null; }
+    }
+
+    setOpenRouterApiKey(key) {
+        try { localStorage.setItem('OPENROUTER_API_KEY', key); } catch (_) {}
+    }
+
+    promptForOpenRouterKey() {
+        const existing = this.getOpenRouterApiKey() || '';
+        const input = window.prompt('Enter your OpenRouter API Key (starts with sk-or-):', existing);
+        if (input && input.trim()) {
+            this.setOpenRouterApiKey(input.trim());
+            alert('API key saved in your browser (localStorage). You can now generate the AI plan.');
+        }
+    }
+
     planSemesters(availableCourses, remainingCredits) {
         const semesters = [];
         let creditsLeft = remainingCredits;
@@ -1338,7 +1583,7 @@ class StudentPortal {
                     </div>
                 </div>
                 <div class="plan-actions">
-                    <button class="btn btn-outline" onclick="studentPortal.generateAcademicPlan()">
+                    <button class="btn btn-outline" onclick="studentPortal.generateAcademicPlanAI().catch(() => studentPortal.generateAcademicPlan())">
                         <i class="fas fa-refresh"></i> Regenerate Plan
                     </button>
                     <button class="btn btn-outline" onclick="studentPortal.exportPlan()">

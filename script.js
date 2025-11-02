@@ -1648,22 +1648,46 @@ class StudentPortal {
         };
     }
 
-    generateAcademicPlan() {
+    async generateAcademicPlan() {
         if (!this.studentData) return;
 
         const currentCredits = this.calculateTotalCredits(false); // Only completed credits for planning
         const targetCredits = 120;
         const remainingCredits = targetCredits - currentCredits;
         
-        console.log('Generating prerequisite-aware academic plan');
+        console.log('Generating academic plan (AI-first with prerequisite awareness)');
         console.log('Completed courses:', Array.from(this.completedCourses));
         console.log('In progress courses:', Array.from(this.inProgressCourses));
-        
-        // Generate prerequisite-aware semester plan
-        const semesters = this.generateSequencedAcademicPlan();
-        
-        // Display the plan with prerequisite information
-        this.displayAcademicPlanWithPrerequisites(semesters, currentCredits, remainingCredits);
+
+        // Visual feedback while generating
+        const btn = document.getElementById('generatePlanBtn');
+        const originalBtnText = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        }
+
+        let usedAI = false;
+        try {
+            // Try AI-powered planning via OpenRouter if configured or provided
+            const aiPlan = await this.generateAcademicPlanAI();
+            if (aiPlan && aiPlan.length > 0) {
+                usedAI = true;
+                this.displayAcademicPlanWithPrerequisites(aiPlan, currentCredits, remainingCredits);
+            }
+        } catch (err) {
+            console.warn('AI planning failed, falling back to local planner:', err);
+        } finally {
+            if (!usedAI) {
+                // Fallback: local prerequisite-aware planner
+                const semesters = this.generateSequencedAcademicPlan();
+                this.displayAcademicPlanWithPrerequisites(semesters, currentCredits, remainingCredits);
+            }
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        }
     }
 
     planSemesters(availableCourses, remainingCredits) {
@@ -1964,6 +1988,236 @@ class StudentPortal {
 
         // Update progress stats
         this.updatePlanningStats(currentCredits, remainingCredits, semesters.length);
+    }
+
+    // ========== AI INTEGRATION: OPENROUTER + GEMINI ==========
+
+    getOpenRouterConfig() {
+        // Retrieve API key and model from localStorage, optionally prompting the user for the key.
+        let apiKey = (localStorage.getItem('openrouter_api_key') || '').trim();
+        let model = (localStorage.getItem('openrouter_model') || '').trim();
+
+        if (!model) {
+            // Default to requested model; allow override in localStorage
+            model = 'google/gemini-2.5-pro';
+        }
+
+        if (!apiKey) {
+            // Prompt user for key once; store for subsequent runs
+            apiKey = window.prompt('Enter your OpenRouter API key to generate an AI plan (stored locally in your browser):', '');
+            if (apiKey) {
+                localStorage.setItem('openrouter_api_key', apiKey.trim());
+            }
+        }
+
+        return { apiKey, model };
+    }
+
+    buildStudentContextForAI() {
+        const includeSummer = document.getElementById('summerCoursesOption')?.checked ?? true;
+        const preferLightLoad = document.getElementById('lightLoadOption')?.checked ?? false;
+
+        const completed = Array.from(this.completedCourses);
+        const inProgress = Array.from(this.inProgressCourses);
+
+        return {
+            student: {
+                id: this.studentData.id,
+                name: this.studentData.name,
+                major: this.studentData.major,
+                gpa: this.studentData.gpa,
+                creditsCompleted: this.calculateTotalCredits(false),
+                targetCredits: 120,
+                preferences: {
+                    includeSummer,
+                    preferLightLoad
+                }
+            },
+            completedCourses: completed,
+            inProgressCourses: inProgress
+        };
+    }
+
+    getCourseCatalogForAI() {
+        // Pull the course catalog and filter to relevant prefixes to keep the payload manageable
+        const catalog = this.getAllCourses();
+        const relevantPrefixes = ['ECEN','ENSC','CS','MATH','PHYS','CHEM','ENGL','STAT','IEM','HIST','POLS','PSYC','BIOL','ENGR'];
+        const isRelevant = (code) => relevantPrefixes.some(p => code?.toUpperCase().startsWith(p));
+
+        // Normalize catalog entries to a compact structure
+        const slim = catalog
+            .filter(c => c && c.code && isRelevant(c.code))
+            .map(c => ({
+                code: c.code,
+                name: c.name,
+                credits: c.credits,
+                prerequisites: typeof c.prerequisites === 'string' ? c.prerequisites : Array.isArray(c.prerequisites) ? c.prerequisites.join(', ') : ''
+            }));
+
+        // Deduplicate by course code (some catalogs repeat)
+        const seen = new Set();
+        const unique = [];
+        for (const c of slim) {
+            if (!seen.has(c.code)) { seen.add(c.code); unique.push(c); }
+        }
+        return unique;
+    }
+
+    async callOpenRouterChat(apiKey, model, messages, extra = {}) {
+        const body = {
+            model,
+            messages,
+            temperature: 0.2,
+            ...extra
+        };
+
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+                'HTTP-Referer': window.location.origin,
+                'X-Title': 'OSU Student Portal'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+            const errText = await res.text().catch(() => '');
+            throw new Error(`OpenRouter error ${res.status}: ${errText}`);
+        }
+
+        const data = await res.json();
+        const content = data?.choices?.[0]?.message?.content || '';
+        return content;
+    }
+
+    parseJsonFromAI(text) {
+        if (!text) return null;
+        let clean = text.trim();
+        // Remove code fences if present
+        if (clean.startsWith('```')) {
+            clean = clean.replace(/^```[a-zA-Z]*\n/, '').replace(/\n```$/, '');
+        }
+        // Try to find the first JSON object
+        const start = clean.indexOf('{');
+        const end = clean.lastIndexOf('}');
+        if (start === -1 || end === -1 || end <= start) return null;
+        const candidate = clean.slice(start, end + 1);
+        try {
+            return JSON.parse(candidate);
+        } catch (e) {
+            console.warn('Failed to parse AI JSON:', e, candidate);
+            return null;
+        }
+    }
+
+    parsePrereqTextToCodes(text) {
+        if (!text || typeof text !== 'string') return [];
+        // Match patterns like CS 1113, MATH 2153, ECEN 3714, etc.
+        const regex = /\b([A-Z]{2,5})\s?([0-9]{3,4})\b/g;
+        const set = new Set();
+        let m;
+        while ((m = regex.exec(text)) !== null) {
+            const code = `${m[1]} ${m[2]}`.trim();
+            set.add(code);
+        }
+        return Array.from(set);
+    }
+
+    async generateAcademicPlanAI() {
+        const { apiKey, model } = this.getOpenRouterConfig();
+        if (!apiKey) {
+            // No key provided; signal caller to use fallback
+            throw new Error('Missing OpenRouter API key');
+        }
+
+        const studentCtx = this.buildStudentContextForAI();
+        const catalog = this.getCourseCatalogForAI();
+
+        // Build a compact course map for quick validation
+        const courseMap = new Map();
+        catalog.forEach(c => courseMap.set(c.code, c));
+
+        const systemPrompt = [
+            'You are an academic planning assistant for a university student portal.',
+            'Task: Create a prerequisite-respecting, semester-by-semester plan using ONLY the provided course catalog.',
+            'Constraints:',
+            '- Do not include any course not present in the catalog.',
+            '- Do not schedule courses whose prerequisites are not completed in prior semesters of the plan.',
+            '- Skip courses already completed or currently in progress.',
+            '- Adhere to credit load preferences and optionally include summer.',
+            'Output: JSON only, no prose, matching this schema:',
+            '{ "plan": [ { "semester": "Fall 2026", "courses": [ { "code": "ECEN 3714", "name": "Network Analysis", "credits": 4, "prerequisites": ["MATH 2233"], "reason": "Required for major; unlocks ECEN 3723" } ], "totalCredits": 15 } ], "notes": ["Short bullets with rationale and assumptions"] }'
+        ].join('\n');
+
+        // Determine starting semester label similar to local planner
+        const now = new Date();
+        const month = now.getMonth();
+        const year = now.getFullYear();
+        let nextSem;
+        if (month >= 0 && month <= 4) nextSem = `Fall ${year}`;
+        else if (month >= 5 && month <= 7) nextSem = `Fall ${year}`;
+        else nextSem = `Spring ${year + 1}`;
+
+        const userPrompt = {
+            student: studentCtx.student,
+            completedCourses: studentCtx.completedCourses,
+            inProgressCourses: studentCtx.inProgressCourses,
+            startingSemester: nextSem,
+            catalog: catalog
+        };
+
+        let content = await this.callOpenRouterChat(apiKey, model, [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: JSON.stringify(userPrompt) }
+        ]);
+
+        // If the requested model isn't available, try a reasonable fallback
+        if (!content && model !== 'google/gemini-1.5-pro') {
+            content = await this.callOpenRouterChat(apiKey, 'google/gemini-1.5-pro', [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: JSON.stringify(userPrompt) }
+            ]);
+        }
+
+        const parsed = this.parseJsonFromAI(content);
+        if (!parsed || !Array.isArray(parsed.plan)) {
+            throw new Error('AI did not return a valid plan JSON');
+        }
+
+        // Normalize AI output to our display shape and enrich with prerequisites if available
+        const normalizeCourse = (c) => {
+            const code = c.code;
+            const catalogEntry = courseMap.get(code) || {};
+            const structured = this.findCourse(code);
+            let prereqList = [];
+            if (structured && Array.isArray(structured.prerequisites)) {
+                prereqList = structured.prerequisites.slice();
+            } else if (catalogEntry && catalogEntry.prerequisites) {
+                prereqList = this.parsePrereqTextToCodes(catalogEntry.prerequisites);
+            }
+            return {
+                code,
+                name: c.name || catalogEntry.name || code,
+                credits: Number(c.credits || catalogEntry.credits || 0) || 0,
+                prerequisites: prereqList
+            };
+        };
+
+        const semesters = parsed.plan.map(s => {
+            const courses = Array.isArray(s.courses) ? s.courses.map(normalizeCourse) : [];
+            const totalCredits = typeof s.totalCredits === 'number' && !Number.isNaN(s.totalCredits)
+                ? s.totalCredits
+                : courses.reduce((sum, c) => sum + (c.credits || 0), 0);
+            return {
+                semester: s.semester,
+                courses,
+                totalCredits
+            };
+        });
+
+        return semesters;
     }
 
     showPrerequisiteTree() {

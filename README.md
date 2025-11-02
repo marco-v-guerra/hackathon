@@ -72,6 +72,18 @@ php -S localhost:8000
 
 Then open `http://localhost:8000` in your browser.
 
+### Optional: AI Academic Plan (OpenRouter + Gemini)
+
+You can enable AI-generated academic plans using OpenRouter:
+
+- Create an account at openrouter.ai and copy your API key.
+- Click "Generate Academic Plan" in the Academic Planning tab. The app will prompt once for your API key and store it locally in your browser.
+- The default model is `google/gemini-2.5-pro`. You can override by setting `openrouter_model` in `localStorage`.
+
+Notes
+- Your API key is stored in your browser’s localStorage. For production use, proxy the request via a backend to avoid exposing keys.
+- If the AI call fails or no key is provided, the app falls back to a local prerequisite-aware planner.
+
 ## Usage
 
 ### Viewing Students

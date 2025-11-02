@@ -38,7 +38,7 @@
                         <div class="profile-info">
                             <h2 id="fullStudentName">Alice Smith</h2>
                             <p class="student-id">Student ID: <span id="studentId">STU001</span></p>
-                            <p class="student-program"><span id="studentMajor">Computer Science</span> • <span id="studentYear">Junior</span></p>
+                            <p class="student-program"><span id="studentMajor">Electrical Engineering</span> • <span id="studentYear">Senior</span></p>
                             <div class="quick-stats">
                                 <div class="quick-stat">
                                     <span class="stat-label">GPA</span>
@@ -93,7 +93,7 @@
                         <i class="fas fa-calendar"></i>
                         <span>Schedule</span>
                     </button>
-                    <button class="tab-btn" data-tab="planning">
+                    <button class="tab-btn" data-tab="academicPlanning">
                         <i class="fas fa-route"></i>
                         <span>Academic Planning</span>
                     </button>
@@ -285,7 +285,7 @@
                     </div>
 
                     <!-- Academic Planning Tab -->
-                    <div class="tab-pane" id="planning">
+                    <div class="tab-pane" id="academicPlanning">
                         <div class="info-card">
                             <div class="card-header">
                                 <h3><i class="fas fa-route"></i> Academic Planning</h3>
@@ -344,6 +344,93 @@
                                             <input type="checkbox" id="lightLoadOption"> 
                                             Prefer Light Course Load (12-13 credits)
                                         </label>
+                                    </div>
+                                </div>
+
+                                <!-- Double Major and Minors Section -->
+                                <div class="curriculum-management">
+                                    <div class="curriculum-header">
+                                        <h4>🎓 Curriculum Management</h4>
+                                        <p>Manage multiple majors and minors with shared course optimization</p>
+                                    </div>
+                                    
+                                    <div class="curriculum-controls">
+                                        <button class="btn btn-outline" onclick="studentPortal.addSecondMajor()">
+                                            📚 Add Second Major
+                                        </button>
+                                        <button class="btn btn-outline" onclick="studentPortal.addMinor()">
+                                            📝 Add Minor
+                                        </button>
+                                        <button class="btn btn-outline" onclick="studentPortal.viewSharedCourses()">
+                                            🔗 View Shared Courses
+                                        </button>
+                                    </div>
+
+                                    <!-- Active Curricula Display -->
+                                    <div class="active-curricula" id="activeCurricula">
+                                        <!-- Current curricula will be displayed here -->
+                                        <div class="curriculum-item primary-major">
+                                            <div class="curriculum-badge">Primary Major</div>
+                                            <div class="curriculum-name" id="primaryMajorName">Electrical Engineering</div>
+                                            <div class="curriculum-progress">
+                                                <span class="progress-fraction">45/60 credits</span>
+                                                <div class="mini-progress-bar">
+                                                    <div class="mini-progress-fill" style="width: 75%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Curriculum Breakdown -->
+                                    <div class="curriculum-breakdown" id="curriculumBreakdown" style="display: none;">
+                                        <div class="breakdown-header">
+                                            <h5>📊 Course Requirements Breakdown</h5>
+                                            <button class="btn btn-sm" onclick="studentPortal.hideCurriculumBreakdown()">✖</button>
+                                        </div>
+                                        
+                                        <!-- Shared Courses Section -->
+                                        <div class="shared-courses-section">
+                                            <div class="section-header">
+                                                <h6>🔗 Shared Courses</h6>
+                                                <p>Courses that count towards multiple requirements</p>
+                                            </div>
+                                            <div class="shared-courses-grid" id="sharedCoursesGrid">
+                                                <!-- Shared courses will be populated here -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Side-by-side Major Requirements -->
+                                        <div class="major-requirements-container">
+                                            <div class="major-column">
+                                                <div class="major-header">
+                                                    <h6>📚 Primary Major: <span id="primaryMajorTitle">Electrical Engineering</span></h6>
+                                                    <div class="major-progress">45/60 credits</div>
+                                                </div>
+                                                <div class="major-courses" id="primaryMajorCourses">
+                                                    <!-- Primary major specific courses -->
+                                                </div>
+                                            </div>
+
+                                            <div class="major-column" id="secondMajorColumn" style="display: none;">
+                                                <div class="major-header">
+                                                    <h6>📚 Second Major: <span id="secondMajorTitle">Mathematics</span></h6>
+                                                    <div class="major-progress">0/36 credits</div>
+                                                </div>
+                                                <div class="major-courses" id="secondMajorCourses">
+                                                    <!-- Second major specific courses -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Minors Section -->
+                                        <div class="minors-container" id="minorsContainer" style="display: none;">
+                                            <div class="minors-header">
+                                                <h6>📝 Minor Requirements</h6>
+                                            </div>
+                                            <div class="minors-grid" id="minorsGrid">
+                                                <!-- Minor requirements will be displayed here -->
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -93,10 +93,16 @@
                         <i class="fas fa-calendar"></i>
                         <span>Schedule</span>
                     </button>
-                    <button class="tab-btn" data-tab="academicPlanning">
+                                        <button class="tab-btn" data-tab="academicPlanning">
                         <i class="fas fa-route"></i>
-                        <span>Academic Planning</span>
+                        <span>Planning</span>
                     </button>
+                    <button class="tab-btn" data-tab="employee">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Employment</span>
+                    </button>
+                </div>
+            </nav>
                 </nav>
 
                 <!-- Tab Content -->
@@ -264,6 +270,17 @@
                                 <div class="card-body">
                                     <div class="payment-schedule" id="paymentSchedule">
                                         <!-- Payment schedule will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-utensils"></i> Meal Plan Budget</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="meal-plan-budget" id="mealPlanBudget">
+                                        <!-- Meal plan budget info will be loaded here -->
                                     </div>
                                 </div>
                             </div>
@@ -441,6 +458,48 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Employee Tab -->
+                    <div class="tab-pane" id="employee">
+                        <div class="tab-grid">
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-file-invoice-dollar"></i> Paystubs</h3>
+                                    <button class="btn btn-primary" id="addPaystubBtn">
+                                        <i class="fas fa-plus"></i> Add Paystub
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="paystubs-list" id="paystubsList">
+                                        <!-- Paystubs will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-clock"></i> Work Hours Summary</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="work-summary" id="workSummary">
+                                        <!-- Work summary will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-calendar-check"></i> Combined Schedule</h3>
+                                    <p class="card-subtitle">Classes and work schedule</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="combined-schedule-grid" id="combinedSchedule">
+                                        <!-- Combined schedule will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -572,6 +631,54 @@
                 <button class="btn btn-primary" onclick="if(window.studentPortal) { window.studentPortal.applyCustomization(); }">
                     <i class="fas fa-magic"></i> Generate Custom Plan
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paystub Modal -->
+    <div class="modal-overlay" id="paystubModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Add Paystub</h3>
+                <button class="modal-close" onclick="studentPortal.closePaystubModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="paystubForm">
+                    <div class="form-group">
+                        <label for="payPeriodStart">Pay Period Start</label>
+                        <input type="date" id="payPeriodStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payPeriodEnd">Pay Period End</label>
+                        <input type="date" id="payPeriodEnd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hoursWorked">Hours Worked</label>
+                        <input type="number" id="hoursWorked" step="0.5" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hourlyRate">Hourly Rate ($)</label>
+                        <input type="number" id="hourlyRate" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="grossPay">Gross Pay ($)</label>
+                        <input type="number" id="grossPay" step="0.01" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="taxes">Taxes/Deductions ($)</label>
+                        <input type="number" id="taxes" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="netPay">Net Pay ($)</label>
+                        <input type="number" id="netPay" step="0.01" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="studentPortal.closePaystubModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="studentPortal.savePaystub()">Save Paystub</button>
             </div>
         </div>
     </div>

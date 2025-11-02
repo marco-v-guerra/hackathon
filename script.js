@@ -36,7 +36,11 @@ class StudentPortal {
         this.transactionsEl = document.getElementById('transactions');
         this.financialAidEl = document.getElementById('financialAid');
         this.paymentScheduleEl = document.getElementById('paymentSchedule');
+        this.mealPlanBudgetEl = document.getElementById('mealPlanBudget');
         this.weeklyScheduleEl = document.getElementById('weeklySchedule');
+        this.paystubsListEl = document.getElementById('paystubsList');
+        this.workSummaryEl = document.getElementById('workSummary');
+        this.combinedScheduleEl = document.getElementById('combinedSchedule');
     }
 
     attachEventListeners() {
@@ -78,6 +82,29 @@ class StudentPortal {
                 this.showPlanCustomization();
             });
         }
+
+        // Employee tab event listeners
+        const addPaystubBtn = document.getElementById('addPaystubBtn');
+        if (addPaystubBtn) {
+            addPaystubBtn.addEventListener('click', () => {
+                this.showPaystubModal();
+            });
+        }
+
+        // Auto-calculate gross and net pay in paystub form
+        const hoursWorkedInput = document.getElementById('hoursWorked');
+        const hourlyRateInput = document.getElementById('hourlyRate');
+        const taxesInput = document.getElementById('taxes');
+        
+        if (hoursWorkedInput && hourlyRateInput) {
+            [hoursWorkedInput, hourlyRateInput, taxesInput].forEach(input => {
+                if (input) {
+                    input.addEventListener('input', () => {
+                        this.calculatePaystubAmounts();
+                    });
+                }
+            });
+        }
     }
 
     async loadStudentData() {
@@ -114,10 +141,10 @@ class StudentPortal {
                 "phone": "(405) 744-5000",
                 "address": "Kerr-Drummond Hall, Room 304",
                 "major": "Electrical Engineering",
-                "year": 3,
+                "year": 4, // This field is now deprecated, academic year is calculated from credits
                 "grade": "A",
                 "gpa": 3.8,
-                "credits": 98,
+                "credits": 98, // 90-120 = Senior
                 "status": "Active",
                 "currentCourses": [
                     {
@@ -200,6 +227,15 @@ class StudentPortal {
                         "payments": 14500.00,
                         "total": -2800.00
                     },
+                    "mealPlan": {
+                        "totalCost": 2800.00,
+                        "amountUsed": 1200.00,
+                        "remainingBalance": 1600.00,
+                        "startDate": "2025-08-22",
+                        "endDate": "2025-12-13",
+                        "currentWeek": 11,
+                        "totalWeeks": 16
+                    },
                     "transactions": [
                         {
                             "date": "2025-11-01",
@@ -278,7 +314,8 @@ class StudentPortal {
                     ],
                     "Tuesday": [
                         { "time": "11:00", "class": "CS 3823", "room": "MSCS 109" },
-                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" }
+                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" },
+                        { "time": "16:00", "class": "Work - IT Support", "room": "IT Center", "type": "work" }
                     ],
                     "Wednesday": [
                         { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
@@ -287,11 +324,42 @@ class StudentPortal {
                     ],
                     "Thursday": [
                         { "time": "11:00", "class": "CS 3823", "room": "MSCS 109" },
-                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" }
+                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" },
+                        { "time": "16:00", "class": "Work - IT Support", "room": "IT Center", "type": "work" }
                     ],
                     "Friday": [
                         { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
                         { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" }
+                    ]
+                },
+                "employment": {
+                    "position": "IT Support Technician",
+                    "hourlyRate": 15.50,
+                    "hoursPerWeek": 10,
+                    "supervisor": "Dr. Mike Stevens",
+                    "department": "Information Technology",
+                    "startDate": "2025-08-22",
+                    "paystubs": [
+                        {
+                            "id": 1,
+                            "payPeriodStart": "2025-10-15",
+                            "payPeriodEnd": "2025-10-31",
+                            "hoursWorked": 20,
+                            "hourlyRate": 15.50,
+                            "grossPay": 310.00,
+                            "taxes": 46.50,
+                            "netPay": 263.50
+                        },
+                        {
+                            "id": 2,
+                            "payPeriodStart": "2025-10-01",
+                            "payPeriodEnd": "2025-10-14",
+                            "hoursWorked": 18.5,
+                            "hourlyRate": 15.50,
+                            "grossPay": 286.75,
+                            "taxes": 43.01,
+                            "netPay": 243.74
+                        }
                     ]
                 }
             },
@@ -302,10 +370,10 @@ class StudentPortal {
                 "phone": "(405) 744-6000",
                 "address": "Bennett Hall, Room 512",
                 "major": "Pre-Medicine",
-                "year": 2,
+                "year": 2, // This field is now deprecated, academic year is calculated from credits
                 "grade": "A-",
                 "gpa": 3.7,
-                "credits": 62,
+                "credits": 62, // 60-89 = Junior
                 "status": "Active",
                 "currentCourses": [
                     {
@@ -387,6 +455,15 @@ class StudentPortal {
                         "meal_plan": -3200.00,
                         "payments": 15000.00,
                         "total": -3800.00
+                    },
+                    "mealPlan": {
+                        "totalCost": 3200.00,
+                        "amountUsed": 1400.00,
+                        "remainingBalance": 1800.00,
+                        "startDate": "2025-08-22",
+                        "endDate": "2025-12-13",
+                        "currentWeek": 11,
+                        "totalWeeks": 16
                     },
                     "transactions": [
                         {
@@ -471,7 +548,8 @@ class StudentPortal {
                     "Wednesday": [
                         { "time": "09:00", "class": "CHEM 3053", "room": "CHEM 179" },
                         { "time": "11:00", "class": "PHYS 2014", "room": "PHYS 106" },
-                        { "time": "14:00", "class": "STAT 2013", "room": "MSCS 203" }
+                        { "time": "14:00", "class": "STAT 2013", "room": "MSCS 203" },
+                        { "time": "16:00", "class": "Work - Lab Assistant", "room": "Chemistry Lab", "type": "work" }
                     ],
                     "Thursday": [
                         { "time": "10:30", "class": "BIOL 3204", "room": "LSE 104" },
@@ -479,7 +557,38 @@ class StudentPortal {
                     ],
                     "Friday": [
                         { "time": "09:00", "class": "CHEM 3053", "room": "CHEM 179" },
-                        { "time": "11:00", "class": "PHYS 2014", "room": "PHYS 106" }
+                        { "time": "11:00", "class": "PHYS 2014", "room": "PHYS 106" },
+                        { "time": "16:00", "class": "Work - Lab Assistant", "room": "Chemistry Lab", "type": "work" }
+                    ]
+                },
+                "employment": {
+                    "position": "Chemistry Lab Assistant",
+                    "hourlyRate": 12.00,
+                    "hoursPerWeek": 8,
+                    "supervisor": "Dr. Sarah Peterson",
+                    "department": "Chemistry Department",
+                    "startDate": "2025-08-22",
+                    "paystubs": [
+                        {
+                            "id": 1,
+                            "payPeriodStart": "2025-10-15",
+                            "payPeriodEnd": "2025-10-31",
+                            "hoursWorked": 16,
+                            "hourlyRate": 12.00,
+                            "grossPay": 192.00,
+                            "taxes": 28.80,
+                            "netPay": 163.20
+                        },
+                        {
+                            "id": 2,
+                            "payPeriodStart": "2025-10-01",
+                            "payPeriodEnd": "2025-10-14",
+                            "hoursWorked": 15,
+                            "hourlyRate": 12.00,
+                            "grossPay": 180.00,
+                            "taxes": 27.00,
+                            "netPay": 153.00
+                        }
                     ]
                 }
             }
@@ -971,16 +1080,32 @@ class StudentPortal {
         };
     }
 
+    getAcademicYear(credits) {
+        if (credits >= 0 && credits <= 29) {
+            return 'Freshman';
+        } else if (credits >= 30 && credits <= 59) {
+            return 'Sophomore';
+        } else if (credits >= 60 && credits <= 89) {
+            return 'Junior';
+        } else if (credits >= 90 && credits <= 120) {
+            return 'Senior';
+        } else {
+            return 'Graduate';
+        }
+    }
+
     populateStudentInfo() {
         const data = this.studentData;
-        const yearNames = ['', 'Freshman', 'Sophomore', 'Junior', 'Senior'];
+        
+        // Calculate academic year based on credits
+        const academicYear = this.getAcademicYear(data.credits);
         
         // Update profile information
         if (this.studentNameEl) this.studentNameEl.textContent = data.name.split(' ')[0];
         if (this.fullStudentNameEl) this.fullStudentNameEl.textContent = data.name;
         if (this.studentIdEl) this.studentIdEl.textContent = data.id;
         if (this.studentMajorEl) this.studentMajorEl.textContent = data.major;
-        if (this.studentYearEl) this.studentYearEl.textContent = yearNames[data.year];
+        if (this.studentYearEl) this.studentYearEl.textContent = academicYear;
         if (this.studentGPAEl) this.studentGPAEl.textContent = data.gpa.toFixed(1);
         if (this.studentCreditsEl) this.studentCreditsEl.textContent = data.credits;
         if (this.studentStatusEl) this.studentStatusEl.textContent = data.status;
@@ -997,6 +1122,7 @@ class StudentPortal {
         this.loadFinancialInfo();
         this.loadSchedule();
         this.loadPlanningTab();
+        this.loadEmployeeInfo();
     }
 
     switchTab(tabId) {
@@ -1037,8 +1163,7 @@ class StudentPortal {
         const historyHTML = this.studentData.gradeHistory.map(semester => `
             <div class="grade-item">
                 <div class="semester-info">
-                    <span class="semester-name">${semester.semester}</span>
-                    <span class="semester-year">${semester.year}</span>
+                    <span class="semester-name">${semester.semester} ${semester.year}</span>
                 </div>
                 <div class="gpa-value">${semester.gpa.toFixed(1)}</div>
             </div>
@@ -1092,6 +1217,7 @@ class StudentPortal {
         this.loadTransactions();
         this.loadFinancialAid();
         this.loadPaymentSchedule();
+        this.loadMealPlanBudget();
     }
 
     loadBalanceSummary() {
@@ -1170,6 +1296,51 @@ class StudentPortal {
         this.paymentScheduleEl.innerHTML = scheduleHTML;
     }
 
+    loadMealPlanBudget() {
+        if (!this.mealPlanBudgetEl || !this.studentData.financial.mealPlan) return;
+
+        const mealPlan = this.studentData.financial.mealPlan;
+        const weeksRemaining = mealPlan.totalWeeks - mealPlan.currentWeek + 1;
+        const dailyBudget = (mealPlan.remainingBalance / (weeksRemaining * 7)).toFixed(2);
+        const monthlyBudget = (mealPlan.remainingBalance / (weeksRemaining / 4)).toFixed(2);
+        const perMealBudget = (dailyBudget / 3).toFixed(2); // Assuming 3 meals per day
+
+        const budgetHTML = `
+            <div class="meal-budget-compact">
+                <div class="budget-item">
+                    <div class="budget-label">
+                        <i class="fas fa-calendar-day"></i>
+                        Per Day
+                    </div>
+                    <div class="budget-amount">$${dailyBudget}</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">
+                        <i class="fas fa-calendar-alt"></i>
+                        Per Month
+                    </div>
+                    <div class="budget-amount">$${monthlyBudget}</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">
+                        <i class="fas fa-utensils"></i>
+                        Per Meal
+                    </div>
+                    <div class="budget-amount">$${perMealBudget}</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">
+                        <i class="fas fa-calendar-week"></i>
+                        Weeks Left
+                    </div>
+                    <div class="budget-amount">${weeksRemaining}</div>
+                </div>
+            </div>
+        `;
+
+        this.mealPlanBudgetEl.innerHTML = budgetHTML;
+    }
+
     loadSchedule() {
         if (!this.weeklyScheduleEl || !this.studentData.schedule) return;
 
@@ -1182,7 +1353,7 @@ class StudentPortal {
         `;
 
         times.forEach(time => {
-            scheduleHTML += `<div class="schedule-time">${time}:00</div>`;
+            scheduleHTML += `<div class="schedule-time">${time}</div>`;
             days.forEach(day => {
                 const daySchedule = this.studentData.schedule[day] || [];
                 const classAtTime = daySchedule.find(item => item.time === time);
@@ -2333,6 +2504,203 @@ class StudentPortal {
         });
 
         minorsGrid.innerHTML = html;
+    }
+
+    // Employee Management Methods
+    loadEmployeeInfo() {
+        if (this.studentData.employment) {
+            this.loadPaystubs();
+            this.loadWorkSummary();
+            this.loadCombinedSchedule();
+        }
+    }
+
+    loadPaystubs() {
+        if (!this.paystubsListEl || !this.studentData.employment) return;
+
+        const employment = this.studentData.employment;
+        const paystubs = employment.paystubs || [];
+
+        const paystubsHTML = paystubs.map(paystub => `
+            <div class="paystub-item">
+                <div class="paystub-header">
+                    <h4>Pay Period: ${new Date(paystub.payPeriodStart).toLocaleDateString()} - ${new Date(paystub.payPeriodEnd).toLocaleDateString()}</h4>
+                    <span class="paystub-net">$${paystub.netPay.toFixed(2)}</span>
+                </div>
+                <div class="paystub-details">
+                    <div class="detail-row">
+                        <span>Hours Worked:</span>
+                        <span>${paystub.hoursWorked}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Hourly Rate:</span>
+                        <span>$${paystub.hourlyRate.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Gross Pay:</span>
+                        <span>$${paystub.grossPay.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Taxes/Deductions:</span>
+                        <span>-$${paystub.taxes.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-row total">
+                        <span>Net Pay:</span>
+                        <span>$${paystub.netPay.toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        this.paystubsListEl.innerHTML = paystubsHTML || '<p class="no-data">No paystubs available. Click "Add Paystub" to get started.</p>';
+    }
+
+    loadWorkSummary() {
+        if (!this.workSummaryEl || !this.studentData.employment) return;
+
+        const employment = this.studentData.employment;
+        const totalEarnings = employment.paystubs.reduce((sum, paystub) => sum + paystub.netPay, 0);
+        const totalHours = employment.paystubs.reduce((sum, paystub) => sum + paystub.hoursWorked, 0);
+
+        const summaryHTML = `
+            <div class="work-stats">
+                <div class="work-stat">
+                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-label">Position</div>
+                        <div class="stat-value">${employment.position}</div>
+                    </div>
+                </div>
+                <div class="work-stat">
+                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-label">Hourly Rate</div>
+                        <div class="stat-value">$${employment.hourlyRate.toFixed(2)}</div>
+                    </div>
+                </div>
+                <div class="work-stat">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Hours</div>
+                        <div class="stat-value">${totalHours} hrs</div>
+                    </div>
+                </div>
+                <div class="work-stat">
+                    <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Earnings</div>
+                        <div class="stat-value">$${totalEarnings.toFixed(2)}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        this.workSummaryEl.innerHTML = summaryHTML;
+    }
+
+    loadCombinedSchedule() {
+        if (!this.combinedScheduleEl || !this.studentData.schedule) return;
+
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const times = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+        let scheduleHTML = `
+            <div class="schedule-header">Time</div>
+            ${days.map(day => `<div class="schedule-header">${day}</div>`).join('')}
+        `;
+
+        times.forEach(time => {
+            scheduleHTML += `<div class="schedule-time">${time}</div>`;
+            days.forEach(day => {
+                const daySchedule = this.studentData.schedule[day] || [];
+                const itemAtTime = daySchedule.find(item => item.time === time);
+                
+                if (itemAtTime) {
+                    const isWork = itemAtTime.type === 'work';
+                    scheduleHTML += `
+                        <div class="schedule-cell ${isWork ? 'work-cell' : 'class-cell'}">
+                            <div class="schedule-item">
+                                <div class="item-name">${itemAtTime.class}</div>
+                                <div class="item-room">${itemAtTime.room}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    scheduleHTML += `<div class="schedule-cell"></div>`;
+                }
+            });
+        });
+
+        this.combinedScheduleEl.innerHTML = scheduleHTML;
+    }
+
+    showPaystubModal() {
+        const modal = document.getElementById('paystubModal');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Pre-fill hourly rate if available
+        if (this.studentData.employment) {
+            const hourlyRateInput = document.getElementById('hourlyRate');
+            if (hourlyRateInput) {
+                hourlyRateInput.value = this.studentData.employment.hourlyRate;
+            }
+        }
+    }
+
+    closePaystubModal() {
+        const modal = document.getElementById('paystubModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Reset form
+        const form = document.getElementById('paystubForm');
+        if (form) form.reset();
+    }
+
+    calculatePaystubAmounts() {
+        const hoursWorked = parseFloat(document.getElementById('hoursWorked').value) || 0;
+        const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+        const taxes = parseFloat(document.getElementById('taxes').value) || 0;
+
+        const grossPay = hoursWorked * hourlyRate;
+        const netPay = grossPay - taxes;
+
+        document.getElementById('grossPay').value = grossPay.toFixed(2);
+        document.getElementById('netPay').value = netPay.toFixed(2);
+    }
+
+    savePaystub() {
+        const form = document.getElementById('paystubForm');
+        const formData = new FormData(form);
+        
+        const paystub = {
+            id: Date.now(), // Simple ID generation
+            payPeriodStart: document.getElementById('payPeriodStart').value,
+            payPeriodEnd: document.getElementById('payPeriodEnd').value,
+            hoursWorked: parseFloat(document.getElementById('hoursWorked').value),
+            hourlyRate: parseFloat(document.getElementById('hourlyRate').value),
+            grossPay: parseFloat(document.getElementById('grossPay').value),
+            taxes: parseFloat(document.getElementById('taxes').value) || 0,
+            netPay: parseFloat(document.getElementById('netPay').value)
+        };
+
+        // Validate required fields
+        if (!paystub.payPeriodStart || !paystub.payPeriodEnd || !paystub.hoursWorked || !paystub.hourlyRate) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        // Add to student data
+        if (!this.studentData.employment.paystubs) {
+            this.studentData.employment.paystubs = [];
+        }
+        this.studentData.employment.paystubs.unshift(paystub); // Add to beginning
+
+        // Reload displays
+        this.loadPaystubs();
+        this.loadWorkSummary();
+        this.closePaystubModal();
     }
 }
 

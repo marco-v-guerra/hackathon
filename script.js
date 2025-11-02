@@ -733,135 +733,64 @@ class StudentPortal {
                 "status": "Active",
                 "currentCourses": [
                     {
-                        "code": "ECEN 3314",
-                        "name": "Electronic Devices and Applications",
+                        "code": "ECEN 2714",
+                        "name": "Fundamentals of Electric Circuits",
                         "instructor": "Dr. Johnson",
                         "credits": 4,
-                        "grade": "A",
+                        "grade": "IP",
                         "schedule": "MWF 10:00-10:50"
                     },
                     {
-                        "code": "ECEN 3513",
-                        "name": "Signal Analysis",
+                        "code": "ECEN 2011",
+                        "name": "Experimental Methods I",
                         "instructor": "Prof. Williams",
-                        "credits": 3,
-                        "grade": "A-",
-                        "schedule": "TTh 11:00-12:15"
+                        "credits": 1,
+                        "grade": "IP",
+                        "schedule": "T 14:00-15:50"
                     },
                     {
-                        "code": "ECEN 3613",
-                        "name": "Applied Fields and Waves I",
+                        "code": "STAT 4033",
+                        "name": "Probability and Statistics",
                         "instructor": "Dr. Smith",
                         "credits": 3,
-                        "grade": "B+",
-                        "schedule": "MWF 1:00-1:50"
+                        "grade": "IP",
+                        "schedule": "MWF 13:00-13:50"
                     },
                     {
-                        "code": "ECEN 4293",
-                        "name": "Applied Numerical Methods for Python for EE",
+                        "code": "CS 2133",
+                        "name": "Data Structures",
                         "instructor": "Prof. Brown",
                         "credits": 3,
-                        "grade": "A",
-                        "schedule": "TTh 2:00-3:15"
+                        "grade": "IP",
+                        "schedule": "TTh 11:00-12:15"
                     },
                     {
                         "code": "IEM 3503",
                         "name": "Engineering Economic Analysis",
                         "instructor": "Dr. Davis",
                         "credits": 3,
-                        "grade": "A-",
-                        "schedule": "MW 3:00-4:15"
+                        "grade": "IP",
+                        "schedule": "MW 15:00-16:15"
                     }
                 ],
                 "gradeHistory": [
-                    { "semester": "Fall 2025", "year": "2025", "gpa": 3.9, "credits": 15 },
                     { "semester": "Spring 2025", "year": "2025", "gpa": 3.7, "credits": 17 },
                     { "semester": "Fall 2024", "year": "2024", "gpa": 3.8, "credits": 16 },
-                    { "semester": "Spring 2024", "year": "2024", "gpa": 3.6, "credits": 18 }
+                    { "semester": "Spring 2024", "year": "2024", "gpa": 3.6, "credits": 16 },
+                    { "semester": "Fall 2023", "year": "2023", "gpa": 3.7, "credits": 16 }
                 ],
                 "pastClasses": [
-                    {
-                        "semester": "Fall 2025",
-                        "year": "2025",
-                        "gpa": 3.9,
-                        "classes": [
-                            {
-                                "code": "ECEN 4133",
-                                "name": "Digital Signal Processing",
-                                "instructor": "Johnson",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 4243",
-                                "name": "Control Systems Design",
-                                "instructor": "Smith",
-                                "credits": 3,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "ECEN 4713",
-                                "name": "Computer Architecture",
-                                "instructor": "Davis",
-                                "credits": 3,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "MATH 4073",
-                                "name": "Applied Statistics",
-                                "instructor": "Wilson",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 4990",
-                                "name": "Special Problems",
-                                "instructor": "Brown",
-                                "credits": 3,
-                                "grade": "A-"
-                            }
-                        ]
-                    },
                     {
                         "semester": "Spring 2025",
                         "year": "2025",
                         "gpa": 3.7,
                         "classes": [
-                            {
-                                "code": "ECEN 3233",
-                                "name": "Electronic Circuits",
-                                "instructor": "Anderson",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "ECEN 3613",
-                                "name": "Introduction to Communication Systems",
-                                "instructor": "Clark",
-                                "credits": 3,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "ECEN 3714",
-                                "name": "Embedded System Design",
-                                "instructor": "Miller",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "MATH 3283",
-                                "name": "Partial Differential Equations",
-                                "instructor": "Taylor",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 3843",
-                                "name": "Probability and Random Variables for Engineers",
-                                "instructor": "Moore",
-                                "credits": 3,
-                                "grade": "B+"
-                            }
+                            { "code": "MATH 2163", "name": "Calculus III", "instructor": "Martin", "credits": 3, "grade": "A-" },
+                            { "code": "MATH 2233", "name": "Differential Equations", "instructor": "Taylor", "credits": 3, "grade": "A" },
+                            { "code": "PHYS 2114", "name": "University Physics II", "instructor": "White", "credits": 4, "grade": "B+" },
+                            { "code": "CS 2433", "name": "C/C++ Programming", "instructor": "Thompson", "credits": 3, "grade": "A-" },
+                            { "code": "ENSC 2113", "name": "Statics", "instructor": "Lee", "credits": 3, "grade": "B+" },
+                            { "code": "ENSC 2611", "name": "Electrical Fabrication Lab", "instructor": "Davis", "credits": 1, "grade": "A" }
                         ]
                     },
                     {
@@ -869,41 +798,11 @@ class StudentPortal {
                         "year": "2024",
                         "gpa": 3.8,
                         "classes": [
-                            {
-                                "code": "ECEN 2703",
-                                "name": "Digital Logic Design",
-                                "instructor": "Rodriguez",
-                                "credits": 3,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ECEN 2114",
-                                "name": "Circuit Analysis",
-                                "instructor": "Lee",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "MATH 2934",
-                                "name": "Differential Equations",
-                                "instructor": "Garcia",
-                                "credits": 4,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "PHYS 2234",
-                                "name": "University Physics II",
-                                "instructor": "White",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "CS 2414",
-                                "name": "Computer Programming",
-                                "instructor": "Thompson",
-                                "credits": 4,
-                                "grade": "A"
-                            }
+                            { "code": "MATH 2153", "name": "Calculus II", "instructor": "Garcia", "credits": 3, "grade": "A-" },
+                            { "code": "PHYS 2014", "name": "University Physics I", "instructor": "Jackson", "credits": 4, "grade": "B+" },
+                            { "code": "ECEN 2233", "name": "Fundamentals of Digital Logic Design", "instructor": "Rodriguez", "credits": 3, "grade": "A" },
+                            { "code": "CS 1323", "name": "Computer Science II", "instructor": "Miller", "credits": 3, "grade": "A" },
+                            { "code": "STAT 2013", "name": "Elementary Statistics", "instructor": "Wilson", "credits": 3, "grade": "A-" }
                         ]
                     },
                     {
@@ -911,48 +810,24 @@ class StudentPortal {
                         "year": "2024",
                         "gpa": 3.6,
                         "classes": [
-                            {
-                                "code": "MATH 2144",
-                                "name": "Calculus III",
-                                "instructor": "Martin",
-                                "credits": 4,
-                                "grade": "B+"
-                            },
-                            {
-                                "code": "PHYS 1114",
-                                "name": "University Physics I",
-                                "instructor": "Jackson",
-                                "credits": 4,
-                                "grade": "B"
-                            },
-                            {
-                                "code": "ECEN 1400",
-                                "name": "Introduction to Electrical and Computer Engineering",
-                                "instructor": "Adams",
-                                "credits": 1,
-                                "grade": "A"
-                            },
-                            {
-                                "code": "ENGL 1213",
-                                "name": "English Composition I",
-                                "instructor": "Harris",
-                                "credits": 3,
-                                "grade": "B-"
-                            },
-                            {
-                                "code": "HIST 1483",
-                                "name": "American History to 1865",
-                                "instructor": "Lewis",
-                                "credits": 3,
-                                "grade": "A-"
-                            },
-                            {
-                                "code": "CHEM 1515",
-                                "name": "General Chemistry I",
-                                "instructor": "Walker",
-                                "credits": 5,
-                                "grade": "C+"
-                            }
+                            { "code": "MATH 2144", "name": "Calculus I", "instructor": "Martin", "credits": 4, "grade": "B+" },
+                            { "code": "CS 1113", "name": "Computer Science I", "instructor": "Thompson", "credits": 3, "grade": "A" },
+                            { "code": "ENGL 3323", "name": "Technical Writing", "instructor": "Harris", "credits": 3, "grade": "A-" },
+                            { "code": "HIST 1103", "name": "Survey of American History", "instructor": "Lewis", "credits": 3, "grade": "B+" },
+                            { "code": "POLS 1113", "name": "American Government", "instructor": "Clark", "credits": 3, "grade": "A-" }
+                        ]
+                    },
+                    {
+                        "semester": "Fall 2023",
+                        "year": "2023",
+                        "gpa": 3.7,
+                        "classes": [
+                            { "code": "ENGR 1111", "name": "First Year Seminar", "instructor": "Adams", "credits": 1, "grade": "A" },
+                            { "code": "ENGR 1412", "name": "Introduction to Engineering", "instructor": "Adams", "credits": 2, "grade": "A" },
+                            { "code": "ENGL 1113", "name": "Composition I", "instructor": "Harris", "credits": 3, "grade": "A-" },
+                            { "code": "MATH 1813", "name": "Preparation for Calculus", "instructor": "Martin", "credits": 3, "grade": "B+" },
+                            { "code": "CHEM 1414", "name": "General Chemistry for Engineers", "instructor": "Walker", "credits": 4, "grade": "A-" },
+                            { "code": "PSYC 1113", "name": "Introduction to Psychology", "instructor": "Moore", "credits": 3, "grade": "A" }
                         ]
                     }
                 ],

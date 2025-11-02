@@ -63,6 +63,21 @@ class StudentPortal {
                 this.showNotifications();
             });
         }
+
+        // Planning tab event listeners
+        const generatePlanBtn = document.getElementById('generatePlanBtn');
+        if (generatePlanBtn) {
+            generatePlanBtn.addEventListener('click', () => {
+                this.generateAcademicPlan();
+            });
+        }
+
+        const customizePlanBtn = document.getElementById('customizePlanBtn');
+        if (customizePlanBtn) {
+            customizePlanBtn.addEventListener('click', () => {
+                this.showPlanCustomization();
+            });
+        }
     }
 
     async loadStudentData() {
@@ -471,6 +486,296 @@ class StudentPortal {
         ];
     }
 
+    getCourseDatabase() {
+        return {
+            'Computer Science': {
+                'Core Courses': [
+                    { code: 'CS 1113', name: 'Computer Science I', credits: 3, prerequisites: [] },
+                    { code: 'CS 1323', name: 'Computer Science II', credits: 3, prerequisites: ['CS 1113'] },
+                    { code: 'CS 2133', name: 'Data Structures', credits: 3, prerequisites: ['CS 1323'] },
+                    { code: 'CS 2714', name: 'Computer Organization', credits: 4, prerequisites: ['CS 1323'] },
+                    { code: 'CS 3353', name: 'Algorithms and Data Structures', credits: 3, prerequisites: ['CS 2133'] },
+                    { code: 'CS 3613', name: 'Operating Systems', credits: 3, prerequisites: ['CS 2714'] },
+                    { code: 'CS 4143', name: 'Senior Capstone I', credits: 3, prerequisites: ['CS 3353'] },
+                    { code: 'CS 4153', name: 'Senior Capstone II', credits: 3, prerequisites: ['CS 4143'] }
+                ],
+                'Electives': [
+                    { code: 'CS 4413', name: 'Web Programming', credits: 3, prerequisites: ['CS 2133'] },
+                    { code: 'CS 4513', name: 'Database Management Systems', credits: 3, prerequisites: ['CS 2133'] },
+                    { code: 'CS 4613', name: 'Artificial Intelligence', credits: 3, prerequisites: ['CS 3353'] },
+                    { code: 'CS 4713', name: 'Computer Graphics', credits: 3, prerequisites: ['CS 2133'] },
+                    { code: 'CS 4813', name: 'Software Engineering II', credits: 3, prerequisites: ['CS 4273'] },
+                    { code: 'CS 4913', name: 'Machine Learning', credits: 3, prerequisites: ['CS 3353'] },
+                    { code: 'CS 5113', name: 'Distributed Systems', credits: 3, prerequisites: ['CS 3613'] },
+                    { code: 'CS 5213', name: 'Computer Security', credits: 3, prerequisites: ['CS 3613'] }
+                ],
+                'Math Requirements': [
+                    { code: 'MATH 2144', name: 'Calculus II', credits: 4, prerequisites: [] },
+                    { code: 'MATH 2153', name: 'Calculus III', credits: 3, prerequisites: ['MATH 2144'] },
+                    { code: 'MATH 3113', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2144'] },
+                    { code: 'STAT 3743', name: 'Applied Statistics', credits: 3, prerequisites: ['MATH 2144'] }
+                ]
+            },
+            'Pre-Medicine': {
+                'Science Core': [
+                    { code: 'CHEM 1314', name: 'General Chemistry I', credits: 4, prerequisites: [] },
+                    { code: 'CHEM 1515', name: 'General Chemistry II', credits: 5, prerequisites: ['CHEM 1314'] },
+                    { code: 'CHEM 3063', name: 'Organic Chemistry II', credits: 3, prerequisites: ['CHEM 3053'] },
+                    { code: 'CHEM 3653', name: 'Biochemistry I', credits: 3, prerequisites: ['CHEM 3053'] },
+                    { code: 'BIOL 1114', name: 'Principles of Biology I', credits: 4, prerequisites: [] },
+                    { code: 'BIOL 1124', name: 'Principles of Biology II', credits: 4, prerequisites: ['BIOL 1114'] },
+                    { code: 'BIOL 3214', name: 'Human Physiology', credits: 4, prerequisites: ['BIOL 3204'] },
+                    { code: 'BIOL 3304', name: 'Genetics', credits: 4, prerequisites: ['BIOL 1124'] },
+                    { code: 'BIOL 4154', name: 'Microbiology', credits: 4, prerequisites: ['BIOL 1124'] }
+                ],
+                'Physics Requirements': [
+                    { code: 'PHYS 2024', name: 'University Physics II', credits: 4, prerequisites: ['PHYS 2014'] },
+                    { code: 'PHYS 2034', name: 'University Physics III', credits: 4, prerequisites: ['PHYS 2024'] }
+                ],
+                'Additional Requirements': [
+                    { code: 'MATH 2144', name: 'Calculus II', credits: 4, prerequisites: ['MATH 2143'] },
+                    { code: 'STAT 4013', name: 'Biostatistics', credits: 3, prerequisites: ['STAT 2013'] },
+                    { code: 'ENGL 3323', name: 'Medical Writing', credits: 3, prerequisites: [] },
+                    { code: 'PSYC 2124', name: 'Abnormal Psychology', credits: 4, prerequisites: ['PSYC 1113'] },
+                    { code: 'SOC 1113', name: 'Introduction to Sociology', credits: 3, prerequisites: [] }
+                ],
+                'Electives': [
+                    { code: 'BIOL 4204', name: 'Cell Biology', credits: 4, prerequisites: ['BIOL 1124'] },
+                    { code: 'BIOL 4304', name: 'Molecular Biology', credits: 4, prerequisites: ['BIOL 3304'] },
+                    { code: 'CHEM 4653', name: 'Biochemistry II', credits: 3, prerequisites: ['CHEM 3653'] },
+                    { code: 'HLTH 2143', name: 'Medical Terminology', credits: 3, prerequisites: [] },
+                    { code: 'NURS 3143', name: 'Human Pathophysiology', credits: 3, prerequisites: ['BIOL 3204'] }
+                ]
+            }
+        };
+    }
+
+    generateAcademicPlan() {
+        if (!this.studentData) return;
+
+        const currentCredits = this.studentData.credits;
+        const targetCredits = 120;
+        const remainingCredits = targetCredits - currentCredits;
+        
+        // Get current courses to avoid duplicates
+        const currentCourses = this.studentData.currentCourses.map(course => course.code);
+        
+        // Get available courses for student's major
+        const courseDatabase = this.getCourseDatabase();
+        const majorCourses = courseDatabase[this.studentData.major];
+        
+        if (!majorCourses) {
+            console.error('No course database found for major:', this.studentData.major);
+            return;
+        }
+
+        // Combine all available courses
+        const allAvailableCourses = [];
+        Object.keys(majorCourses).forEach(category => {
+            majorCourses[category].forEach(course => {
+                if (!currentCourses.includes(course.code)) {
+                    allAvailableCourses.push({...course, category});
+                }
+            });
+        });
+
+        // Generate semester plan
+        const semesters = this.planSemesters(allAvailableCourses, remainingCredits);
+        
+        // Display the plan
+        this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
+    }
+
+    planSemesters(availableCourses, remainingCredits) {
+        const semesters = [];
+        let creditsLeft = remainingCredits;
+        const coursesLeft = [...availableCourses];
+        
+        // Options from UI
+        const includeSummer = document.getElementById('summerCoursesOption')?.checked ?? true;
+        const preferLightLoad = document.getElementById('lightLoadOption')?.checked ?? false;
+        
+        const minCredits = preferLightLoad ? 12 : 13;
+        const maxCredits = 19;
+        const avgCredits = preferLightLoad ? 13 : 15;
+
+        let semesterCount = 1;
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth();
+        
+        // Determine starting semester
+        let startingSemester = currentMonth <= 4 ? 'Spring' : currentMonth <= 7 ? 'Summer' : 'Fall';
+        let year = currentMonth <= 4 ? currentYear : currentYear + 1;
+
+        while (creditsLeft > 0 && coursesLeft.length > 0) {
+            const semester = {
+                name: `${startingSemester} ${year}`,
+                courses: [],
+                totalCredits: 0
+            };
+
+            // Skip summer if not included
+            if (startingSemester === 'Summer' && !includeSummer) {
+                startingSemester = 'Fall';
+                continue;
+            }
+
+            // Target credits for this semester
+            let targetCredits = Math.min(avgCredits, creditsLeft);
+            if (creditsLeft <= maxCredits) {
+                targetCredits = creditsLeft;
+            }
+
+            // Select courses for this semester
+            while (semester.totalCredits < targetCredits && coursesLeft.length > 0) {
+                // Find courses that fit
+                const availableOptions = coursesLeft.filter(course => 
+                    semester.totalCredits + course.credits <= maxCredits
+                );
+
+                if (availableOptions.length === 0) break;
+
+                // Prioritize core courses, then electives
+                let selectedCourse = availableOptions.find(course => 
+                    course.category.toLowerCase().includes('core') || 
+                    course.category.toLowerCase().includes('requirement')
+                ) || availableOptions[0];
+
+                semester.courses.push(selectedCourse);
+                semester.totalCredits += selectedCourse.credits;
+                
+                // Remove from available courses
+                const index = coursesLeft.findIndex(c => c.code === selectedCourse.code);
+                coursesLeft.splice(index, 1);
+            }
+
+            if (semester.courses.length > 0) {
+                semesters.push(semester);
+                creditsLeft -= semester.totalCredits;
+            }
+
+            // Move to next semester
+            if (startingSemester === 'Spring') {
+                startingSemester = includeSummer ? 'Summer' : 'Fall';
+            } else if (startingSemester === 'Summer') {
+                startingSemester = 'Fall';
+            } else {
+                startingSemester = 'Spring';
+                year++;
+            }
+
+            semesterCount++;
+            if (semesterCount > 8) break; // Safety limit
+        }
+
+        return semesters;
+    }
+
+    displayAcademicPlan(semesters, currentCredits, remainingCredits) {
+        const planContainer = document.getElementById('academicPlan');
+        
+        let html = '';
+        let totalPlannedCredits = 0;
+
+        semesters.forEach(semester => {
+            totalPlannedCredits += semester.totalCredits;
+            
+            html += `
+                <div class="semester-plan">
+                    <div class="semester-header">
+                        <h4 class="semester-title">${semester.name}</h4>
+                        <span class="semester-credits">${semester.totalCredits} Credits</span>
+                    </div>
+                    <div class="semester-courses">
+                        <div class="course-list">
+            `;
+
+            semester.courses.forEach(course => {
+                html += `
+                    <div class="course-item">
+                        <div class="course-info">
+                            <div class="course-code">${course.code}</div>
+                            <div class="course-name">${course.name}</div>
+                        </div>
+                        <div class="course-credits">${course.credits} CR</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add summary
+        html += `
+            <div class="plan-summary">
+                <h4 class="summary-title">
+                    <i class="fas fa-chart-line"></i>
+                    Plan Summary
+                </h4>
+                <div class="summary-stats">
+                    <div class="summary-item">
+                        <span class="summary-value">${semesters.length}</span>
+                        <span class="summary-label">Semesters</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-value">${totalPlannedCredits}</span>
+                        <span class="summary-label">Planned Credits</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-value">${Math.round((totalPlannedCredits / semesters.length) * 10) / 10}</span>
+                        <span class="summary-label">Avg Credits/Semester</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-value">${currentCredits + totalPlannedCredits}</span>
+                        <span class="summary-label">Total at Graduation</span>
+                    </div>
+                </div>
+                <div class="plan-actions">
+                    <button class="btn btn-outline" onclick="studentPortal.generateAcademicPlan()">
+                        <i class="fas fa-refresh"></i> Regenerate Plan
+                    </button>
+                    <button class="btn btn-outline" onclick="studentPortal.exportPlan()">
+                        <i class="fas fa-download"></i> Export Plan
+                    </button>
+                </div>
+            </div>
+        `;
+
+        planContainer.innerHTML = html;
+        planContainer.classList.add('active');
+
+        // Update progress stats
+        this.updatePlanningStats(currentCredits, remainingCredits, semesters.length);
+    }
+
+    updatePlanningStats(currentCredits, remainingCredits, semestersRemaining) {
+        document.getElementById('completedCredits').textContent = currentCredits;
+        document.getElementById('remainingCredits').textContent = remainingCredits;
+        document.getElementById('semestersRemaining').textContent = semestersRemaining;
+        
+        const progressPercent = Math.round((currentCredits / 120) * 100);
+        document.getElementById('graduationProgress').style.width = `${progressPercent}%`;
+        document.getElementById('progressText').textContent = `${currentCredits} of 120 credits completed (${progressPercent}%)`;
+    }
+
+    exportPlan() {
+        // Simple export functionality
+        const planData = document.getElementById('academicPlan').textContent;
+        const blob = new Blob([planData], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${this.studentData.name}_Academic_Plan.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     getDefaultStudentData() {
         return {
             id: 'OSU001',
@@ -691,6 +996,7 @@ class StudentPortal {
         this.loadRequirements();
         this.loadFinancialInfo();
         this.loadSchedule();
+        this.loadPlanningTab();
     }
 
     switchTab(tabId) {
@@ -899,6 +1205,635 @@ class StudentPortal {
         this.weeklyScheduleEl.innerHTML = scheduleHTML;
     }
 
+    loadPlanningTab() {
+        // Initialize planning tab with current student data
+        if (!this.studentData) return;
+
+        // Update planning stats on tab load
+        const currentCredits = this.studentData.credits;
+        const remainingCredits = 120 - currentCredits;
+        const estimatedSemesters = Math.ceil(remainingCredits / 15);
+        
+        this.updatePlanningStats(currentCredits, remainingCredits, estimatedSemesters);
+    }
+
+    showPlanCustomization() {
+        console.log('Opening plan customization...');
+        
+        // Initialize customization data
+        this.customizationData = {
+            selectedCourses: [],
+            coursePriorities: { high: [], medium: [], low: [] },
+            timeline: {
+                graduationSemester: 'Spring 2027',
+                includeSummer: true,
+                targetCredits: 15
+            }
+        };
+        
+        try {
+            this.openCustomizationModal();
+            this.loadAvailableCourses();
+            this.setupCustomizationTabs();
+        } catch (error) {
+            console.error('Error opening customization:', error);
+            alert('Error opening customization: ' + error.message);
+        }
+    }
+
+    openCustomizationModal() {
+        const modal = document.getElementById('customizationModal');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeCustomization() {
+        const modal = document.getElementById('customizationModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    setupCustomizationTabs() {
+        const tabButtons = document.querySelectorAll('.custom-tab-btn');
+        const tabPanes = document.querySelectorAll('.custom-tab-pane');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const targetTab = e.currentTarget.dataset.tab;
+                
+                // Update button states
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                
+                // Update pane states
+                tabPanes.forEach(pane => pane.classList.remove('active'));
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+    }
+
+    loadAvailableCourses() {
+        try {
+            if (!this.studentData) {
+                console.error('No student data available');
+                return;
+            }
+
+            console.log('Loading courses for major:', this.studentData.major);
+            
+            const courseDatabase = this.getCourseDatabase();
+            const majorCourses = courseDatabase[this.studentData.major];
+            
+            if (!majorCourses) {
+                console.error('No courses found for major:', this.studentData.major);
+                alert('No courses found for your major. Please contact support.');
+                return;
+            }
+
+            // Get current courses to avoid duplicates
+            const currentCourses = this.studentData.currentCourses.map(course => course.code);
+            console.log('Current courses:', currentCourses);
+            
+            // Combine all available courses
+            const allAvailableCourses = [];
+            Object.keys(majorCourses).forEach(category => {
+                majorCourses[category].forEach(course => {
+                    if (!currentCourses.includes(course.code)) {
+                        allAvailableCourses.push({...course, category: category.toLowerCase()});
+                    }
+                });
+            });
+
+            console.log('Available courses loaded:', allAvailableCourses.length);
+            
+            this.renderAvailableCourses(allAvailableCourses);
+            this.initializePriorities(allAvailableCourses);
+            
+        } catch (error) {
+            console.error('Error loading available courses:', error);
+            alert('Error loading courses: ' + error.message);
+        }
+    }
+
+    renderAvailableCourses(courses) {
+        const container = document.getElementById('availableCourses');
+        
+        // Clear any existing content first
+        container.innerHTML = '';
+        
+        // Clear selected courses display too
+        const selectedContainer = document.getElementById('selectedCourses');
+        if (selectedContainer) {
+            selectedContainer.innerHTML = '';
+        }
+        
+        // Reset selected courses in data
+        this.customizationData.selectedCourses = [];
+        
+        container.innerHTML = courses.map(course => `
+            <div class="course-card" data-course-code="${course.code}" onclick="studentPortal.toggleCourseSelection('${course.code}')">
+                <div class="course-info">
+                    <h6>${course.code}</h6>
+                    <p>${course.name}</p>
+                </div>
+                <div class="course-credits">${course.credits} CR</div>
+            </div>
+        `).join('');
+    }
+
+    toggleCourseSelection(courseCode) {
+        const availableContainer = document.getElementById('availableCourses');
+        const selectedContainer = document.getElementById('selectedCourses');
+        const availableCourseCard = availableContainer.querySelector(`[data-course-code="${courseCode}"]`);
+        const selectedCourseCard = selectedContainer.querySelector(`[data-course-code="${courseCode}"]`);
+        
+        if (this.customizationData.selectedCourses.includes(courseCode)) {
+            // Remove from selected
+            this.customizationData.selectedCourses = this.customizationData.selectedCourses.filter(c => c !== courseCode);
+            
+            // Update available course card
+            if (availableCourseCard) {
+                availableCourseCard.classList.remove('selected');
+            }
+            
+            // Remove from selected display
+            if (selectedCourseCard) {
+                selectedCourseCard.remove();
+            }
+        } else {
+            // Add to selected
+            this.customizationData.selectedCourses.push(courseCode);
+            
+            // Update available course card
+            if (availableCourseCard) {
+                availableCourseCard.classList.add('selected');
+            }
+            
+            // Add to selected display
+            const courseData = this.findCourseData(courseCode);
+            if (courseData) {
+                const selectedCard = document.createElement('div');
+                selectedCard.className = 'course-card selected';
+                selectedCard.setAttribute('data-course-code', courseCode);
+                selectedCard.innerHTML = `
+                    <div class="course-info">
+                        <h6>${courseData.code}</h6>
+                        <p>${courseData.name}</p>
+                    </div>
+                    <div class="course-credits">${courseData.credits} CR</div>
+                `;
+                selectedCard.onclick = () => this.toggleCourseSelection(courseCode);
+                selectedContainer.appendChild(selectedCard);
+            }
+        }
+    }
+
+    findCourseData(courseCode) {
+        const courseDatabase = this.getCourseDatabase();
+        const majorCourses = courseDatabase[this.studentData.major];
+        
+        for (const category of Object.values(majorCourses)) {
+            const course = category.find(c => c.code === courseCode);
+            if (course) return course;
+        }
+        return null;
+    }
+
+    filterCourses() {
+        const searchTerm = document.getElementById('courseSearch').value.toLowerCase();
+        const category = document.getElementById('courseCategory').value;
+        const courseCards = document.querySelectorAll('#availableCourses .course-card');
+        
+        courseCards.forEach(card => {
+            const courseCode = card.querySelector('h6').textContent.toLowerCase();
+            const courseName = card.querySelector('p').textContent.toLowerCase();
+            const courseData = this.findCourseData(card.dataset.courseCode);
+            
+            const matchesSearch = courseCode.includes(searchTerm) || courseName.includes(searchTerm);
+            const matchesCategory = category === 'all' || (courseData && courseData.category.includes(category));
+            
+            card.style.display = matchesSearch && matchesCategory ? 'flex' : 'none';
+        });
+    }
+
+    initializePriorities(courses) {
+        // Auto-categorize courses by priority
+        const highPriority = courses.filter(c => 
+            c.category.toLowerCase().includes('core') || 
+            c.category.toLowerCase().includes('requirement') ||
+            c.category.toLowerCase().includes('science core')
+        );
+        const mediumPriority = courses.filter(c => 
+            c.category.toLowerCase().includes('math') || 
+            c.category.toLowerCase().includes('physics') ||
+            c.category.toLowerCase().includes('additional')
+        );
+        const lowPriority = courses.filter(c => 
+            c.category.toLowerCase().includes('elective')
+        );
+        
+        this.customizationData.coursePriorities = {
+            high: highPriority.slice(0, 8).map(c => c.code),
+            medium: mediumPriority.slice(0, 6).map(c => c.code),
+            low: lowPriority.slice(0, 4).map(c => c.code)
+        };
+        
+        this.renderPriorities();
+    }
+
+    renderPriorities() {
+        const priorities = ['high', 'medium', 'low'];
+        
+        priorities.forEach(priority => {
+            const container = document.getElementById(`${priority}Priority`);
+            const courses = this.customizationData.coursePriorities[priority];
+            
+            container.innerHTML = courses.map(courseCode => {
+                const courseData = this.findCourseData(courseCode);
+                return courseData ? `
+                    <div class="priority-course" draggable="true" data-course-code="${courseCode}">
+                        ${courseData.code}
+                    </div>
+                ` : '';
+            }).join('');
+        });
+        
+        // Re-setup drag and drop after rendering
+        this.setupDragAndDrop();
+    }
+
+    setupDragAndDrop() {
+        const priorityLists = document.querySelectorAll('.priority-list');
+        const priorityCourses = document.querySelectorAll('.priority-course');
+        
+        priorityCourses.forEach(course => {
+            course.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', e.target.dataset.courseCode);
+                e.target.classList.add('dragging');
+            });
+            
+            course.addEventListener('dragend', (e) => {
+                e.target.classList.remove('dragging');
+            });
+        });
+        
+        priorityLists.forEach(list => {
+            list.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                list.classList.add('drag-over');
+            });
+            
+            list.addEventListener('dragleave', (e) => {
+                list.classList.remove('drag-over');
+            });
+            
+            list.addEventListener('drop', (e) => {
+                e.preventDefault();
+                list.classList.remove('drag-over');
+                
+                const courseCode = e.dataTransfer.getData('text/plain');
+                const newPriority = list.dataset.priority;
+                
+                this.moveCourseToNewPriority(courseCode, newPriority);
+            });
+        });
+    }
+
+    moveCourseToNewPriority(courseCode, newPriority) {
+        // Remove from all priority lists
+        Object.keys(this.customizationData.coursePriorities).forEach(priority => {
+            this.customizationData.coursePriorities[priority] = 
+                this.customizationData.coursePriorities[priority].filter(c => c !== courseCode);
+        });
+        
+        // Add to new priority
+        this.customizationData.coursePriorities[newPriority].push(courseCode);
+        
+        // Re-render priorities (this will also re-setup drag and drop)
+        this.renderPriorities();
+    }
+
+    applyCustomization() {
+        console.log('applyCustomization called');
+        console.log('studentPortal object:', window.studentPortal);
+        console.log('this context:', this);
+        try {
+            // Get timeline settings
+            const graduationSemesterEl = document.getElementById('graduationSemester');
+            const includeSummerEl = document.getElementById('includeSummerCustom');
+            const creditRangeEl = document.getElementById('creditRange');
+            
+            console.log('DOM elements found:', {
+                graduationSemester: !!graduationSemesterEl,
+                includeSummer: !!includeSummerEl,
+                creditRange: !!creditRangeEl
+            });
+            
+            // Use values if elements exist, otherwise use defaults
+            this.customizationData.timeline.graduationSemester = graduationSemesterEl ? graduationSemesterEl.value : 'Spring 2027';
+            this.customizationData.timeline.includeSummer = includeSummerEl ? includeSummerEl.checked : true;
+            this.customizationData.timeline.targetCredits = creditRangeEl ? parseInt(creditRangeEl.value) : 15;
+            
+            console.log('Timeline data collected:', this.customizationData.timeline);
+            
+            // Generate custom plan
+            const success = this.generateCustomPlan();
+            console.log('Plan generation success:', success);
+            
+            // Only close modal if plan generation was successful
+            if (success) {
+                this.closeCustomization();
+            }
+        } catch (error) {
+            console.error('Error in applyCustomization:', error);
+            // Try to generate a basic plan anyway
+            try {
+                const semesters = this.createBasicPlanStructure(75); // Default remaining credits
+                this.displayAcademicPlan(semesters, 45, 75);
+                this.closeCustomization();
+            } catch (fallbackError) {
+                console.error('Fallback plan generation failed:', fallbackError);
+            }
+        }
+    }
+
+    generateCustomPlan() {
+        console.log('generateCustomPlan method called');
+        try {
+            console.log('Student data check:', !!this.studentData);
+            if (!this.studentData) {
+                console.error('No student data available - using defaults');
+                // Use default values instead of failing
+                const currentCredits = 45; // Default current credits
+                const targetCredits = 120;
+                const remainingCredits = targetCredits - currentCredits;
+                
+                const prioritizedCourses = this.getPrioritizedCourseList();
+                let semesters = [];
+                if (prioritizedCourses.length > 0) {
+                    semesters = this.planCustomSemesters(prioritizedCourses, remainingCredits);
+                } else {
+                    semesters = this.createBasicPlanStructure(remainingCredits);
+                }
+                
+                this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
+                return true;
+            }
+
+            const currentCredits = this.studentData.credits;
+            const targetCredits = 120;
+            const remainingCredits = targetCredits - currentCredits;
+            
+            console.log('Generating custom plan with:', {
+                currentCredits,
+                remainingCredits,
+                selectedCourses: this.customizationData.selectedCourses,
+                priorities: this.customizationData.coursePriorities
+            });
+            
+            // Get prioritized course list
+            const prioritizedCourses = this.getPrioritizedCourseList();
+            console.log('Prioritized courses:', prioritizedCourses);
+            
+            // Generate custom semester plan even if no courses are selected
+            let semesters = [];
+            if (prioritizedCourses.length > 0) {
+                semesters = this.planCustomSemesters(prioritizedCourses, remainingCredits);
+            } else {
+                // Create a basic plan structure even with no courses
+                semesters = this.createBasicPlanStructure(remainingCredits);
+            }
+            console.log('Generated semesters:', semesters);
+            
+            // Always allow plan generation, even if empty or incomplete
+            
+            // Display the plan
+            this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
+            return true;
+            
+        } catch (error) {
+            console.error('Error generating custom plan:', error);
+            // Generate a basic plan as fallback
+            try {
+                const semesters = this.createBasicPlanStructure(75);
+                this.displayAcademicPlan(semesters, 45, 75);
+                return true;
+            } catch (fallbackError) {
+                console.error('Fallback plan failed:', fallbackError);
+                return false;
+            }
+        }
+    }
+
+    getPrioritizedCourseList() {
+        try {
+            const courseDatabase = this.getCourseDatabase();
+            const majorCourses = courseDatabase[this.studentData.major];
+            
+            if (!majorCourses) {
+                console.error('No major courses found for:', this.studentData.major);
+                return [];
+            }
+            
+            const currentCourses = this.studentData.currentCourses.map(course => course.code);
+            
+            // Build prioritized list
+            let prioritizedCourses = [];
+            
+            // Ensure priority arrays exist
+            if (!this.customizationData.coursePriorities) {
+                this.customizationData.coursePriorities = { high: [], medium: [], low: [] };
+            }
+            
+            // Add high priority courses first
+            (this.customizationData.coursePriorities.high || []).forEach(courseCode => {
+                const courseData = this.findCourseInDatabase(courseCode, majorCourses);
+                if (courseData && !currentCourses.includes(courseCode)) {
+                    prioritizedCourses.push(courseData);
+                }
+            });
+            
+            // Add medium priority courses
+            (this.customizationData.coursePriorities.medium || []).forEach(courseCode => {
+                const courseData = this.findCourseInDatabase(courseCode, majorCourses);
+                if (courseData && !currentCourses.includes(courseCode)) {
+                    prioritizedCourses.push(courseData);
+                }
+            });
+            
+            // Add low priority courses
+            (this.customizationData.coursePriorities.low || []).forEach(courseCode => {
+                const courseData = this.findCourseInDatabase(courseCode, majorCourses);
+                if (courseData && !currentCourses.includes(courseCode)) {
+                    prioritizedCourses.push(courseData);
+                }
+            });
+            
+            // Add any remaining courses not in priorities
+            Object.values(majorCourses).flat().forEach(course => {
+                if (!prioritizedCourses.find(c => c.code === course.code) && 
+                    !currentCourses.includes(course.code)) {
+                    prioritizedCourses.push(course);
+                }
+            });
+            
+            return prioritizedCourses;
+            
+        } catch (error) {
+            console.error('Error getting prioritized course list:', error);
+            return [];
+        }
+    }
+
+    findCourseInDatabase(courseCode, majorCourses) {
+        for (const category of Object.values(majorCourses)) {
+            const course = category.find(c => c.code === courseCode);
+            if (course) return course;
+        }
+        return null;
+    }
+
+    planCustomSemesters(availableCourses, remainingCredits) {
+        const semesters = [];
+        let creditsLeft = remainingCredits;
+        const coursesLeft = [...availableCourses];
+        
+        // Ensure we have valid timeline data
+        const timeline = this.customizationData?.timeline || {
+            graduationSemester: 'Spring 2027',
+            includeSummer: true,
+            targetCredits: 15
+        };
+        const { graduationSemester, includeSummer, targetCredits } = timeline;
+        const maxCredits = 19;
+
+        let semesterCount = 1;
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth();
+        
+        // Determine starting semester
+        let startingSemester = currentMonth <= 4 ? 'Spring' : currentMonth <= 7 ? 'Summer' : 'Fall';
+        let year = currentMonth <= 4 ? currentYear : currentYear + 1;
+
+        // Parse graduation target
+        const [gradSemester, gradYear] = graduationSemester.split(' ');
+        const targetYear = parseInt(gradYear);
+
+        while (creditsLeft > 0 && coursesLeft.length > 0) {
+            // Check if we've reached graduation deadline
+            if (year > targetYear || (year === targetYear && 
+                (startingSemester === 'Fall' && gradSemester === 'Spring') ||
+                (startingSemester === 'Summer' && ['Spring', 'Summer'].includes(gradSemester)))) {
+                break;
+            }
+
+            const semester = {
+                name: `${startingSemester} ${year}`,
+                courses: [],
+                totalCredits: 0
+            };
+
+            // Skip summer if not included
+            if (startingSemester === 'Summer' && !includeSummer) {
+                startingSemester = 'Fall';
+                continue;
+            }
+
+            // Select courses for this semester based on priorities
+            while (semester.totalCredits < targetCredits && coursesLeft.length > 0) {
+                const availableOptions = coursesLeft.filter(course => 
+                    semester.totalCredits + course.credits <= maxCredits
+                );
+
+                if (availableOptions.length === 0) break;
+
+                // Select first available course (already prioritized)
+                const selectedCourse = availableOptions[0];
+
+                semester.courses.push(selectedCourse);
+                semester.totalCredits += selectedCourse.credits;
+                
+                // Remove from available courses
+                const index = coursesLeft.findIndex(c => c.code === selectedCourse.code);
+                coursesLeft.splice(index, 1);
+            }
+
+            if (semester.courses.length > 0) {
+                semesters.push(semester);
+                creditsLeft -= semester.totalCredits;
+            }
+
+            // Move to next semester
+            if (startingSemester === 'Spring') {
+                startingSemester = includeSummer ? 'Summer' : 'Fall';
+            } else if (startingSemester === 'Summer') {
+                startingSemester = 'Fall';
+            } else {
+                startingSemester = 'Spring';
+                year++;
+            }
+
+            semesterCount++;
+            if (semesterCount > 12) break; // Safety limit
+        }
+
+        return semesters;
+    }
+
+    createBasicPlanStructure(remainingCredits) {
+        const semesters = [];
+        const { graduationSemester, includeSummer, targetCredits } = this.customizationData.timeline;
+        
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth();
+        
+        // Determine starting semester
+        let startingSemester = currentMonth <= 4 ? 'Spring' : currentMonth <= 7 ? 'Summer' : 'Fall';
+        let year = currentMonth <= 4 ? currentYear : currentYear + 1;
+
+        // Parse graduation target
+        const [gradSemester, gradYear] = graduationSemester.split(' ');
+        const targetYear = parseInt(gradYear);
+
+        let semesterCount = 0;
+        while (year <= targetYear && semesterCount < 12) {
+            // Check if we've reached graduation deadline
+            if (year === targetYear && 
+                ((startingSemester === 'Fall' && gradSemester === 'Spring') ||
+                 (startingSemester === 'Summer' && ['Spring', 'Summer'].includes(gradSemester)))) {
+                break;
+            }
+
+            // Skip summer if not included
+            if (startingSemester === 'Summer' && !includeSummer) {
+                startingSemester = 'Fall';
+                continue;
+            }
+
+            const semester = {
+                name: `${startingSemester} ${year}`,
+                courses: [],
+                totalCredits: 0
+            };
+
+            semesters.push(semester);
+
+            // Move to next semester
+            if (startingSemester === 'Spring') {
+                startingSemester = includeSummer ? 'Summer' : 'Fall';
+            } else if (startingSemester === 'Summer') {
+                startingSemester = 'Fall';
+            } else {
+                startingSemester = 'Spring';
+                year++;
+            }
+
+            semesterCount++;
+        }
+
+        return semesters;
+    }
+
     handleLogout() {
         if (confirm('Are you sure you want to logout?')) {
             // Clear session data
@@ -916,7 +1851,7 @@ class StudentPortal {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new StudentPortal();
+    window.studentPortal = new StudentPortal();
 });
 
 // Export for potential module use

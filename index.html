@@ -93,6 +93,10 @@
                         <i class="fas fa-calendar"></i>
                         <span>Schedule</span>
                     </button>
+                    <button class="tab-btn" data-tab="planning">
+                        <i class="fas fa-route"></i>
+                        <span>Academic Planning</span>
+                    </button>
                 </nav>
 
                 <!-- Tab Content -->
@@ -279,12 +283,211 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Academic Planning Tab -->
+                    <div class="tab-pane" id="planning">
+                        <div class="info-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-route"></i> Academic Planning</h3>
+                                <p class="card-subtitle">Plan your path to graduation with customized semester schedules</p>
+                            </div>
+                            <div class="card-body">
+                                <!-- Progress Overview -->
+                                <div class="planning-overview">
+                                    <div class="progress-stats">
+                                        <div class="progress-stat">
+                                            <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+                                            <div class="stat-info">
+                                                <span class="stat-number" id="completedCredits">98</span>
+                                                <span class="stat-label">Credits Completed</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <div class="stat-icon"><i class="fas fa-target"></i></div>
+                                            <div class="stat-info">
+                                                <span class="stat-number" id="remainingCredits">22</span>
+                                                <span class="stat-label">Credits Remaining</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                                            <div class="stat-info">
+                                                <span class="stat-number" id="semestersRemaining">2</span>
+                                                <span class="stat-label">Semesters to Graduate</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="graduation-progress">
+                                        <h4>Progress to Graduation (120 Credits)</h4>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" id="graduationProgress" style="width: 82%"></div>
+                                        </div>
+                                        <span class="progress-text" id="progressText">98 of 120 credits completed (82%)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Planning Controls -->
+                                <div class="planning-controls">
+                                    <button class="btn btn-primary" id="generatePlanBtn">
+                                        <i class="fas fa-magic"></i> Generate Academic Plan
+                                    </button>
+                                    <button class="btn btn-secondary" id="customizePlanBtn" onclick="studentPortal.showPlanCustomization()">
+                                        <i class="fas fa-edit"></i> Customize Plan
+                                    </button>
+                                    <div class="plan-options">
+                                        <label>
+                                            <input type="checkbox" id="summerCoursesOption" checked> 
+                                            Include Summer Courses
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" id="lightLoadOption"> 
+                                            Prefer Light Course Load (12-13 credits)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Generated Plan -->
+                                <div class="academic-plan" id="academicPlan">
+                                    <!-- Plan will be generated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
     </main>
 
+    <!-- Plan Customization Modal -->
+    <div class="modal-overlay" id="customizationModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-cogs"></i> Customize Academic Plan</h3>
+                <button class="modal-close" onclick="studentPortal.closeCustomization()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="customization-tabs">
+                    <button class="custom-tab-btn active" data-tab="timeline">
+                        <i class="fas fa-calendar-alt"></i> Timeline
+                    </button>
+                    <button class="custom-tab-btn" data-tab="courses">
+                        <i class="fas fa-book"></i> Courses
+                    </button>
+                    <button class="custom-tab-btn" data-tab="priorities">
+                        <i class="fas fa-star"></i> Priorities
+                    </button>
+                </div>
 
+                <div class="custom-tab-content">
+                    <!-- Timeline Tab -->
+                    <div class="custom-tab-pane active" id="timeline">
+                        <div class="timeline-section">
+                            <h4>Graduation Timeline</h4>
+                            <div class="timeline-options">
+                                <div class="option-group">
+                                    <label>Target Graduation:</label>
+                                    <select id="graduationSemester">
+                                        <option value="Spring 2026">Spring 2026</option>
+                                        <option value="Summer 2026">Summer 2026</option>
+                                        <option value="Fall 2026">Fall 2026</option>
+                                        <option value="Spring 2027">Spring 2027</option>
+                                        <option value="Summer 2027">Summer 2027</option>
+                                        <option value="Fall 2027">Fall 2027</option>
+                                    </select>
+                                </div>
+                                <div class="option-group">
+                                    <label>
+                                        <input type="checkbox" id="includeSummerCustom" checked>
+                                        Include Summer Semesters
+                                    </label>
+                                </div>
+                                <div class="option-group">
+                                    <label>Credits per Semester:</label>
+                                    <div class="credit-range">
+                                        <input type="range" id="creditRange" min="12" max="19" value="15" 
+                                               oninput="document.getElementById('creditValue').textContent = this.value">
+                                        <span>Target: <span id="creditValue">15</span> credits</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Courses Tab -->
+                    <div class="custom-tab-pane" id="courses">
+                        <div class="course-selection">
+                            <h4>Course Selection</h4>
+                            <div class="course-filters">
+                                <select id="courseCategory">
+                                    <option value="all">All Categories</option>
+                                    <option value="core">Core Courses</option>
+                                    <option value="electives">Electives</option>
+                                    <option value="requirements">Requirements</option>
+                                </select>
+                                <input type="text" id="courseSearch" placeholder="Search courses..." 
+                                       onkeyup="studentPortal.filterCourses()">
+                            </div>
+                            <div class="course-lists">
+                                <div class="available-courses">
+                                    <h5>Available Courses</h5>
+                                    <div class="course-grid" id="availableCourses">
+                                        <!-- Courses will be loaded here -->
+                                    </div>
+                                </div>
+                                <div class="selected-courses">
+                                    <h5>Selected Courses</h5>
+                                    <div class="course-grid" id="selectedCourses">
+                                        <!-- Selected courses will appear here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Priorities Tab -->
+                    <div class="custom-tab-pane" id="priorities">
+                        <div class="priority-section">
+                            <h4>Course Priorities</h4>
+                            <p class="priority-description">
+                                Drag courses to reorder them by priority. Higher priority courses will be scheduled first.
+                            </p>
+                            <div class="priority-categories">
+                                <div class="priority-group">
+                                    <h5><i class="fas fa-star text-gold"></i> High Priority</h5>
+                                    <div class="priority-list" id="highPriority" data-priority="high">
+                                        <!-- High priority courses -->
+                                    </div>
+                                </div>
+                                <div class="priority-group">
+                                    <h5><i class="fas fa-star-half-alt text-orange"></i> Medium Priority</h5>
+                                    <div class="priority-list" id="mediumPriority" data-priority="medium">
+                                        <!-- Medium priority courses -->
+                                    </div>
+                                </div>
+                                <div class="priority-group">
+                                    <h5><i class="far fa-star text-gray"></i> Low Priority</h5>
+                                    <div class="priority-list" id="lowPriority" data-priority="low">
+                                        <!-- Low priority courses -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="studentPortal.closeCustomization()">
+                    Cancel
+                </button>
+                <button class="btn btn-primary" onclick="if(window.studentPortal) { window.studentPortal.applyCustomization(); }">
+                    <i class="fas fa-magic"></i> Generate Custom Plan
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

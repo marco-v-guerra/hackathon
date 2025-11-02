@@ -729,17 +729,9 @@ class StudentPortal {
                 "year": 3,
                 "grade": "A",
                 "gpa": 3.8,
-                "credits": 98,
+                "credits": 102,
                 "status": "Active",
                 "currentCourses": [
-                    {
-                        "code": "ECEN 2714",
-                        "name": "Fundamentals of Electric Circuits",
-                        "instructor": "Dr. Johnson",
-                        "credits": 4,
-                        "grade": "IP",
-                        "schedule": "MWF 10:00-10:50"
-                    },
                     {
                         "code": "ECEN 2011",
                         "name": "Experimental Methods I",
@@ -774,7 +766,7 @@ class StudentPortal {
                     }
                 ],
                 "gradeHistory": [
-                    { "semester": "Spring 2025", "year": "2025", "gpa": 3.7, "credits": 17 },
+                    { "semester": "Spring 2025", "year": "2025", "gpa": 3.7, "credits": 21 },
                     { "semester": "Fall 2024", "year": "2024", "gpa": 3.8, "credits": 16 },
                     { "semester": "Spring 2024", "year": "2024", "gpa": 3.6, "credits": 16 },
                     { "semester": "Fall 2023", "year": "2023", "gpa": 3.7, "credits": 16 }
@@ -790,7 +782,8 @@ class StudentPortal {
                             { "code": "PHYS 2114", "name": "University Physics II", "instructor": "White", "credits": 4, "grade": "B+" },
                             { "code": "CS 2433", "name": "C/C++ Programming", "instructor": "Thompson", "credits": 3, "grade": "A-" },
                             { "code": "ENSC 2113", "name": "Statics", "instructor": "Lee", "credits": 3, "grade": "B+" },
-                            { "code": "ENSC 2611", "name": "Electrical Fabrication Lab", "instructor": "Davis", "credits": 1, "grade": "A" }
+                            { "code": "ENSC 2611", "name": "Electrical Fabrication Lab", "instructor": "Davis", "credits": 1, "grade": "A" },
+                            { "code": "ECEN 2714", "name": "Fundamentals of Electric Circuits", "instructor": "Dr. Johnson", "credits": 4, "grade": "B+" }
                         ]
                     },
                     {
@@ -5561,6 +5554,493 @@ class StudentPortal {
     showNotifications() {
         // In a real application, this would show a notifications panel
         alert('Notifications:\n• Registration deadline approaching\n• New scholarship opportunity available\n• Grade posted for CS 301');
+    }
+
+    // Curriculum Management Methods
+    addSecondMajor() {
+        const availableMajors = [
+            'Mathematics', 'Physics', 'Business Administration', 
+            'Psychology', 'English Literature', 'Electrical Engineering', 
+            'Biology', 'Chemistry', 'History', 'Economics'
+        ];
+        
+        const selectedMajor = prompt('Select a second major:\n' + 
+            availableMajors.map((major, index) => `${index + 1}. ${major}`).join('\n') +
+            '\n\nEnter the number of your choice:'
+        );
+        
+        const majorIndex = parseInt(selectedMajor) - 1;
+        if (majorIndex >= 0 && majorIndex < availableMajors.length) {
+            this.initializeSecondMajor(availableMajors[majorIndex]);
+        }
+    }
+
+    initializeSecondMajor(majorName) {
+        // Initialize student data for second major if not exists
+        if (!this.studentData.secondMajor) {
+            this.studentData.secondMajor = {
+                name: majorName,
+                credits: 0,
+                requiredCredits: 120,
+                courses: []
+            };
+        }
+
+        // Show the second major column
+        const secondMajorColumn = document.getElementById('secondMajorColumn');
+        const secondMajorTitle = document.getElementById('secondMajorTitle');
+        
+        if (secondMajorColumn && secondMajorTitle) {
+            secondMajorColumn.style.display = 'block';
+            secondMajorTitle.textContent = majorName;
+        }
+
+        // Add to active curricula display
+        this.updateActiveCurricula();
+        this.populateSecondMajorCourses();
+    }
+
+    addMinor() {
+        const availableMinors = [
+            'Data Science', 'Cybersecurity', 'Web Development',
+            'Mobile App Development', 'Artificial Intelligence',
+            'Creative Writing', 'Digital Marketing', 'Statistics',
+            'Philosophy', 'International Studies'
+        ];
+        
+        const selectedMinor = prompt('Select a minor:\n' + 
+            availableMinors.map((minor, index) => `${index + 1}. ${minor}`).join('\n') +
+            '\n\nEnter the number of your choice:'
+        );
+        
+        const minorIndex = parseInt(selectedMinor) - 1;
+        if (minorIndex >= 0 && minorIndex < availableMinors.length) {
+            this.initializeMinor(availableMinors[minorIndex]);
+        }
+    }
+
+    initializeMinor(minorName) {
+        // Initialize minors array if not exists
+        if (!this.studentData.minors) {
+            this.studentData.minors = [];
+        }
+
+        // Check if minor already exists
+        const existingMinor = this.studentData.minors.find(minor => minor.name === minorName);
+        if (existingMinor) {
+            alert(`You already have ${minorName} as a minor.`);
+            return;
+        }
+
+        // Add new minor (max 2)
+        if (this.studentData.minors.length >= 2) {
+            alert('You can only have up to 2 minors.');
+            return;
+        }
+
+        this.studentData.minors.push({
+            name: minorName,
+            credits: 0,
+            requiredCredits: 18,
+            courses: []
+        });
+
+        // Show minors container
+        const minorsContainer = document.getElementById('minorsContainer');
+        if (minorsContainer) {
+            minorsContainer.style.display = 'block';
+        }
+
+        this.updateActiveCurricula();
+        this.populateMinorCourses();
+    }
+
+    viewSharedCourses() {
+        const curriculumBreakdown = document.getElementById('curriculumBreakdown');
+        if (curriculumBreakdown) {
+            curriculumBreakdown.style.display = 'block';
+            this.populateSharedCourses();
+            this.populateMajorRequirements();
+            this.populateMinorCourses();
+        }
+    }
+
+    hideCurriculumBreakdown() {
+        const curriculumBreakdown = document.getElementById('curriculumBreakdown');
+        if (curriculumBreakdown) {
+            curriculumBreakdown.style.display = 'none';
+        }
+    }
+
+    updateActiveCurricula() {
+        const activeCurricula = document.getElementById('activeCurricula');
+        if (!activeCurricula) return;
+
+        let html = `
+            <div class="curriculum-item primary-major">
+                <div class="curriculum-badge">Primary Major</div>
+                <div class="curriculum-name">${this.studentData.major}</div>
+                <div class="curriculum-progress">
+                    <span class="progress-fraction">${this.studentData.credits || 45}/120 credits</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" style="width: ${((this.studentData.credits || 45) / 120) * 100}%"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Add second major if exists
+        if (this.studentData.secondMajor) {
+            const progress = (this.studentData.secondMajor.credits / this.studentData.secondMajor.requiredCredits) * 100;
+            html += `
+                <div class="curriculum-item second-major">
+                    <div class="curriculum-badge" style="background: #1565c0;">Second Major</div>
+                    <div class="curriculum-name">${this.studentData.secondMajor.name}</div>
+                    <div class="curriculum-progress">
+                        <span class="progress-fraction">${this.studentData.secondMajor.credits}/${this.studentData.secondMajor.requiredCredits} credits</span>
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" style="width: ${progress}%; background: #1565c0;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add minors if exist
+        if (this.studentData.minors && this.studentData.minors.length > 0) {
+            this.studentData.minors.forEach(minor => {
+                const progress = (minor.credits / minor.requiredCredits) * 100;
+                html += `
+                    <div class="curriculum-item minor-item">
+                        <div class="curriculum-badge" style="background: #388e3c;">Minor</div>
+                        <div class="curriculum-name">${minor.name}</div>
+                        <div class="curriculum-progress">
+                            <span class="progress-fraction">${minor.credits}/${minor.requiredCredits} credits</span>
+                            <div class="mini-progress-bar">
+                                <div class="mini-progress-fill" style="width: ${progress}%; background: #388e3c;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        activeCurricula.innerHTML = html;
+    }
+
+    populateSharedCourses() {
+        const sharedCoursesGrid = document.getElementById('sharedCoursesGrid');
+        if (!sharedCoursesGrid) return;
+
+        // Shared courses that count towards multiple requirements
+        const sharedCourses = [
+            {
+                code: 'MATH 2101',
+                name: 'Calculus I',
+                credits: 4,
+                appliesTo: ['Electrical Engineering', 'Mathematics', 'Physics', 'General Education']
+            },
+            {
+                code: 'MATH 2102',
+                name: 'Calculus II',
+                credits: 3,
+                appliesTo: ['Electrical Engineering', 'Mathematics', 'Physics', 'General Education']
+            },
+            {
+                code: 'PHYS 2101',
+                name: 'Physics I',
+                credits: 4,
+                appliesTo: ['Electrical Engineering', 'Physics', 'General Education']
+            },
+            {
+                code: 'ENGL 3101',
+                name: 'Technical Writing',
+                credits: 3,
+                appliesTo: ['Electrical Engineering', 'Engineering', 'General Education']
+            },
+            {
+                code: 'MATH 3101',
+                name: 'Linear Algebra',
+                credits: 3,
+                appliesTo: ['Electrical Engineering', 'Mathematics', 'Data Science Minor']
+            }
+        ];
+
+        let html = '';
+        sharedCourses.forEach(course => {
+            const appliesToTags = course.appliesTo.map(item => 
+                `<span class="applies-tag">${item}</span>`
+            ).join('');
+
+            html += `
+                <div class="shared-course-item">
+                    <div class="shared-course-code">${course.code}</div>
+                    <div class="shared-course-name">${course.name}</div>
+                    <div class="course-credits" style="margin: 0.5rem 0; display: inline-block;">${course.credits} CR</div>
+                    <div class="shared-course-applies">
+                        ${appliesToTags}
+                    </div>
+                </div>
+            `;
+        });
+
+        sharedCoursesGrid.innerHTML = html;
+    }
+
+    populateMajorRequirements() {
+        // Populate primary major courses
+        this.populatePrimaryMajorCourses();
+        
+        // Populate second major courses if exists
+        if (this.studentData.secondMajor) {
+            this.populateSecondMajorCourses();
+        }
+    }
+
+    populatePrimaryMajorCourses() {
+        const primaryMajorCourses = document.getElementById('primaryMajorCourses');
+        if (!primaryMajorCourses) return;
+
+        // Electrical Engineering core courses - generic course structure
+        const eeCourses = [
+            // Foundation Courses
+            { code: 'EE 2101', name: 'Circuit Analysis I', credits: 3 },
+            { code: 'EE 2102', name: 'Circuit Analysis II', credits: 3 },
+            { code: 'EE 2201', name: 'Digital Logic Design', credits: 3 },
+            { code: 'EE 2301', name: 'Electronics Lab', credits: 2 },
+            
+            // Core EE Courses
+            { code: 'EE 3101', name: 'Electronic Devices', credits: 4 },
+            { code: 'EE 3201', name: 'Signals and Systems', credits: 3 },
+            { code: 'EE 3301', name: 'Electromagnetic Fields', credits: 3 },
+            { code: 'EE 3401', name: 'Power Systems', credits: 3 },
+            { code: 'EE 3501', name: 'Control Systems', credits: 3 },
+            
+            // Advanced Courses
+            { code: 'EE 4101', name: 'Senior Design I', credits: 3 },
+            { code: 'EE 4102', name: 'Senior Design II', credits: 3 },
+            { code: 'EE 4201', name: 'Communication Systems', credits: 3 },
+            { code: 'EE 4301', name: 'Microprocessors', credits: 3 },
+            
+            // Supporting Courses
+            { code: 'ENGR 2001', name: 'Engineering Economics', credits: 3 },
+            { code: 'CS 1201', name: 'Programming Fundamentals', credits: 3 },
+            { code: 'MATH 3401', name: 'Engineering Mathematics', credits: 3 }
+        ];
+
+        let html = '';
+        eeCourses.forEach(course => {
+            html += `
+                <div class="major-course-item">
+                    <div class="major-course-info">
+                        <div class="major-course-code">${course.code}</div>
+                        <div class="major-course-name">${course.name}</div>
+                    </div>
+                    <div class="major-course-credits">${course.credits} CR</div>
+                </div>
+            `;
+        });
+
+        primaryMajorCourses.innerHTML = html;
+    }
+
+    populateSecondMajorCourses() {
+        const secondMajorCourses = document.getElementById('secondMajorCourses');
+        if (!secondMajorCourses || !this.studentData.secondMajor) return;
+
+        // Generate courses based on the actual second major selected
+        const majorName = this.studentData.secondMajor.name;
+        let courses = [];
+
+        // Define courses for different majors
+        switch (majorName) {
+            case 'Mathematics':
+                courses = [
+                    { code: 'MATH 2153', name: 'Calculus II', credits: 3 },
+                    { code: 'MATH 2163', name: 'Calculus III', credits: 3 },
+                    { code: 'MATH 3113', name: 'Linear Algebra', credits: 3 },
+                    { code: 'MATH 3323', name: 'Differential Equations', credits: 3 },
+                    { code: 'MATH 4103', name: 'Abstract Algebra', credits: 3 },
+                    { code: 'MATH 4203', name: 'Real Analysis', credits: 3 }
+                ];
+                break;
+            case 'Physics':
+                courses = [
+                    { code: 'PHYS 2014', name: 'University Physics I', credits: 4 },
+                    { code: 'PHYS 2114', name: 'University Physics II', credits: 4 },
+                    { code: 'PHYS 3054', name: 'Modern Physics', credits: 4 },
+                    { code: 'PHYS 3204', name: 'Thermodynamics', credits: 4 },
+                    { code: 'PHYS 4014', name: 'Quantum Mechanics', credits: 4 },
+                    { code: 'PHYS 4024', name: 'Electromagnetic Theory', credits: 4 }
+                ];
+                break;
+            case 'Business Administration':
+                courses = [
+                    { code: 'MGMT 3013', name: 'Principles of Management', credits: 3 },
+                    { code: 'MKTG 3213', name: 'Marketing Principles', credits: 3 },
+                    { code: 'ACCT 2103', name: 'Financial Accounting', credits: 3 },
+                    { code: 'FIN 3113', name: 'Business Finance', credits: 3 },
+                    { code: 'MGMT 4333', name: 'Strategic Management', credits: 3 },
+                    { code: 'BUSN 4013', name: 'Business Ethics', credits: 3 }
+                ];
+                break;
+            case 'Psychology':
+                courses = [
+                    { code: 'PSYC 2003', name: 'Research Methods', credits: 3 },
+                    { code: 'PSYC 2013', name: 'Developmental Psychology', credits: 3 },
+                    { code: 'PSYC 3003', name: 'Abnormal Psychology', credits: 3 },
+                    { code: 'PSYC 3013', name: 'Cognitive Psychology', credits: 3 },
+                    { code: 'PSYC 4003', name: 'Social Psychology', credits: 3 },
+                    { code: 'PSYC 4013', name: 'Psychology Capstone', credits: 3 }
+                ];
+                break;
+            case 'English Literature':
+                courses = [
+                    { code: 'ENGL 2413', name: 'World Literature I', credits: 3 },
+                    { code: 'ENGL 2423', name: 'World Literature II', credits: 3 },
+                    { code: 'ENGL 3323', name: 'American Literature', credits: 3 },
+                    { code: 'ENGL 3413', name: 'British Literature', credits: 3 },
+                    { code: 'ENGL 4003', name: 'Literary Theory', credits: 3 },
+                    { code: 'ENGL 4013', name: 'Senior Seminar', credits: 3 }
+                ];
+                break;
+            case 'Electrical Engineering':
+                courses = [
+                    // EE Electives and Advanced Courses
+                    { code: 'EE 3601', name: 'Energy Systems', credits: 3 },
+                    { code: 'EE 3701', name: 'Antenna Theory', credits: 3 },
+                    { code: 'EE 3801', name: 'Digital Signal Processing', credits: 3 },
+                    { code: 'EE 4401', name: 'Semiconductor Devices', credits: 3 },
+                    { code: 'EE 4501', name: 'VLSI Design', credits: 3 },
+                    { code: 'EE 4601', name: 'Renewable Energy Systems', credits: 3 }
+                ];
+                break;
+            case 'Biology':
+                courses = [
+                    { code: 'BIOL 2004', name: 'General Biology I', credits: 4 },
+                    { code: 'BIOL 2014', name: 'General Biology II', credits: 4 },
+                    { code: 'BIOL 3013', name: 'Genetics', credits: 3 },
+                    { code: 'BIOL 3023', name: 'Ecology', credits: 3 },
+                    { code: 'BIOL 4003', name: 'Molecular Biology', credits: 3 },
+                    { code: 'BIOL 4013', name: 'Evolution', credits: 3 }
+                ];
+                break;
+            case 'Chemistry':
+                courses = [
+                    { code: 'CHEM 1515', name: 'General Chemistry I', credits: 5 },
+                    { code: 'CHEM 1615', name: 'General Chemistry II', credits: 5 },
+                    { code: 'CHEM 3053', name: 'Organic Chemistry I', credits: 3 },
+                    { code: 'CHEM 3153', name: 'Organic Chemistry II', credits: 3 },
+                    { code: 'CHEM 4003', name: 'Physical Chemistry', credits: 3 },
+                    { code: 'CHEM 4013', name: 'Analytical Chemistry', credits: 3 }
+                ];
+                break;
+            case 'History':
+                courses = [
+                    { code: 'HIST 1103', name: 'World History I', credits: 3 },
+                    { code: 'HIST 1213', name: 'World History II', credits: 3 },
+                    { code: 'HIST 2013', name: 'American History I', credits: 3 },
+                    { code: 'HIST 2023', name: 'American History II', credits: 3 },
+                    { code: 'HIST 4003', name: 'Historical Methods', credits: 3 },
+                    { code: 'HIST 4013', name: 'Senior Thesis', credits: 3 }
+                ];
+                break;
+            case 'Economics':
+                courses = [
+                    { code: 'ECON 1113', name: 'Principles of Macroeconomics', credits: 3 },
+                    { code: 'ECON 1213', name: 'Principles of Microeconomics', credits: 3 },
+                    { code: 'ECON 3013', name: 'Intermediate Microeconomics', credits: 3 },
+                    { code: 'ECON 3023', name: 'Intermediate Macroeconomics', credits: 3 },
+                    { code: 'ECON 4003', name: 'Econometrics', credits: 3 },
+                    { code: 'ECON 4013', name: 'Economic Theory', credits: 3 }
+                ];
+                break;
+            default:
+                // Generic courses for any unlisted major
+                const prefix = majorName.substring(0, 4).toUpperCase();
+                courses = [
+                    { code: `${prefix} 2003`, name: `Introduction to ${majorName}`, credits: 3 },
+                    { code: `${prefix} 3003`, name: `Intermediate ${majorName}`, credits: 3 },
+                    { code: `${prefix} 3013`, name: `Advanced ${majorName} I`, credits: 3 },
+                    { code: `${prefix} 3023`, name: `Advanced ${majorName} II`, credits: 3 },
+                    { code: `${prefix} 4003`, name: `${majorName} Research Methods`, credits: 3 },
+                    { code: `${prefix} 4013`, name: `${majorName} Capstone`, credits: 3 }
+                ];
+        }
+
+        let html = '';
+        courses.forEach(course => {
+            html += `
+                <div class="major-course-item">
+                    <div class="major-course-info">
+                        <div class="major-course-code">${course.code}</div>
+                        <div class="major-course-name">${course.name}</div>
+                    </div>
+                    <div class="major-course-credits">${course.credits} CR</div>
+                </div>
+            `;
+        });
+
+        secondMajorCourses.innerHTML = html;
+    }
+
+    populateMinorCourses() {
+        const minorsGrid = document.getElementById('minorsGrid');
+        if (!minorsGrid || !this.studentData.minors || this.studentData.minors.length === 0) return;
+
+        let html = '';
+        this.studentData.minors.forEach(minor => {
+            // Example courses for different minors
+            let minorCourses = [];
+            if (minor.name === 'Data Science') {
+                minorCourses = [
+                    { code: 'DS 2003', name: 'Introduction to Data Science', credits: 3 },
+                    { code: 'DS 3013', name: 'Data Mining', credits: 3 },
+                    { code: 'DS 3023', name: 'Machine Learning', credits: 3 },
+                    { code: 'DS 4003', name: 'Data Visualization', credits: 3 },
+                    { code: 'DS 4013', name: 'Big Data Analytics', credits: 3 },
+                    { code: 'DS 4023', name: 'Capstone Project', credits: 3 }
+                ];
+            } else {
+                // Generic minor courses
+                minorCourses = [
+                    { code: `${minor.name.substring(0,2).toUpperCase()} 2003`, name: `Introduction to ${minor.name}`, credits: 3 },
+                    { code: `${minor.name.substring(0,2).toUpperCase()} 3003`, name: `Intermediate ${minor.name}`, credits: 3 },
+                    { code: `${minor.name.substring(0,2).toUpperCase()} 3013`, name: `Advanced ${minor.name}`, credits: 3 },
+                    { code: `${minor.name.substring(0,2).toUpperCase()} 4003`, name: `${minor.name} Applications`, credits: 3 },
+                    { code: `${minor.name.substring(0,2).toUpperCase()} 4013`, name: `${minor.name} Seminar`, credits: 3 },
+                    { code: `${minor.name.substring(0,2).toUpperCase()} 4023`, name: `${minor.name} Project`, credits: 3 }
+                ];
+            }
+
+            const progress = (minor.credits / minor.requiredCredits) * 100;
+            let coursesHtml = '';
+            minorCourses.forEach(course => {
+                coursesHtml += `
+                    <div class="minor-course-item">
+                        <div class="minor-course-info">
+                            <div class="minor-course-code">${course.code}</div>
+                            <div class="minor-course-name">${course.name}</div>
+                        </div>
+                        <div class="minor-course-credits">${course.credits} CR</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="minor-item">
+                    <div class="minor-header">
+                        <div class="minor-name">${minor.name}</div>
+                        <div class="minor-progress">${minor.credits}/${minor.requiredCredits} credits</div>
+                    </div>
+                    <div class="minor-courses">
+                        ${coursesHtml}
+                    </div>
+                </div>
+            `;
+        });
+
+        minorsGrid.innerHTML = html;
     }
 
     // Curriculum Management Methods

@@ -4,9 +4,147 @@ class StudentPortal {
         this.studentData = null;
         this.currentTab = 'overview';
         
+        // Initialize course tracking system
+        this.initializeCourseTrackingSystem();
+        
         this.initializeElements();
         this.attachEventListeners();
         this.loadStudentData();
+    }
+
+    initializeCourseTrackingSystem() {
+        // Initialize centralized course database
+        this.initializeCourseDatabase();
+        
+        // Course tracking variables
+        this.completedCourses = new Set(); // Courses that have been completed
+        this.inProgressCourses = new Set(); // Currently enrolled courses
+        this.plannedCourses = new Map(); // semester -> [courses] mapping
+        this.courseGrades = new Map(); // course code -> grade mapping
+        this.semesterHistory = []; // chronological list of semesters
+        
+        // Prerequisite chain cache for performance
+        this.prerequisiteCache = new Map();
+    }
+
+    initializeCourseDatabase() {
+        // ========== CENTRALIZED COURSE DATABASE ==========
+        // All courses defined as variables for consistent reference
+
+        // Mathematics Courses
+        this.MATH_1813 = { code: 'MATH 1813', name: 'Precalculus', credits: 3, prerequisites: [] };
+        this.MATH_2144 = { code: 'MATH 2144', name: 'Calculus I', credits: 4, prerequisites: ['MATH 1813'] };
+        this.MATH_2153 = { code: 'MATH 2153', name: 'Calculus II', credits: 3, prerequisites: ['MATH 2144'] };
+        this.MATH_2163 = { code: 'MATH 2163', name: 'Calculus III', credits: 3, prerequisites: ['MATH 2153'] };
+        this.MATH_2233 = { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2153'] };
+        this.MATH_3013 = { code: 'MATH 3013', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2153'] };
+        this.MATH_3113 = { code: 'MATH 3113', name: 'Introduction to Linear Algebra', credits: 3, prerequisites: ['MATH 2153'] };
+
+        // Physics Courses
+        this.PHYS_2014 = { code: 'PHYS 2014', name: 'University Physics I', credits: 4, prerequisites: ['MATH 2144'] };
+        this.PHYS_2114 = { code: 'PHYS 2114', name: 'University Physics II', credits: 4, prerequisites: ['PHYS 2014', 'MATH 2153'] };
+        this.PHYS_3313 = { code: 'PHYS 3313', name: 'Modern Physics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'] };
+
+        // Chemistry Courses  
+        this.CHEM_1414 = { code: 'CHEM 1414', name: 'General Chemistry for Engineers', credits: 4, prerequisites: [] };
+        this.CHEM_1515 = { code: 'CHEM 1515', name: 'General Chemistry I', credits: 5, prerequisites: [] };
+        this.CHEM_1615 = { code: 'CHEM 1615', name: 'General Chemistry II', credits: 5, prerequisites: ['CHEM 1515'] };
+        this.CHEM_3053 = { code: 'CHEM 3053', name: 'Organic Chemistry I', credits: 3, prerequisites: ['CHEM 1615'] };
+
+        // English/Communication Courses
+        this.ENGL_1113 = { code: 'ENGL 1113', name: 'Composition I', credits: 3, prerequisites: [] };
+        this.ENGL_1313 = { code: 'ENGL 1313', name: 'Critical Analysis and Writing I', credits: 3, prerequisites: [] };
+        this.ENGL_3323 = { code: 'ENGL 3323', name: 'Technical Writing', credits: 3, prerequisites: ['ENGL 1113'] };
+
+        // Computer Science Courses
+        this.CS_1113 = { code: 'CS 1113', name: 'Computer Science I', credits: 3, prerequisites: [] };
+        this.CS_1323 = { code: 'CS 1323', name: 'Computer Science II', credits: 3, prerequisites: ['CS 1113'] };
+        this.CS_2133 = { code: 'CS 2133', name: 'Data Structures', credits: 3, prerequisites: ['CS 1323'] };
+        this.CS_2433 = { code: 'CS 2433', name: 'C/C++ Programming', credits: 3, prerequisites: ['CS 1113'] };
+        this.CS_2714 = { code: 'CS 2714', name: 'Computer Organization', credits: 4, prerequisites: ['CS 1323'] };
+        this.CS_3353 = { code: 'CS 3353', name: 'Algorithms and Data Structures', credits: 3, prerequisites: ['CS 2133'] };
+        this.CS_3443 = { code: 'CS 3443', name: 'Computer Systems', credits: 3, prerequisites: ['CS 2714'] };
+        this.CS_3613 = { code: 'CS 3613', name: 'Operating Systems', credits: 3, prerequisites: ['CS 2714'] };
+        this.CS_3823 = { code: 'CS 3823', name: 'Database Systems', credits: 3, prerequisites: ['CS 2133'] };
+        this.CS_4143 = { code: 'CS 4143', name: 'Senior Capstone I', credits: 3, prerequisites: ['CS 3353'] };
+        this.CS_4153 = { code: 'CS 4153', name: 'Senior Capstone II', credits: 3, prerequisites: ['CS 4143'] };
+        this.CS_4273 = { code: 'CS 4273', name: 'Software Engineering', credits: 3, prerequisites: ['CS 3353'] };
+        this.CS_4413 = { code: 'CS 4413', name: 'Web Technologies', credits: 3, prerequisites: ['CS 2133'] };
+
+        // Engineering Science Courses
+        this.ENSC_2113 = { code: 'ENSC 2113', name: 'Statics', credits: 3, prerequisites: ['PHYS 2014', 'MATH 2144'] };
+        this.ENSC_2123 = { code: 'ENSC 2123', name: 'Elementary Dynamics', credits: 3, prerequisites: ['ENSC 2113'] };
+        this.ENSC_2143 = { code: 'ENSC 2143', name: 'Strength of Materials', credits: 3, prerequisites: ['ENSC 2113'] };
+        this.ENSC_2213 = { code: 'ENSC 2213', name: 'Thermodynamics', credits: 3, prerequisites: ['PHYS 2014', 'MATH 2153'] };
+        this.ENSC_2411 = { code: 'ENSC 2411', name: 'Engineering Laboratory I', credits: 1, prerequisites: ['PHYS 2014'] };
+        this.ENSC_2611 = { code: 'ENSC 2611', name: 'Electrical Fabrication Lab', credits: 1, prerequisites: ['PHYS 2014'] };
+        this.ENSC_3213 = { code: 'ENSC 3213', name: 'Engineering Systems Design', credits: 3, prerequisites: ['ENSC 2113'] };
+
+        // Electrical & Computer Engineering Courses
+        this.ECEN_2011 = { code: 'ECEN 2011', name: 'Experimental Methods I', credits: 1, prerequisites: ['PHYS 2014'] };
+        this.ECEN_2233 = { code: 'ECEN 2233', name: 'Fundamentals of Digital Logic Design', credits: 3, prerequisites: ['MATH 1813'] };
+        this.ECEN_2714 = { code: 'ECEN 2714', name: 'Fundamentals of Electric Circuits', credits: 4, prerequisites: ['MATH 2153', 'PHYS 2014', 'MATH 2233', 'ENSC 2611'] };
+        this.ECEN_3113 = { code: 'ECEN 3113', name: 'Energy, Environment and Economics', credits: 3, prerequisites: ['ECEN 2714'] };
+        this.ECEN_3213 = { code: 'ECEN 3213', name: 'Computer Based Systems in Engineering', credits: 3, prerequisites: ['ECEN 2714', 'ECEN 2233', 'CS 2433'] };
+        this.ECEN_3314 = { code: 'ECEN 3314', name: 'Electronic Devices and Applications', credits: 4, prerequisites: ['ECEN 3714', 'ENSC 2611'] };
+        this.ECEN_3513 = { code: 'ECEN 3513', name: 'Signal Analysis', credits: 3, prerequisites: ['ECEN 3714'] };
+        this.ECEN_3613 = { code: 'ECEN 3613', name: 'Applied Fields and Waves I', credits: 3, prerequisites: ['MATH 2163', 'ECEN 3714'] };
+        this.ECEN_3623 = { code: 'ECEN 3623', name: 'Applied Fields and Waves II', credits: 3, prerequisites: ['ECEN 3613'] };
+        this.ECEN_3714 = { code: 'ECEN 3714', name: 'Network Analysis', credits: 4, prerequisites: ['MATH 2233', 'PHYS 2014', 'ECEN 2714'] };
+        this.ECEN_3723 = { code: 'ECEN 3723', name: 'Systems I', credits: 3, prerequisites: ['ECEN 3714', 'ENSC 2113', 'MATH 3013'] };
+        this.ECEN_3903 = { code: 'ECEN 3903', name: 'Introduction to Semiconductor Devices', credits: 3, prerequisites: ['ECEN 3714'] };
+        this.ECEN_4013 = { code: 'ECEN 4013', name: 'Design of Engineering Systems', credits: 3, prerequisites: ['ECEN 3213', 'ECEN 2233', 'ECEN 3714', 'ECEN 3613', 'ECEN 3513', 'ECEN 3314', 'ENGL 3323'] };
+        this.ECEN_4024 = { code: 'ECEN 4024', name: 'Capstone Design', credits: 4, prerequisites: ['ECEN 4013', 'ECEN 4503'] };
+        this.ECEN_4293 = { code: 'ECEN 4293', name: 'Applied Numerical Methods for Python for EE', credits: 3, prerequisites: ['ECEN 3714', 'CS 2433'] };
+        this.ECEN_4503 = { code: 'ECEN 4503', name: 'Applications of Probability and Statistics to Random Signals', credits: 3, prerequisites: ['ECEN 3513'] };
+
+        // General Engineering
+        this.ENGR_1111 = { code: 'ENGR 1111', name: 'First Year Seminar', credits: 1, prerequisites: [] };
+        this.ENGR_1412 = { code: 'ENGR 1412', name: 'Introduction to Engineering', credits: 2, prerequisites: [] };
+
+        // Industrial Engineering & Management
+        this.IEM_3503 = { code: 'IEM 3503', name: 'Engineering Economic Analysis', credits: 3, prerequisites: [] };
+
+        // Statistics
+        this.STAT_2013 = { code: 'STAT 2013', name: 'Elementary Statistics', credits: 3, prerequisites: ['MATH 1813'] };
+        this.STAT_4033 = { code: 'STAT 4033', name: 'Probability and Statistics', credits: 3, prerequisites: ['MATH 2163'] };
+
+        // Psychology
+        this.PSYC_1113 = { code: 'PSYC 1113', name: 'Introduction to Psychology', credits: 3, prerequisites: [] };
+
+        // History and Government
+        this.HIST_1103 = { code: 'HIST 1103', name: 'Survey of American History', credits: 3, prerequisites: [] };
+        this.POLS_1113 = { code: 'POLS 1113', name: 'American Government', credits: 3, prerequisites: [] };
+
+        // Biology
+        this.BIOL_2004 = { code: 'BIOL 2004', name: 'General Biology I', credits: 4, prerequisites: [] };
+        this.BIOL_3204 = { code: 'BIOL 3204', name: 'Human Anatomy', credits: 4, prerequisites: ['BIOL 2004'] };
+
+        // Create master course list with all course variables
+        this.ALL_COURSES = [
+            this.MATH_1813, this.MATH_2144, this.MATH_2153, this.MATH_2163, this.MATH_2233, this.MATH_3013, this.MATH_3113,
+            this.PHYS_2014, this.PHYS_2114, this.PHYS_3313,
+            this.CHEM_1414, this.CHEM_1515, this.CHEM_1615, this.CHEM_3053,
+            this.ENGL_1113, this.ENGL_1313, this.ENGL_3323,
+            this.CS_1113, this.CS_1323, this.CS_2133, this.CS_2433, this.CS_2714, this.CS_3353, this.CS_3443, this.CS_3613, this.CS_3823, this.CS_4143, this.CS_4153, this.CS_4273, this.CS_4413,
+            this.ENSC_2113, this.ENSC_2123, this.ENSC_2143, this.ENSC_2213, this.ENSC_2411, this.ENSC_2611, this.ENSC_3213,
+            this.ECEN_2011, this.ECEN_2233, this.ECEN_2714, this.ECEN_3113, this.ECEN_3213, this.ECEN_3314, this.ECEN_3513, this.ECEN_3613, this.ECEN_3623, this.ECEN_3714, this.ECEN_3723, this.ECEN_3903, this.ECEN_4013, this.ECEN_4024, this.ECEN_4293, this.ECEN_4503,
+            this.ENGR_1111, this.ENGR_1412,
+            this.IEM_3503,
+            this.STAT_2013, this.STAT_4033,
+            this.PSYC_1113,
+            this.HIST_1103, this.POLS_1113,
+            this.BIOL_2004, this.BIOL_3204
+        ];
+
+        // Create course lookup map for fast access
+        this.COURSE_MAP = new Map();
+        this.ALL_COURSES.forEach(course => {
+            this.COURSE_MAP.set(course.code, course);
+        });
+
+        // Build the structured course database using the variables
+        this.courseDatabase = this.buildStructuredDatabase();
     }
 
     initializeElements() {
@@ -163,8 +301,428 @@ class StudentPortal {
             return;
         }
         
+        // Initialize course tracking with student data
+        this.initializeStudentCourseTracking();
+        
         this.populateStudentInfo();
         this.loadTabContent();
+    }
+
+    // ========== COURSE TRACKING SYSTEM ==========
+    
+    initializeStudentCourseTracking() {
+        // Parse completed courses from student history
+        this.parseCompletedCourses();
+        
+        // Parse current courses
+        this.parseCurrentCourses();
+        
+        // Initialize prerequisite checking
+        this.buildPrerequisiteCache();
+    }
+
+    parseCompletedCourses() {
+        // Clear existing tracking
+        this.completedCourses.clear();
+        this.courseGrades.clear();
+        this.semesterHistory = [];
+
+        // Parse actual past classes if available
+        if (this.studentData.pastClasses && this.studentData.pastClasses.length > 0) {
+            this.studentData.pastClasses.forEach(semester => {
+                const semesterKey = `${semester.semester} ${semester.year}`;
+                this.semesterHistory.push(semesterKey);
+                
+                // Parse actual course completions
+                semester.classes.forEach(classItem => {
+                    if (classItem.grade !== 'W' && classItem.grade !== 'F') {
+                        this.markCourseCompleted(classItem.code, classItem.grade);
+                    }
+                });
+            });
+        } else if (this.studentData.gradeHistory) {
+            // Fallback to grade history with sample courses if no past classes
+            this.studentData.gradeHistory.forEach(semesterData => {
+                const semesterKey = `${semesterData.semester} ${semesterData.year}`;
+                this.semesterHistory.push(semesterKey);
+                
+                // Add sample completed courses based on year progression
+                this.addSampleCompletedCourses(semesterData.semester, semesterData.year);
+            });
+        }
+    }
+
+    addSampleCompletedCourses(semester, year) {
+        // Add realistic course progression based on year using course variables
+        const yearNum = parseInt(year);
+        const isSpring = semester === 'Spring';
+        const isFall = semester === 'Fall';
+        
+        if (yearNum <= 2023) {
+            // Freshman year courses
+            this.markCourseCompleted(this.MATH_1813.code, 'B+');
+            this.markCourseCompleted(this.ENGL_1113.code, 'A');
+            this.markCourseCompleted(this.ENGR_1111.code, 'A');
+            this.markCourseCompleted(this.HIST_1103.code, 'B+');
+        }
+        
+        if (yearNum <= 2024) {
+            // Sophomore courses
+            this.markCourseCompleted(this.MATH_2144.code, 'A-');
+            this.markCourseCompleted(this.MATH_2153.code, 'A-');
+            this.markCourseCompleted(this.PHYS_2014.code, 'B+');
+            this.markCourseCompleted(this.CHEM_1414.code, 'A');
+            this.markCourseCompleted(this.CS_1113.code, 'A');
+            this.markCourseCompleted(this.ENGL_3323.code, 'A');
+            
+            if (isSpring) {
+                this.markCourseCompleted(this.MATH_2163.code, 'A-');
+                this.markCourseCompleted(this.PHYS_2114.code, 'B+');
+                this.markCourseCompleted(this.ENSC_2113.code, 'B+');
+            }
+        }
+        
+        if (yearNum >= 2024) {
+            // Junior level courses
+            this.markCourseCompleted(this.MATH_2233.code, 'B+');
+            this.markCourseCompleted(this.MATH_3013.code, 'A-');
+            this.markCourseCompleted(this.ECEN_2233.code, 'A');
+            this.markCourseCompleted(this.ENSC_2611.code, 'A');
+            this.markCourseCompleted(this.CS_1323.code, 'A');
+            this.markCourseCompleted(this.CS_2433.code, 'A-');
+            
+            if (yearNum === 2025 && isFall) {
+                this.markCourseCompleted(this.ECEN_2714.code, 'B+');
+                this.markCourseCompleted(this.CS_2133.code, 'A');
+                this.markCourseCompleted(this.ECEN_3714.code, 'A-');
+            }
+        }
+    }
+
+    parseCurrentCourses() {
+        this.inProgressCourses.clear();
+        
+        if (this.studentData.currentCourses) {
+            this.studentData.currentCourses.forEach(course => {
+                this.inProgressCourses.add(course.code);
+            });
+        }
+    }
+
+    markCourseCompleted(courseCode, grade = 'A') {
+        this.completedCourses.add(courseCode);
+        this.courseGrades.set(courseCode, grade);
+    }
+
+    buildPrerequisiteCache() {
+        // Build a flattened prerequisite chain for all courses
+        Object.values(this.courseDatabase).forEach(major => {
+            Object.values(major).forEach(category => {
+                if (Array.isArray(category)) {
+                    category.forEach(course => {
+                        this.cachePrerequisiteChain(course.code);
+                    });
+                }
+            });
+        });
+    }
+
+    cachePrerequisiteChain(courseCode) {
+        if (this.prerequisiteCache.has(courseCode)) {
+            return this.prerequisiteCache.get(courseCode);
+        }
+
+        const course = this.findCourse(courseCode);
+        if (!course) {
+            this.prerequisiteCache.set(courseCode, []);
+            return [];
+        }
+
+        const allPrereqs = new Set();
+        const queue = [...course.prerequisites];
+        
+        while (queue.length > 0) {
+            const prereq = queue.shift();
+            if (!allPrereqs.has(prereq)) {
+                allPrereqs.add(prereq);
+                const prereqCourse = this.findCourse(prereq);
+                if (prereqCourse) {
+                    queue.push(...prereqCourse.prerequisites);
+                }
+            }
+        }
+
+        const prereqArray = Array.from(allPrereqs);
+        this.prerequisiteCache.set(courseCode, prereqArray);
+        return prereqArray;
+    }
+
+    findCourse(courseCode) {
+        // Use centralized course lookup for better performance and consistency
+        return this.COURSE_MAP.get(courseCode) || null;
+    }
+
+    getCourseDatabase() {
+        return this.courseDatabase;
+    }
+
+    // ========== COURSE STATUS CHECKING ==========
+
+    isCourseCompleted(courseCode) {
+        return this.completedCourses.has(courseCode);
+    }
+
+    isCourseInProgress(courseCode) {
+        return this.inProgressCourses.has(courseCode);
+    }
+
+    hasPrerequisites(courseCode) {
+        const course = this.findCourse(courseCode);
+        return course && course.prerequisites.length > 0;
+    }
+
+    checkPrerequisites(courseCode) {
+        const course = this.findCourse(courseCode);
+        if (!course) return { eligible: false, missing: [], reason: 'Course not found' };
+
+        const missing = [];
+        
+        for (const prereq of course.prerequisites) {
+            if (!this.isCourseCompleted(prereq)) {
+                missing.push(prereq);
+            }
+        }
+
+        return {
+            eligible: missing.length === 0,
+            missing: missing,
+            reason: missing.length > 0 ? `Missing prerequisites: ${missing.join(', ')}` : null
+        };
+    }
+
+    getCoursesReadyToTake() {
+        const readyCourses = [];
+        
+        Object.values(this.courseDatabase).forEach(major => {
+            Object.values(major).forEach(category => {
+                if (Array.isArray(category)) {
+                    category.forEach(course => {
+                        if (!this.isCourseCompleted(course.code) && 
+                            !this.isCourseInProgress(course.code)) {
+                            
+                            const prereqCheck = this.checkPrerequisites(course.code);
+                            if (prereqCheck.eligible) {
+                                readyCourses.push(course);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        return readyCourses;
+    }
+
+    getCoursesByPrerequisiteLevel() {
+        const levels = {
+            0: [], // No prerequisites
+            1: [], // Direct prerequisites only
+            2: [], // 2+ levels of prerequisites
+            3: []  // Complex prerequisite chains
+        };
+
+        Object.values(this.courseDatabase).forEach(major => {
+            Object.values(major).forEach(category => {
+                if (Array.isArray(category)) {
+                    category.forEach(course => {
+                        const prereqChain = this.cachePrerequisiteChain(course.code);
+                        const level = Math.min(3, prereqChain.length === 0 ? 0 : 
+                                     course.prerequisites.length === 0 ? 0 :
+                                     course.prerequisites.length === 1 ? 1 :
+                                     course.prerequisites.length <= 3 ? 2 : 3);
+                        
+                        levels[level].push({
+                            ...course,
+                            prerequisiteChain: prereqChain,
+                            isCompleted: this.isCourseCompleted(course.code),
+                            isInProgress: this.isCourseInProgress(course.code),
+                            canTake: this.checkPrerequisites(course.code).eligible
+                        });
+                    });
+                }
+            });
+        });
+
+        return levels;
+    }
+
+    // ========== ACADEMIC PLANNING WITH PREREQUISITES ==========
+
+    generateSequencedAcademicPlan() {
+        // Create temporary tracking for planning simulation
+        const tempCompleted = new Set(this.completedCourses);
+        const tempInProgress = new Set(this.inProgressCourses);
+        
+        const plan = [];
+        
+        // Determine starting semester based on current date (avoiding summer assumption)
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // 0-11
+        const currentYear = currentDate.getFullYear();
+        
+        let startingSemester, startingYear;
+        if (currentMonth >= 0 && currentMonth <= 4) { // Jan-May: Next semester is Summer/Fall
+            startingSemester = 'Fall';
+            startingYear = currentYear;
+        } else if (currentMonth >= 5 && currentMonth <= 7) { // Jun-Aug: Next semester is Fall
+            startingSemester = 'Fall';
+            startingYear = currentYear;
+        } else { // Sep-Dec: Next semester is Spring
+            startingSemester = 'Spring';
+            startingYear = currentYear + 1;
+        }
+        
+        let currentSemester = `${startingSemester} ${startingYear}`;
+        let maxSemesters = 8; // Increased to allow for more planning flexibility
+        
+        for (let semesterCount = 0; semesterCount < maxSemesters; semesterCount++) {
+            const availableCourses = this.getCoursesReadyToTakeWithTemp(tempCompleted, tempInProgress);
+            
+            if (availableCourses.length === 0) {
+                break; // No more courses available
+            }
+            
+            // Sort by prerequisite complexity and importance
+            availableCourses.sort((a, b) => {
+                const aChain = this.cachePrerequisiteChain(a.code);
+                const bChain = this.cachePrerequisiteChain(b.code);
+                
+                // Prioritize courses with more dependent courses
+                const aDependents = this.countDependentCourses(a.code);
+                const bDependents = this.countDependentCourses(b.code);
+                
+                if (aDependents !== bDependents) {
+                    return bDependents - aDependents; // More dependents first
+                }
+                
+                return aChain.length - bChain.length; // Simpler prerequisites first
+            });
+            
+            const semesterCourses = [];
+            let semesterCredits = 0;
+            const maxCredits = 15;
+            
+            // Select courses for this semester
+            for (const course of availableCourses) {
+                if (semesterCredits + course.credits <= maxCredits) {
+                    semesterCourses.push(course);
+                    semesterCredits += course.credits;
+                    tempCompleted.add(course.code); // Mark as completed for future semesters
+                    
+                    if (semesterCredits >= 12) break; // Minimum full-time load
+                }
+            }
+            
+            if (semesterCourses.length > 0) {
+                plan.push({
+                    semester: currentSemester,
+                    courses: semesterCourses,
+                    totalCredits: semesterCredits
+                });
+                
+                currentSemester = this.getNextSemester(currentSemester);
+            } else {
+                break; // Can't schedule any more courses
+            }
+        }
+        
+        return plan;
+    }
+
+    getCoursesReadyToTakeWithTemp(tempCompleted, tempInProgress) {
+        const readyCourses = [];
+        const seenCourses = new Set(); // Prevent duplicates
+        
+        Object.values(this.courseDatabase).forEach(major => {
+            Object.values(major).forEach(category => {
+                if (Array.isArray(category)) {
+                    category.forEach(course => {
+                        // Skip if already seen (prevents duplicates)
+                        if (seenCourses.has(course.code)) {
+                            return;
+                        }
+                        seenCourses.add(course.code);
+                        
+                        if (!tempCompleted.has(course.code) && 
+                            !tempInProgress.has(course.code)) {
+                            
+                            const prereqCheck = this.checkPrerequisitesWithTemp(course.code, tempCompleted);
+                            if (prereqCheck.eligible) {
+                                readyCourses.push(course);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        return readyCourses;
+    }
+
+    checkPrerequisitesWithTemp(courseCode, tempCompleted) {
+        const course = this.findCourse(courseCode);
+        if (!course) return { eligible: false, missing: [], reason: 'Course not found' };
+
+        const missing = [];
+        
+        for (const prereq of course.prerequisites) {
+            if (!tempCompleted.has(prereq)) {
+                missing.push(prereq);
+            }
+        }
+
+        return {
+            eligible: missing.length === 0,
+            missing: missing,
+            reason: missing.length > 0 ? `Missing prerequisites: ${missing.join(', ')}` : null
+        };
+    }
+
+    countDependentCourses(courseCode) {
+        let count = 0;
+        
+        Object.values(this.courseDatabase).forEach(major => {
+            Object.values(major).forEach(category => {
+                if (Array.isArray(category)) {
+                    category.forEach(course => {
+                        if (course.prerequisites.includes(courseCode)) {
+                            count++;
+                        }
+                    });
+                }
+            });
+        });
+        
+        return count;
+    }
+
+    getNextSemester(currentSemester) {
+        const [season, year] = currentSemester.split(' ');
+        const yearNum = parseInt(year);
+        
+        // Check if summer semesters should be included
+        const includeSummer = document.getElementById('summerCoursesOption')?.checked ?? false;
+        
+        switch (season) {
+            case 'Spring':
+                return includeSummer ? `Summer ${year}` : `Fall ${year}`;
+            case 'Summer':
+                return `Fall ${year}`;
+            case 'Fall':
+                return `Spring ${yearNum + 1}`;
+            default:
+                return `Spring ${yearNum + 1}`;
+        }
     }
 
     getStudentsData() {
@@ -183,40 +741,40 @@ class StudentPortal {
                 "status": "Active",
                 "currentCourses": [
                     {
-                        "code": "CS 3443",
-                        "name": "Computer Systems",
+                        "code": "ECEN 3314",
+                        "name": "Electronic Devices and Applications",
                         "instructor": "Dr. Johnson",
-                        "credits": 3,
+                        "credits": 4,
                         "grade": "A",
                         "schedule": "MWF 10:00-10:50"
                     },
                     {
-                        "code": "CS 3823",
-                        "name": "Database Systems",
+                        "code": "ECEN 3513",
+                        "name": "Signal Analysis",
                         "instructor": "Prof. Williams",
                         "credits": 3,
                         "grade": "A-",
                         "schedule": "TTh 11:00-12:15"
                     },
                     {
-                        "code": "MATH 3113",
-                        "name": "Linear Algebra",
+                        "code": "ECEN 3613",
+                        "name": "Applied Fields and Waves I",
                         "instructor": "Dr. Smith",
                         "credits": 3,
                         "grade": "B+",
                         "schedule": "MWF 1:00-1:50"
                     },
                     {
-                        "code": "CS 4273",
-                        "name": "Software Engineering",
+                        "code": "ECEN 4293",
+                        "name": "Applied Numerical Methods for Python for EE",
                         "instructor": "Prof. Brown",
                         "credits": 3,
                         "grade": "A",
                         "schedule": "TTh 2:00-3:15"
                     },
                     {
-                        "code": "CS 3653",
-                        "name": "Computer Networks",
+                        "code": "IEM 3503",
+                        "name": "Engineering Economic Analysis",
                         "instructor": "Dr. Davis",
                         "credits": 3,
                         "grade": "A-",
@@ -895,117 +1453,54 @@ class StudentPortal {
         ];
     }
 
-    getCourseDatabase() {
+    buildStructuredDatabase() {
         return {
             'Electrical Engineering': {
                 'Foundation Courses': [
-                    { code: 'MATH 1813', name: 'Precalculus', credits: 3, prerequisites: [] },
-                    { code: 'MATH 2153', name: 'Calculus I', credits: 3, prerequisites: ['MATH 1813'] },
-                    { code: 'MATH 2163', name: 'Calculus II', credits: 3, prerequisites: ['MATH 2153'] },
-                    { code: 'MATH 2233', name: 'Differential Equations', credits: 3, prerequisites: ['MATH 2163'] },
-                    { code: 'MATH 3013', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2163'] },
-                    { code: 'PHYS 2114', name: 'University Physics I', credits: 4, prerequisites: ['MATH 2153'] },
-                    { code: 'PHYS 3313', name: 'Modern Physics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'] },
-                    { code: 'ENGL 3323', name: 'Technical Writing', credits: 3, prerequisites: [] }
+                    this.MATH_1813, this.MATH_2144, this.MATH_2153, this.MATH_2163, this.MATH_2233, this.MATH_3013,
+                    this.PHYS_2014, this.PHYS_2114, this.PHYS_3313,
+                    this.ENGL_1113, this.ENGL_3323,
+                    this.CHEM_1414
                 ],
                 'Core ECEN Courses': [
-                    { code: 'ECEN 2011', name: 'Experimental Methods I', credits: 1, prerequisites: ['PHYS 2114'] },
-                    { code: 'ECEN 2233', name: 'Fundamentals of Digital Logic Design', credits: 3, prerequisites: ['MATH 1813'] },
-                    { code: 'ECEN 2714', name: 'Fundamentals of Electric Circuits', credits: 4, prerequisites: ['MATH 2153', 'PHYS 2114', 'MATH 2233', 'ENSC 2611'] },
-                    { code: 'ECEN 3714', name: 'Network Analysis', credits: 4, prerequisites: ['MATH 2233', 'PHYS 2114', 'ECEN 2714'] },
-                    { code: 'ECEN 3314', name: 'Electronic Devices and Applications', credits: 4, prerequisites: ['ECEN 3714', 'ENSC 2611'] },
-                    { code: 'ECEN 3513', name: 'Signal Analysis', credits: 3, prerequisites: ['ECEN 3714'] },
-                    { code: 'ECEN 3613', name: 'Applied Fields and Waves I', credits: 3, prerequisites: ['MATH 2163', 'ECEN 3714'] },
-                    { code: 'ECEN 3623', name: 'Applied Fields and Waves II', credits: 3, prerequisites: ['ECEN 3613'] },
-                    { code: 'ECEN 3723', name: 'Systems I', credits: 3, prerequisites: ['ECEN 3714', 'ENSC 2113', 'MATH 3013'] }
+                    this.ECEN_2011, this.ECEN_2233, this.ECEN_2714, this.ECEN_3714, this.ECEN_3314, 
+                    this.ECEN_3513, this.ECEN_3613, this.ECEN_3623, this.ECEN_3723
                 ],
                 'Engineering Support': [
-                    { code: 'CS 1113', name: 'Introduction to Programming', credits: 3, prerequisites: [] },
-                    { code: 'CS 2133', name: 'Introduction to Computer Science', credits: 3, prerequisites: ['CS 1113'] },
-                    { code: 'CS 2433', name: 'Data Structures', credits: 3, prerequisites: ['CS 2133'] },
-                    { code: 'ENSC 2113', name: 'Statics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2153'] },
-                    { code: 'ENSC 2411', name: 'Engineering Laboratory I', credits: 1, prerequisites: ['PHYS 2114'] },
-                    { code: 'ENSC 2611', name: 'Engineering Mathematics', credits: 1, prerequisites: ['MATH 2163'] },
-                    { code: 'ENSC 2613', name: 'Thermodynamics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'] },
-                    { code: 'ENSC 3213', name: 'Engineering Systems Design', credits: 3, prerequisites: ['ENSC 2113'] },
-                    { code: 'ENGR 1412', name: 'Introduction to Engineering', credits: 2, prerequisites: [] },
-                    { code: 'STAT 4033', name: 'Probability and Statistics', credits: 3, prerequisites: ['MATH 2163'] }
+                    this.CS_1113, this.CS_1323, this.CS_2133, this.CS_2433,
+                    this.ENSC_2113, this.ENSC_2411, this.ENSC_2611, this.ENSC_2213, this.ENSC_3213,
+                    this.ENGR_1111, this.ENGR_1412,
+                    this.IEM_3503,
+                    this.STAT_4033
                 ],
                 'Advanced ECEN': [
-                    { code: 'ECEN 3113', name: 'Energy, Environment and Economics', credits: 3, prerequisites: ['ECEN 3714'] },
-                    { code: 'ECEN 3213', name: 'Computer Based Systems in Engineering', credits: 3, prerequisites: ['ECEN 2714', 'ECEN 2233', 'CS 2433'] },
-                    { code: 'ECEN 4013', name: 'Design of Engineering Systems', credits: 3, prerequisites: ['ECEN 3213', 'ECEN 2233', 'ECEN 3714', 'ECEN 3613', 'ECEN 3513', 'ECEN 3314', 'ENGL 3323'] },
-                    { code: 'ECEN 4024', name: 'Capstone Design', credits: 4, prerequisites: ['ECEN 4013', 'ECEN 4503'] },
-                    { code: 'ECEN 4133', name: 'Power Electronics', credits: 3, prerequisites: ['ECEN 3714'] },
-                    { code: 'ECEN 4153', name: 'Power System Analysis and Design', credits: 3, prerequisites: ['ECEN 3714'] },
-                    { code: 'ECEN 4213', name: 'Embedded Computer Systems Design', credits: 3, prerequisites: ['ECEN 3213', 'ECEN 2233', 'ECEN 3714'] },
-                    { code: 'ECEN 4313', name: 'Linear Electronics Circuit Design', credits: 3, prerequisites: ['ECEN 3314'] },
-                    { code: 'ECEN 4413', name: 'Automatic Control Systems', credits: 3, prerequisites: ['ECEN 3723'] },
-                    { code: 'ECEN 4503', name: 'Applications of Probability and Statistics to Random Signals', credits: 3, prerequisites: ['ECEN 3513'] },
-                    { code: 'ECEN 4523', name: 'Communication Theory', credits: 3, prerequisites: ['ECEN 4503'] },
-                    { code: 'ECEN 4763', name: 'Introduction to Digital Signal Processing', credits: 3, prerequisites: ['ECEN 3513'] }
+                    this.ECEN_3113, this.ECEN_3213, this.ECEN_4013, this.ECEN_4024, this.ECEN_4293, this.ECEN_4503
                 ],
                 'Electives': [
-                    { code: 'ECEN 3020', name: 'Supervised Research Project', credits: 1, prerequisites: [] },
-                    { code: 'ECEN 3903', name: 'Introduction to Semiconductor Devices', credits: 3, prerequisites: ['ECEN 3714'] },
-                    { code: 'ECEN 3913', name: 'Solid State Electronic Devices', credits: 3, prerequisites: ['ECEN 3714', 'PHYS 3313'] },
-                    { code: 'MAE 3723', name: 'Control Systems I', credits: 3, prerequisites: [] },
-                    { code: 'MAE 3724', name: 'Control Systems Laboratory', credits: 1, prerequisites: ['MAE 3723'] },
-                    { code: 'MAE 4733', name: 'Mechatronics', credits: 3, prerequisites: ['MAE 3723'] },
-                    { code: 'PHYS 3213', name: 'Optics', credits: 3, prerequisites: ['PHYS 2114', 'MATH 2163'] },
-                    { code: 'CHEM 3553', name: 'Physical Chemistry', credits: 3, prerequisites: [] }
+                    this.ECEN_3903
                 ]
             },
             'Computer Science': {
                 'Core Courses': [
-                    { code: 'CS 1113', name: 'Computer Science I', credits: 3, prerequisites: [] },
-                    { code: 'CS 1323', name: 'Computer Science II', credits: 3, prerequisites: ['CS 1113'] },
-                    { code: 'CS 2133', name: 'Data Structures', credits: 3, prerequisites: ['CS 1323'] },
-                    { code: 'CS 2714', name: 'Computer Organization', credits: 4, prerequisites: ['CS 1323'] },
-                    { code: 'CS 3353', name: 'Algorithms and Data Structures', credits: 3, prerequisites: ['CS 2133'] },
-                    { code: 'CS 3613', name: 'Operating Systems', credits: 3, prerequisites: ['CS 2714'] },
-                    { code: 'CS 4143', name: 'Senior Capstone I', credits: 3, prerequisites: ['CS 3353'] },
-                    { code: 'CS 4153', name: 'Senior Capstone II', credits: 3, prerequisites: ['CS 4143'] }
+                    this.CS_1113, this.CS_1323, this.CS_2133, this.CS_2714, this.CS_3353, this.CS_3613, this.CS_4143, this.CS_4153
                 ],
                 'Electives': [
-                    { code: 'CS 4413', name: 'Web Programming', credits: 3, prerequisites: ['CS 2133'] },
-                    { code: 'CS 4513', name: 'Database Management Systems', credits: 3, prerequisites: ['CS 2133'] },
-                    { code: 'CS 4613', name: 'Artificial Intelligence', credits: 3, prerequisites: ['CS 3353'] },
-                    { code: 'CS 4713', name: 'Computer Graphics', credits: 3, prerequisites: ['CS 2133'] },
-                    { code: 'CS 4813', name: 'Software Engineering II', credits: 3, prerequisites: ['CS 4273'] },
-                    { code: 'CS 4913', name: 'Machine Learning', credits: 3, prerequisites: ['CS 3353'] },
-                    { code: 'CS 5113', name: 'Distributed Systems', credits: 3, prerequisites: ['CS 3613'] },
-                    { code: 'CS 5213', name: 'Computer Security', credits: 3, prerequisites: ['CS 3613'] }
+                    this.CS_4413, this.CS_3823, this.CS_4273, this.CS_3443
                 ],
                 'Math Requirements': [
-                    { code: 'MATH 2144', name: 'Calculus II', credits: 4, prerequisites: [] },
-                    { code: 'MATH 2153', name: 'Calculus III', credits: 3, prerequisites: ['MATH 2144'] },
-                    { code: 'MATH 3113', name: 'Linear Algebra', credits: 3, prerequisites: ['MATH 2144'] },
-                    { code: 'STAT 3743', name: 'Applied Statistics', credits: 3, prerequisites: ['MATH 2144'] }
+                    this.MATH_2144, this.MATH_2153, this.MATH_3113, this.STAT_2013
                 ]
             },
             'Pre-Medicine': {
                 'Science Core': [
-                    { code: 'CHEM 1314', name: 'General Chemistry I', credits: 4, prerequisites: [] },
-                    { code: 'CHEM 1515', name: 'General Chemistry II', credits: 5, prerequisites: ['CHEM 1314'] },
-                    { code: 'CHEM 3063', name: 'Organic Chemistry II', credits: 3, prerequisites: ['CHEM 3053'] },
-                    { code: 'CHEM 3653', name: 'Biochemistry I', credits: 3, prerequisites: ['CHEM 3053'] },
-                    { code: 'BIOL 1114', name: 'Principles of Biology I', credits: 4, prerequisites: [] },
-                    { code: 'BIOL 1124', name: 'Principles of Biology II', credits: 4, prerequisites: ['BIOL 1114'] },
-                    { code: 'BIOL 3214', name: 'Human Physiology', credits: 4, prerequisites: ['BIOL 3204'] },
-                    { code: 'BIOL 3304', name: 'Genetics', credits: 4, prerequisites: ['BIOL 1124'] },
-                    { code: 'BIOL 4154', name: 'Microbiology', credits: 4, prerequisites: ['BIOL 1124'] }
+                    this.CHEM_1515, this.CHEM_1615, this.CHEM_3053,
+                    this.BIOL_2004, this.BIOL_3204
                 ],
                 'Physics Requirements': [
-                    { code: 'PHYS 2024', name: 'University Physics II', credits: 4, prerequisites: ['PHYS 2014'] },
-                    { code: 'PHYS 2034', name: 'University Physics III', credits: 4, prerequisites: ['PHYS 2024'] }
+                    this.PHYS_2014, this.PHYS_2114
                 ],
                 'Additional Requirements': [
-                    { code: 'MATH 2144', name: 'Calculus II', credits: 4, prerequisites: ['MATH 2143'] },
-                    { code: 'STAT 4013', name: 'Biostatistics', credits: 3, prerequisites: ['STAT 2013'] },
-                    { code: 'ENGL 3323', name: 'Medical Writing', credits: 3, prerequisites: [] },
-                    { code: 'PSYC 2124', name: 'Abnormal Psychology', credits: 4, prerequisites: ['PSYC 1113'] },
-                    { code: 'SOC 1113', name: 'Introduction to Sociology', credits: 3, prerequisites: [] }
+                    this.MATH_2144, this.STAT_2013, this.ENGL_3323, this.PSYC_1113, this.HIST_1103
                 ],
                 'Electives': [
                     { code: 'BIOL 4204', name: 'Cell Biology', credits: 4, prerequisites: ['BIOL 1124'] },
@@ -1164,37 +1659,19 @@ class StudentPortal {
     generateAcademicPlan() {
         if (!this.studentData) return;
 
-        const currentCredits = this.studentData.credits;
+        const currentCredits = this.calculateTotalCredits(false); // Only completed credits for planning
         const targetCredits = 120;
         const remainingCredits = targetCredits - currentCredits;
         
-        // Get current courses to avoid duplicates
-        const currentCourses = this.studentData.currentCourses.map(course => course.code);
+        console.log('Generating prerequisite-aware academic plan');
+        console.log('Completed courses:', Array.from(this.completedCourses));
+        console.log('In progress courses:', Array.from(this.inProgressCourses));
         
-        // Get available courses for student's major
-        const courseDatabase = this.getCourseDatabase();
-        const majorCourses = courseDatabase[this.studentData.major];
+        // Generate prerequisite-aware semester plan
+        const semesters = this.generateSequencedAcademicPlan();
         
-        if (!majorCourses) {
-            console.error('No course database found for major:', this.studentData.major);
-            return;
-        }
-
-        // Combine all available courses
-        const allAvailableCourses = [];
-        Object.keys(majorCourses).forEach(category => {
-            majorCourses[category].forEach(course => {
-                if (!currentCourses.includes(course.code)) {
-                    allAvailableCourses.push({...course, category});
-                }
-            });
-        });
-
-        // Generate semester plan
-        const semesters = this.planSemesters(allAvailableCourses, remainingCredits);
-        
-        // Display the plan
-        this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
+        // Display the plan with prerequisite information
+        this.displayAcademicPlanWithPrerequisites(semesters, currentCredits, remainingCredits);
     }
 
     // AI-powered academic plan generation via OpenRouter (Gemini 2.5 Pro)
@@ -1610,6 +2087,186 @@ class StudentPortal {
         document.getElementById('progressText').textContent = `${currentCredits} of 120 credits completed (${progressPercent}%)`;
     }
 
+    displayAcademicPlanWithPrerequisites(semesters, currentCredits, remainingCredits) {
+        const planContainer = document.getElementById('academicPlan');
+        
+        let html = '';
+        let totalPlannedCredits = 0;
+
+        semesters.forEach(semester => {
+            totalPlannedCredits += semester.totalCredits;
+            
+            html += `
+                <div class="semester-plan">
+                    <div class="semester-header">
+                        <h4 class="semester-title">${semester.semester}</h4>
+                        <span class="semester-credits">${semester.totalCredits} Credits</span>
+                    </div>
+                    <div class="semester-courses">
+                        <div class="course-list">
+            `;
+
+            semester.courses.forEach(course => {
+                const prereqCheck = this.checkPrerequisites(course.code);
+                const prereqChain = this.cachePrerequisiteChain(course.code);
+                
+                let prereqBadge = '';
+                let prereqTooltip = '';
+                
+                if (course.prerequisites && course.prerequisites.length > 0) {
+                    const completedPrereqs = course.prerequisites.filter(p => this.isCourseCompleted(p));
+                    const prereqStatus = completedPrereqs.length === course.prerequisites.length ? 'completed' : 'pending';
+                    
+                    prereqBadge = `<span class="prereq-badge prereq-${prereqStatus}" title="Prerequisites: ${course.prerequisites.join(', ')}">${course.prerequisites.length} REQ</span>`;
+                    prereqTooltip = `Prerequisites: ${course.prerequisites.join(', ')}`;
+                }
+
+                html += `
+                    <div class="course-item ${prereqCheck.eligible ? 'prereq-ready' : 'prereq-waiting'}" title="${prereqTooltip}">
+                        <div class="course-info">
+                            <div class="course-header">
+                                <div class="course-code">${course.code}</div>
+                                ${prereqBadge}
+                            </div>
+                            <div class="course-name">${course.name}</div>
+                            ${!prereqCheck.eligible ? `<div class="prereq-warning">⚠️ ${prereqCheck.reason}</div>` : ''}
+                        </div>
+                        <div class="course-credits">${course.credits} CR</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add enhanced summary with prerequisite analysis
+        const readyCourses = this.getCoursesReadyToTake();
+        const levels = this.getCoursesByPrerequisiteLevel();
+        
+        html += `
+            <div class="plan-summary">
+                <h4 class="summary-title">
+                    <i class="fas fa-chart-line"></i>
+                    Plan Summary & Prerequisites
+                </h4>
+                <div class="summary-stats">
+                    <div class="summary-item">
+                        <span class="summary-value">${semesters.length}</span>
+                        <span class="summary-label">Semesters Planned</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-value">${totalPlannedCredits}</span>
+                        <span class="summary-label">Planned Credits</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-value">${readyCourses.length}</span>
+                        <span class="summary-label">Courses Ready Now</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-value">${this.completedCourses.size}</span>
+                        <span class="summary-label">Completed Courses</span>
+                    </div>
+                </div>
+                
+                <div class="prerequisite-summary">
+                    <h5>📋 Course Readiness Breakdown:</h5>
+                    <div class="prereq-levels">
+                        <div class="prereq-level">
+                            <span class="level-badge ready">No Prerequisites</span>
+                            <span class="level-count">${levels[0].length} courses</span>
+                        </div>
+                        <div class="prereq-level">
+                            <span class="level-badge intermediate">1-2 Prerequisites</span>
+                            <span class="level-count">${levels[1].length + levels[2].length} courses</span>
+                        </div>
+                        <div class="prereq-level">
+                            <span class="level-badge advanced">Complex Chain</span>
+                            <span class="level-count">${levels[3].length} courses</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="plan-actions">
+                    <button class="btn btn-outline" onclick="studentPortal.generateAcademicPlan()">
+                        <i class="fas fa-refresh"></i> Regenerate Plan
+                    </button>
+                    <button class="btn btn-outline" onclick="studentPortal.showPrerequisiteTree()">
+                        <i class="fas fa-sitemap"></i> View Prerequisite Tree
+                    </button>
+                    <button class="btn btn-outline" onclick="studentPortal.exportPlan()">
+                        <i class="fas fa-download"></i> Export Plan
+                    </button>
+                </div>
+            </div>
+        `;
+
+        planContainer.innerHTML = html;
+        planContainer.classList.add('active');
+
+        // Update progress stats
+        this.updatePlanningStats(currentCredits, remainingCredits, semesters.length);
+    }
+
+    showPrerequisiteTree() {
+        // Display a modal showing the full prerequisite tree
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay prerequisite-modal';
+        modal.innerHTML = `
+            <div class="modal-dialog large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-sitemap"></i> Course Prerequisite Tree</h3>
+                    <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ${this.generatePrerequisiteTreeHTML()}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    generatePrerequisiteTreeHTML() {
+        const levels = this.getCoursesByPrerequisiteLevel();
+        let html = '<div class="prerequisite-tree">';
+        
+        Object.keys(levels).forEach(level => {
+            const levelName = ['Foundation', 'Intermediate', 'Advanced', 'Capstone'][level];
+            html += `
+                <div class="tree-level">
+                    <h4 class="level-title">${levelName} Courses</h4>
+                    <div class="level-courses">
+            `;
+            
+            levels[level].forEach(course => {
+                const statusClass = course.isCompleted ? 'completed' : 
+                                  course.isInProgress ? 'in-progress' : 
+                                  course.canTake ? 'ready' : 'blocked';
+                
+                html += `
+                    <div class="tree-course ${statusClass}" title="${course.prerequisites.join(', ')}">
+                        <div class="course-code">${course.code}</div>
+                        <div class="course-name">${course.name}</div>
+                        <div class="course-status">${statusClass.replace('-', ' ')}</div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        return html;
+    }
+
     exportPlan() {
         // Simple export functionality
         const planData = document.getElementById('academicPlan').textContent;
@@ -1845,14 +2502,20 @@ class StudentPortal {
             academicYear = 4; // Default to Senior for >120 credits
         }
         
+        // Calculate the weighted GPA using the same method as Past Classes
+        const calculatedGPA = this.calculateWeightedGPA();
+        
+        // Calculate total credits from actual classes taken
+        const calculatedCredits = this.calculateTotalCredits();
+        
         // Update profile information
         if (this.studentNameEl) this.studentNameEl.textContent = data.name.split(' ')[0];
         if (this.fullStudentNameEl) this.fullStudentNameEl.textContent = data.name;
         if (this.studentIdEl) this.studentIdEl.textContent = data.id;
         if (this.studentMajorEl) this.studentMajorEl.textContent = data.major;
         if (this.studentYearEl) this.studentYearEl.textContent = yearNames[academicYear];
-        if (this.studentGPAEl) this.studentGPAEl.textContent = data.gpa.toFixed(1);
-        if (this.studentCreditsEl) this.studentCreditsEl.textContent = data.credits;
+        if (this.studentGPAEl) this.studentGPAEl.textContent = calculatedGPA;
+        if (this.studentCreditsEl) this.studentCreditsEl.textContent = calculatedCredits;
         if (this.studentStatusEl) this.studentStatusEl.textContent = data.status;
         if (this.studentEmailEl) this.studentEmailEl.textContent = data.email;
         if (this.studentPhoneEl) this.studentPhoneEl.textContent = data.phone;
@@ -1964,6 +2627,69 @@ class StudentPortal {
         this.displayPastClasses();
     }
 
+    calculateWeightedGPA() {
+        if (!this.studentData.pastClasses) return '3.8'; // fallback to original value
+
+        let totalWeightedGPA = 0;
+        let totalCredits = 0;
+
+        this.studentData.pastClasses.forEach(semester => {
+            // Calculate semester credits
+            let semesterCredits = semester.classes.reduce((sum, classItem) => sum + classItem.credits, 0);
+            
+            // Use the semester GPA weighted by semester credits
+            if (semester.gpa && semesterCredits > 0) {
+                totalWeightedGPA += semester.gpa * semesterCredits;
+                totalCredits += semesterCredits;
+            }
+        });
+
+        // If we have grade history data, cross-reference it for accuracy
+        if (this.studentData.gradeHistory && totalCredits === 0) {
+            // Fallback to grade history if pastClasses data is incomplete
+            this.studentData.gradeHistory.forEach(historyItem => {
+                if (historyItem.gpa && historyItem.credits) {
+                    totalWeightedGPA += historyItem.gpa * historyItem.credits;
+                    totalCredits += historyItem.credits;
+                }
+            });
+        }
+
+        return totalCredits > 0 ? (totalWeightedGPA / totalCredits).toFixed(1) : '3.8';
+    }
+
+    calculateTotalCredits(includeCurrentCourses = true) {
+        let totalCredits = 0;
+
+        // Add credits from past classes (completed only)
+        if (this.studentData.pastClasses) {
+            this.studentData.pastClasses.forEach(semester => {
+                semester.classes.forEach(classItem => {
+                    // Only count completed classes (not withdrawn or failed)
+                    if (classItem.grade !== 'W' && classItem.grade !== 'F') {
+                        totalCredits += classItem.credits;
+                    }
+                });
+            });
+        }
+
+        // Add credits from current courses (in progress) - optional
+        if (includeCurrentCourses && this.studentData.currentCourses) {
+            totalCredits += this.studentData.currentCourses.reduce((sum, course) => sum + course.credits, 0);
+        }
+
+        // If no past classes data, fall back to grade history
+        if ((!this.studentData.pastClasses || this.studentData.pastClasses.length === 0) && this.studentData.gradeHistory) {
+            totalCredits = this.studentData.gradeHistory.reduce((sum, semester) => sum + semester.credits, 0);
+            // Add current courses if available and requested
+            if (includeCurrentCourses && this.studentData.currentCourses) {
+                totalCredits += this.studentData.currentCourses.reduce((sum, course) => sum + course.credits, 0);
+            }
+        }
+
+        return totalCredits;
+    }
+
     updatePastClassesSummary() {
         const totalClassesEl = document.getElementById('totalClassesTaken');
         const completedClassesEl = document.getElementById('completedClasses');
@@ -1973,26 +2699,53 @@ class StudentPortal {
 
         let totalClasses = 0;
         let completedClasses = 0;
-        let totalGradePoints = 0;
+        let totalWeightedGPA = 0;
         let totalCredits = 0;
 
         this.studentData.pastClasses.forEach(semester => {
+            // Calculate semester credits and count classes
+            let semesterCredits = 0;
             semester.classes.forEach(classItem => {
                 totalClasses++;
+                semesterCredits += classItem.credits;
+                
                 if (classItem.grade !== 'W' && classItem.grade !== 'F') {
                     completedClasses++;
                 }
-                
-                // Calculate GPA (simplified)
-                const gradePoints = this.getGradePoints(classItem.grade);
-                if (gradePoints !== null) {
-                    totalGradePoints += gradePoints * classItem.credits;
-                    totalCredits += classItem.credits;
-                }
             });
+            
+            // Use the semester GPA weighted by semester credits
+            if (semester.gpa && semesterCredits > 0) {
+                totalWeightedGPA += semester.gpa * semesterCredits;
+                totalCredits += semesterCredits;
+            }
         });
 
-        const averageGPA = totalCredits > 0 ? (totalGradePoints / totalCredits).toFixed(2) : '0.00';
+        // If we have grade history data, cross-reference it for accuracy
+        if (this.studentData.gradeHistory && totalCredits === 0) {
+            // Fallback to grade history if pastClasses data is incomplete
+            this.studentData.gradeHistory.forEach(historyItem => {
+                if (historyItem.gpa && historyItem.credits) {
+                    totalWeightedGPA += historyItem.gpa * historyItem.credits;
+                    totalCredits += historyItem.credits;
+                }
+            });
+        }
+
+        const averageGPA = totalCredits > 0 ? (totalWeightedGPA / totalCredits).toFixed(2) : '0.00';
+
+        // Debug logging for GPA calculation
+        console.log('GPA Calculation Debug:');
+        console.log('Total weighted GPA points:', totalWeightedGPA);
+        console.log('Total credits:', totalCredits);
+        console.log('Calculated average GPA:', averageGPA);
+        console.log('Semester data:', this.studentData.pastClasses?.map(s => ({
+            semester: s.semester,
+            year: s.year,
+            gpa: s.gpa,
+            classCount: s.classes.length,
+            totalCredits: s.classes.reduce((sum, c) => sum + c.credits, 0)
+        })));
 
         if (totalClassesEl) totalClassesEl.textContent = totalClasses;
         if (completedClassesEl) completedClassesEl.textContent = completedClasses;
@@ -2001,12 +2754,19 @@ class StudentPortal {
 
     getGradePoints(grade) {
         const gradeMap = {
-            'A': 4.0, 'A-': 3.7,
+            'A+': 4.0, 'A': 4.0, 'A-': 3.7,
             'B+': 3.3, 'B': 3.0, 'B-': 2.7,
             'C+': 2.3, 'C': 2.0, 'C-': 1.7,
             'D+': 1.3, 'D': 1.0, 'D-': 0.7,
-            'F': 0.0
+            'F': 0.0,
+            'W': null, 'WF': 0.0, 'I': null, 'P': null, 'NP': null
         };
+        
+        // Debug logging to see what grades we're encountering
+        if (gradeMap[grade] === undefined) {
+            console.warn(`Unknown grade encountered: "${grade}"`);
+        }
+        
         return gradeMap[grade] !== undefined ? gradeMap[grade] : null;
     }
 
@@ -2048,11 +2808,16 @@ class StudentPortal {
                                 <span class="semester-gpa">GPA: ${semester.gpa.toFixed(2)}</span>
                             </div>
                             <div class="semester-classes">
-                                ${semester.classes.map(classItem => `
+                                ${semester.classes.map(classItem => {
+                                    // Look up the correct course name from our centralized database
+                                    const courseInfo = this.findCourse(classItem.code);
+                                    const displayName = courseInfo ? courseInfo.name : classItem.name;
+                                    
+                                    return `
                                     <div class="past-class-item">
                                         <div class="past-class-info">
                                             <div class="past-class-code">${classItem.code}</div>
-                                            <div class="past-class-name">${classItem.name}</div>
+                                            <div class="past-class-name">${displayName}</div>
                                             <div class="past-class-instructor">Prof. ${classItem.instructor}</div>
                                         </div>
                                         <div class="past-class-grade">
@@ -2060,7 +2825,8 @@ class StudentPortal {
                                             <span class="past-class-credits">${classItem.credits}</span>
                                         </div>
                                     </div>
-                                `).join('')}
+                                    `;
+                                }).join('')}
                             </div>
                         </div>
                     `).join('')}
@@ -4105,7 +4871,7 @@ class StudentPortal {
         if (!this.studentData) return;
 
         // Update planning stats on tab load
-        const currentCredits = this.studentData.credits;
+        const currentCredits = this.calculateTotalCredits(false); // Only completed credits for planning
         const remainingCredits = 120 - currentCredits;
         const estimatedSemesters = Math.ceil(remainingCredits / 15);
         
@@ -4641,52 +5407,34 @@ class StudentPortal {
     }
 
     generateCustomPlan() {
-        console.log('generateCustomPlan method called');
+        console.log('generateCustomPlan method called with prerequisite awareness');
         try {
             console.log('Student data check:', !!this.studentData);
             if (!this.studentData) {
                 console.error('No student data available - using defaults');
-                // Use default values instead of failing
-                const currentCredits = 45; // Default current credits
+                const currentCredits = 45;
                 const targetCredits = 120;
                 const remainingCredits = targetCredits - currentCredits;
                 
-                const prioritizedCourses = this.getPrioritizedCourseList();
-                let semesters = [];
-                if (prioritizedCourses.length > 0) {
-                    semesters = this.planCustomSemesters(prioritizedCourses, remainingCredits);
-                } else {
-                    semesters = this.createBasicPlanStructure(remainingCredits);
-                }
-                
+                const semesters = this.generateSequencedAcademicPlan();
                 this.displayAcademicPlan(semesters, currentCredits, remainingCredits);
                 return true;
             }
 
-            const currentCredits = this.studentData.credits;
+            const currentCredits = this.calculateTotalCredits(false); // Only completed credits for planning
             const targetCredits = 120;
             const remainingCredits = targetCredits - currentCredits;
             
-            console.log('Generating custom plan with:', {
+            console.log('Generating prerequisite-aware plan with:', {
                 currentCredits,
                 remainingCredits,
-                selectedCourses: this.customizationData.selectedCourses,
-                priorities: this.customizationData.coursePriorities
+                completedCourses: Array.from(this.completedCourses),
+                inProgressCourses: Array.from(this.inProgressCourses)
             });
             
-            // Get prioritized course list
-            const prioritizedCourses = this.getPrioritizedCourseList();
-            console.log('Prioritized courses:', prioritizedCourses);
-            
-            // Generate custom semester plan even if no courses are selected
-            let semesters = [];
-            if (prioritizedCourses.length > 0) {
-                semesters = this.planCustomSemesters(prioritizedCourses, remainingCredits);
-            } else {
-                // Create a basic plan structure even with no courses
-                semesters = this.createBasicPlanStructure(remainingCredits);
-            }
-            console.log('Generated semesters:', semesters);
+            // Generate prerequisite-aware semester plan
+            const semesters = this.generateSequencedAcademicPlan();
+            console.log('Generated prerequisite-sequenced semesters:', semesters);
             
             // Always allow plan generation, even if empty or incomplete
             

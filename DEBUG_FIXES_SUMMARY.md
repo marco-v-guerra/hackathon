@@ -57,39 +57,3 @@
 
 ### Result
 The system should now maintain proper state even when plan generation fails, allowing users to continue modifying their course selections and successfully generate plans after addressing any issues.
-
-## Weekly Meal Plan Budget
-
-### Budget Overview
-- **Total Semester Budget**: $2,400
-- **Weeks Remaining in Semester**: 12 weeks
-- **Weekly Budget Allocation**: $200.00
-
-### Daily Budget Breakdown
-- **Budget Per Day**: $28.57 (based on 7 days per week)
-- **Weekday Budget**: $30.00 (Monday-Friday)
-- **Weekend Budget**: $25.00 (Saturday-Sunday)
-
-### Per Meal Budget Allocation
-- **Breakfast**: $6.00 - $8.00
-- **Lunch**: $10.00 - $12.00
-- **Dinner**: $12.00 - $15.00
-- **Snacks/Beverages**: $3.00 - $5.00
-
-### Budget Tracking
-- **Amount Spent This Week**: $0.00
-- **Remaining This Week**: $200.00
-- **Average Daily Spending**: $0.00
-- **Projected End-of-Semester Balance**: $2,400.00
-
-### Budget Guidelines
-1. **Meal Swipe Optimization**: Use dining hall swipes during peak hours for maximum value
-2. **Flex Dollar Management**: Reserve flex dollars for off-campus dining and late-night options
-3. **Weekly Review**: Check spending every Sunday to stay on track
-4. **Emergency Buffer**: Keep 10% of weekly budget ($20) as emergency fund
-
-### Cost-Saving Tips
-- Utilize dining hall hours for best value meals
-- Take advantage of student discounts at partner restaurants
-- Plan grocery purchases for dorm cooking when applicable
-- Monitor special dining events and promotions

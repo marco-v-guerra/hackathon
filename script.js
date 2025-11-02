@@ -936,26 +936,22 @@ class StudentPortal {
                 },
                 "schedule": {
                     "Monday": [
-                        { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
-                        { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" },
-                        { "time": "15:00", "class": "CS 3653", "room": "MSCS 203" }
+                        { "time": "13:00", "class": "STAT 4033", "room": "STAT 205" },
+                        { "time": "15:00", "class": "IEM 3503", "room": "ENSC 301" }
                     ],
                     "Tuesday": [
-                        { "time": "11:00", "class": "CS 3823", "room": "MSCS 109" },
-                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" }
+                        { "time": "11:00", "class": "CS 2133", "room": "MSCS 109" },
+                        { "time": "14:00", "class": "ECEN 2011", "room": "ECEN 104" }
                     ],
                     "Wednesday": [
-                        { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
-                        { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" },
-                        { "time": "15:00", "class": "CS 3653", "room": "MSCS 203" }
+                        { "time": "13:00", "class": "STAT 4033", "room": "STAT 205" },
+                        { "time": "15:00", "class": "IEM 3503", "room": "ENSC 301" }
                     ],
                     "Thursday": [
-                        { "time": "11:00", "class": "CS 3823", "room": "MSCS 109" },
-                        { "time": "14:00", "class": "CS 4273", "room": "MSCS 207" }
+                        { "time": "11:00", "class": "CS 2133", "room": "MSCS 109" }
                     ],
                     "Friday": [
-                        { "time": "10:00", "class": "CS 3443", "room": "MSCS 205" },
-                        { "time": "13:00", "class": "MATH 3113", "room": "MSCS 310" }
+                        { "time": "13:00", "class": "STAT 4033", "room": "STAT 205" }
                     ]
                 }
             },
